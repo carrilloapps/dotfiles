@@ -1,0 +1,71 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+[](fg:#e5484d)\
+$os\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$nodejs\
+$rust\
+$docker_context\
+$cmd_duration\
+$line_break\
+$character"""
+
+add_newline = true
+
+[character]
+success_symbol = "[▶](bold #e5484d)"
+error_symbol = "[▶](bold #ff7a3c)"
+vimcmd_symbol = "[◀](bold #9d6bff)"
+
+[os]
+disabled = false
+style = "bg:#e5484d fg:#141216"
+format = '[ $symbol ]($style)[](fg:#e5484d bg:#5c1f24)'
+
+[os.symbols]
+Arch = "󰣇"
+Linux = "󰌽"
+
+[directory]
+style = "bg:#5c1f24 fg:#bc8cff"
+format = '[ $path ]($style)[](fg:#5c1f24 bg:#2a262d)'
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = ""
+style = "bg:#2a262d fg:#d96bff"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style = "bg:#2a262d fg:#f5d742"
+format = '[$all_status$ahead_behind ]($style)[](fg:#2a262d)'
+
+[python]
+symbol = ""
+style = "fg:#38e8d0"
+format = ' [$symbol $version]($style)'
+
+[nodejs]
+symbol = ""
+style = "fg:#3be05c"
+format = ' [$symbol $version]($style)'
+
+[rust]
+symbol = ""
+style = "fg:#ff7a3c"
+format = ' [$symbol $version]($style)'
+
+[docker_context]
+symbol = " "
+style = "fg:#9d6bff"
+format = ' [$symbol $context]($style)'
+
+[cmd_duration]
+min_time = 500
+style = "fg:#a39aa0"
+format = ' [ $duration]($style)'

@@ -1,0 +1,57 @@
+# Vietnamese translation of RedRog.
+# Copyright (C) 2026 RedRog contributors
+# This file is distributed under the same license as the redrog-hud package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: redrog-hud\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-16 20:35-0500\n"
+"PO-Revision-Date: 2026-10-16 20:35-0500\n"
+"Last-Translator: \n"
+"Language-Team: none\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:162
+#, kde-format
+msgid "SYSTEM"
+msgstr "HỆ THỐNG"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:206
+#, kde-format
+msgid "NVIDIA resting"
+msgstr "NVIDIA đang nghỉ"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:216
+#, kde-format
+msgid "Memory"
+msgstr "Bộ nhớ"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:221
+#, kde-format
+msgid "Frequency"
+msgstr "Tần số"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:226
+#, kde-format
+msgid "Fans"
+msgstr "Quạt"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:231
+#, kde-format
+msgid "Disk"
+msgstr "Ổ đĩa"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:236
+#, kde-format
+msgid "Network"
+msgstr "Mạng"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:241
+#, kde-format
+msgid "Battery"
+msgstr "Pin"

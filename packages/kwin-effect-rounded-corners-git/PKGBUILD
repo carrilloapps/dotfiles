@@ -1,0 +1,60 @@
+# Maintainer:
+# Contributor: 2xsaiko <aur@dblsaiko.net>
+# RedRog: the AUR package, plus its sources in /usr/src and a pacman hook that
+# rebuilds it after every KWin update (a KWin effect only loads in the KWin it
+# was built for: KWin 6.8.0 -> 6.8.1 left the rounded corners off).
+
+_pkgname="kwin-effect-rounded-corners"
+pkgname="$_pkgname-git"
+pkgver=0.11.0.r0.g66d7ce9
+pkgrel=1
+pkgdesc="Rounds the corners of your windows (wayland)"
+url="https://github.com/matinlotfali/KDE-Rounded-Corners"
+license=("GPL-3.0-only")
+arch=('x86_64')
+
+# the build tools stay installed: the hook builds with them
+depends=('kwin' 'cmake' 'extra-cmake-modules' 'ninja' 'vulkan-headers' 'gcc')
+makedepends=('cmake' 'extra-cmake-modules' 'git' 'ninja' 'vulkan-headers')
+
+provides=("$_pkgname=${pkgver%%.g*}")
+conflicts=("$_pkgname")
+
+_pkgsrc="kde-rounded-corners"
+source=("$_pkgsrc"::"git+$url.git")
+sha256sums=("SKIP")
+
+prepare() {
+  # ensure Qt6
+  sed -E -e 's&\bQUIET\b&REQUIRED&' -i "$_pkgsrc/cmake/qtversion.cmake"
+}
+
+pkgver() {
+  cd "$_pkgsrc"
+  git describe --long --tags --abbrev=7 --exclude='*[a-zA-Z][a-zA-Z]*' \
+    | sed -E 's/^[^0-9]*//;s/([^-]*-g)/r\1/;s/-/./g'
+}
+
+build() {
+  local _cmake_options=(
+    -B build
+    -S "$_pkgsrc"
+    -G Ninja
+    -Wno-dev
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_INSTALL_PREFIX=/usr
+  )
+
+  cmake "${_cmake_options[@]}"
+  cmake --build build
+}
+
+package() {
+  DESTDIR="$pkgdir" cmake --install build
+  # what the pacman hook rebuilds from after a KWin update (without .git)
+  install -d "$pkgdir/usr/src/$pkgname"
+  (cd "$srcdir/$_pkgsrc" && find . -path ./.git -prune -o -type f -print0 \
+     | xargs -0 -I{} install -Dm644 {} "$pkgdir/usr/src/$pkgname/{}")
+  install -Dm755 "$startdir/hook/rebuild" "$pkgdir/usr/lib/$pkgname/rebuild"
+  install -Dm644 "$startdir/hook/$pkgname.hook" "$pkgdir/usr/share/libalpm/hooks/90-$pkgname.hook"
+}

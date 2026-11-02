@@ -1,0 +1,23 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Id": "org.redrog.themeswitch",
+        "Name": "Light and Dark",
+        "Description": "RedRog's light/dark switch in the system tray: light, dark or automatic (following Plasma), with a preview",
+        "Name[es]": "Claro y oscuro",
+        "Description[es]": "Cambio de RedRog entre claro y oscuro en la bandeja del sistema: claro, oscuro o automático (siguiendo a Plasma), con vista previa",
+        "Icon": "weather-clear-night",
+        "Category": "System Information",
+        "License": "GPL-2.0-or-later",
+        "Version": "1.0",
+        "EnabledByDefault": true,
+        "Authors": [
+            {
+                "Name": "RedRog"
+            }
+        ]
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-NotificationArea": "true",
+    "X-Plasma-NotificationAreaCategory": "SystemServices"
+}

@@ -1,0 +1,27 @@
+# Spanish translation of the RedRog spectrum switch (org.redrog.spectrumswitch)
+msgid ""
+msgstr ""
+"Project-Id-Version: org.redrog.spectrumswitch\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Audio spectrum"
+msgstr "Espectro de audio"
+
+msgid "On: click to turn it off"
+msgstr "Encendido: pulsa para apagarlo"
+
+msgid "Off: click to turn it on"
+msgstr "Apagado: pulsa para encenderlo"
+
+msgid "Turn off"
+msgstr "Apagar"
+
+msgid "Turn on"
+msgstr "Encender"
+
+msgid "Spectrum settings…"
+msgstr "Ajustes del espectro…"

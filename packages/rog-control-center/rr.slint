@@ -1,0 +1,681 @@
+// RedRog controls for ROG Control Center, copied to ui/widgets/rr.slint by
+// packages/rog-control-center/redrog-theme.py: a glass button with a ROG red
+// hover (used in place of Slint's Button), a round icon button (help, reset)
+// and a section header.
+
+import { RR } from "globals.slint";
+
+export component RRButton inherits Rectangle {
+    in property <string> text;
+    in property <bool> enabled: true;
+    in property <bool> primary: false;
+    callback clicked;
+
+    min-height: 32px;
+    preferred-height: 32px;
+    min-width: label.preferred-width + 28px;
+    border-radius: 8px;
+    background: !root.enabled ? RR.ink.with-alpha(0.03)
+              : t.pressed ? RR.accent.with-alpha(0.4)
+              : root.primary ? (t.has-hover ? #ff4655 : RR.accent)
+              : t.has-hover ? RR.ink.with-alpha(0.12) : RR.ink.with-alpha(0.07);
+    border-width: 1px;
+    border-color: root.enabled && t.has-hover && !root.primary ? RR.accent.with-alpha(0.6) : root.primary ? RR.accent : RR.border;
+    opacity: root.enabled ? 1 : 0.5;
+    animate background, border-color { duration: 140ms; }
+
+    label := Text {
+        width: parent.width;
+        height: parent.height;
+        text: root.text;
+        color: root.primary ? #ffffff : RR.foreground;
+        font-size: 13px;
+        font-weight: root.primary ? 600 : 500;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+
+    t := TouchArea {
+        enabled: root.enabled;
+        mouse-cursor: pointer;
+        clicked => {
+            root.clicked();
+        }
+    }
+}
+
+export component RRIconButton inherits Rectangle {
+    in property <string> glyph;
+    in property <bool> enabled: true;
+    callback clicked;
+
+    width: 28px;
+    height: 28px;
+    border-radius: 14px;
+    background: t.pressed ? RR.accent.with-alpha(0.4) : t.has-hover ? RR.accent.with-alpha(0.2) : RR.ink.with-alpha(0.07);
+    border-width: 1px;
+    border-color: t.has-hover ? RR.accent.with-alpha(0.6) : RR.border;
+    opacity: root.enabled ? 1 : 0.4;
+    animate background, border-color { duration: 140ms; }
+
+    Text {
+        width: parent.width;
+        height: parent.height;
+        text: root.glyph;
+        color: t.has-hover ? RR.emphasis : RR.foreground;
+        font-size: 14px;
+        font-weight: 700;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+
+    t := TouchArea {
+        enabled: root.enabled;
+        mouse-cursor: pointer;
+        clicked => {
+            root.clicked();
+        }
+    }
+}
+
+// Section title: a short ROG red bar, the title in spaced capitals and a red
+// hairline fading out
+export component RRSection inherits Rectangle {
+    in property <string> text;
+    height: 34px;
+
+    Rectangle {
+        x: 2px;
+        y: (parent.height - self.height) / 2 - 2px;
+        width: 3px;
+        height: 13px;
+        border-radius: 1.5px;
+        background: RR.accent;
+    }
+
+    Text {
+        x: 14px;
+        height: parent.height - 4px;
+        vertical-alignment: center;
+        text: root.text.to-uppercase();
+        color: RR.foreground;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1.6px;
+    }
+
+    Rectangle {
+        y: parent.height - 1px;
+        height: 1px;
+        background: @linear-gradient(90deg, RR.accent.with-alpha(0.4) 0%, RR.accent.with-alpha(0) 70%);
+    }
+}
+
+// macOS-style switch with the ROG red when on; same API as Slint's Switch
+export component RRSwitch inherits Rectangle {
+    in-out property <bool> checked;
+    in property <string> text;
+    in-out property <bool> enabled: true;
+    callback toggled();
+
+    min-height: 24px;
+    min-width: 42px + (root.text != "" ? label.preferred-width + 10px : 0px);
+    opacity: root.enabled ? 1 : 0.45;
+    forward-focus: fs;
+
+    function flip() {
+        if (root.enabled) {
+            root.checked = !root.checked;
+            root.toggled();
+        }
+    }
+
+    track := Rectangle {
+        x: 0px;
+        y: (parent.height - self.height) / 2;
+        width: 40px;
+        height: 22px;
+        border-radius: 11px;
+        background: root.checked ? @linear-gradient(90deg, #d42a37 0%, RR.accent 100%)
+                  : t.has-hover ? RR.ink.with-alpha(0.18) : RR.ink.with-alpha(0.12);
+        border-width: 1px;
+        border-color: root.checked ? #ff5a66 : fs.has-focus ? RR.accent.with-alpha(0.6) : RR.border;
+        animate background, border-color { duration: 160ms; }
+
+        Rectangle {
+            x: root.checked ? parent.width - self.width - 2px : 2px;
+            y: 2px;
+            width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            background: #ffffff;
+            drop-shadow-blur: 4px;
+            drop-shadow-color: #00000066;
+            animate x { duration: 180ms; easing: ease-out; }
+        }
+    }
+
+    label := Text {
+        x: 52px;
+        width: parent.width - 52px;
+        height: parent.height;
+        visible: root.text != "";
+        text: root.text;
+        color: RR.foreground;
+        font-size: 13px;
+        vertical-alignment: center;
+    }
+
+    t := TouchArea {
+        enabled: root.enabled;
+        mouse-cursor: pointer;
+        clicked => {
+            fs.focus();
+            root.flip();
+        }
+    }
+    fs := FocusScope {
+        enabled: root.enabled;
+        key-pressed(event) => {
+            if (event.text == " " || event.text == "\n") {
+                root.flip();
+                return accept;
+            }
+            return reject;
+        }
+    }
+}
+
+// Checkbox: a rounded box that fills with the ROG red; same API as CheckBox
+export component RRCheckBox inherits Rectangle {
+    in-out property <bool> checked;
+    in property <string> text;
+    in-out property <bool> enabled: true;
+    callback toggled();
+
+    min-height: 24px;
+    min-width: 20px + (root.text != "" ? label.preferred-width + 10px : 0px);
+    opacity: root.enabled ? 1 : 0.45;
+
+    Rectangle {
+        x: 0px;
+        y: (parent.height - self.height) / 2;
+        width: 18px;
+        height: 18px;
+        border-radius: 5px;
+        background: root.checked ? RR.accent : t.has-hover ? RR.ink.with-alpha(0.14) : RR.ink.with-alpha(0.08);
+        border-width: 1px;
+        border-color: root.checked ? #ff5a66 : RR.border;
+        animate background { duration: 140ms; }
+        Text {
+            width: parent.width;
+            height: parent.height;
+            visible: root.checked;
+            text: "✓";
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 800;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+    }
+
+    label := Text {
+        x: 28px;
+        width: parent.width - 28px;
+        height: parent.height;
+        text: root.text;
+        color: RR.foreground;
+        font-size: 13px;
+        vertical-alignment: center;
+    }
+
+    t := TouchArea {
+        enabled: root.enabled;
+        mouse-cursor: pointer;
+        clicked => {
+            root.checked = !root.checked;
+            root.toggled();
+        }
+    }
+}
+
+// Slider: thin track, ROG red fill, a white knob that grows while dragged;
+// arrow keys and Page Up/Down; same API as Slider (changed, released, step)
+export component RRSlider inherits Rectangle {
+    in-out property <float> value;
+    in property <float> minimum: 0;
+    in property <float> maximum: 100;
+    in property <float> step: 1;
+    in-out property <bool> enabled: true;
+    in property <bool> bare: false;   // knob only, over a track drawn outside
+    callback changed(float);
+    callback released(float);
+
+    min-height: 24px;
+    min-width: 120px;
+    opacity: root.enabled ? 1 : 0.45;
+    forward-focus: fs;
+    property <float> span: root.maximum > root.minimum ? root.maximum - root.minimum : 1;
+    property <float> frac: max(0, min(1, (root.value - root.minimum) / root.span));
+    property <length> knob: ta.pressed ? 20px : ta.has-hover || fs.has-focus ? 18px : 16px;
+
+    function set-from(x: length) {
+        if (root.enabled) {
+            root.set-value(root.minimum + (x - 9px) / max(1px, root.width - 18px) * root.span);
+        }
+    }
+    function set-value(v: float) {
+        let snapped = root.step > 0 ? Math.round(v / root.step) * root.step : v;
+        let next = max(root.minimum, min(root.maximum, snapped));
+        if (next != root.value) {
+            root.value = next;
+            root.changed(next);
+        }
+    }
+
+    Rectangle {
+        x: 9px;
+        y: (parent.height - self.height) / 2;
+        width: parent.width - 18px;
+        height: 4px;
+        border-radius: 2px;
+        background: RR.ink.with-alpha(0.12);
+        visible: !root.bare;
+
+        Rectangle {
+            x: 0px;
+            width: parent.width * root.frac;
+            height: parent.height;
+            border-radius: 2px;
+            background: @linear-gradient(90deg, #b8202c 0%, RR.accent 100%);
+        }
+    }
+
+    Rectangle {
+        x: 9px + (parent.width - 18px) * root.frac - self.width / 2;
+        y: (parent.height - self.height) / 2;
+        width: root.knob;
+        height: root.knob;
+        border-radius: self.width / 2;
+        background: #ffffff;
+        border-width: 2px;
+        border-color: RR.accent;
+        drop-shadow-blur: 6px;
+        drop-shadow-color: ta.pressed ? RR.accent.with-alpha(0.6) : #00000066;
+        animate width, height { duration: 120ms; }
+    }
+
+    ta := TouchArea {
+        enabled: root.enabled;
+        mouse-cursor: pointer;
+        pointer-event(event) => {
+            if (event.kind == PointerEventKind.down && event.button == PointerEventButton.left) {
+                fs.focus();
+                root.set-from(self.mouse-x);
+            }
+            if (event.kind == PointerEventKind.up && event.button == PointerEventButton.left) {
+                root.released(root.value);
+            }
+        }
+        moved => {
+            if (self.pressed) {
+                root.set-from(self.mouse-x);
+            }
+        }
+    }
+
+    fs := FocusScope {
+        enabled: root.enabled;
+        key-pressed(event) => {
+            let big = max(root.step, root.span / 10);
+            let small = root.step > 0 ? root.step : 1;
+            if (event.text == Key.RightArrow || event.text == Key.UpArrow) {
+                root.set-value(root.value + small);
+            } else if (event.text == Key.LeftArrow || event.text == Key.DownArrow) {
+                root.set-value(root.value - small);
+            } else if (event.text == Key.PageUp) {
+                root.set-value(root.value + big);
+            } else if (event.text == Key.PageDown) {
+                root.set-value(root.value - big);
+            } else if (event.text == Key.Home) {
+                root.set-value(root.minimum);
+            } else if (event.text == Key.End) {
+                root.set-value(root.maximum);
+            } else {
+                return reject;
+            }
+            return accept;
+        }
+        key-released(event) => {
+            root.released(root.value);
+            return accept;
+        }
+    }
+}
+
+// Drop-down: a glass field with a chevron and a frosted list with the
+// current item checked; same API as ComboBox
+export component RRComboBox inherits Rectangle {
+    in-out property <[string]> model;
+    in-out property <int> current-index: 0;
+    in-out property <string> current-value: root.current-index >= 0 && root.current-index < root.model.length ? root.model[root.current-index] : "";
+    in-out property <bool> enabled: true;
+    callback selected(string);
+
+    min-height: 32px;
+    min-width: 150px;
+    border-radius: 8px;
+    background: t.pressed ? RR.ink.with-alpha(0.15) : t.has-hover ? RR.ink.with-alpha(0.12) : RR.ink.with-alpha(0.07);
+    border-width: 1px;
+    border-color: t.has-hover && root.enabled ? RR.accent.with-alpha(0.6) : RR.border;
+    opacity: root.enabled ? 1 : 0.45;
+    animate background, border-color { duration: 140ms; }
+
+    Text {
+        x: 12px;
+        width: parent.width - 40px;
+        height: parent.height;
+        text: root.current-value;
+        color: RR.foreground;
+        font-size: 13px;
+        vertical-alignment: center;
+        overflow: elide;
+    }
+    Rectangle {
+        x: parent.width - self.width - 4px;
+        y: 4px;
+        width: 24px;
+        height: parent.height - 8px;
+        border-radius: 6px;
+        background: RR.accent;
+        Text {
+            width: parent.width;
+            height: parent.height;
+            text: "⌄";
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 700;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+    }
+
+    t := TouchArea {
+        enabled: root.enabled;
+        mouse-cursor: pointer;
+        clicked => {
+            popup.show();
+        }
+    }
+
+    popup := PopupWindow {
+        x: 0px;
+        y: root.height + 4px;
+        width: root.width;
+        Rectangle {
+            border-radius: 10px;
+            background: RR.popup;
+            border-width: 1px;
+            border-color: RR.border;
+            drop-shadow-blur: 18px;
+            drop-shadow-color: #000000aa;
+            VerticalLayout {
+                padding: 5px;
+                spacing: 1px;
+                for item[i] in root.model: Rectangle {
+                    height: 30px;
+                    border-radius: 6px;
+                    background: ia.has-hover ? RR.accent : transparent;
+                    Text {
+                        x: 26px;
+                        width: parent.width - 32px;
+                        height: parent.height;
+                        text: item;
+                        color: ia.has-hover ? #ffffff : RR.foreground;
+                        font-size: 13px;
+                        vertical-alignment: center;
+                        overflow: elide;
+                    }
+                    Text {
+                        x: 8px;
+                        height: parent.height;
+                        visible: i == root.current-index;
+                        text: "✓";
+                        color: ia.has-hover ? #ffffff : RR.accent;
+                        font-size: 12px;
+                        font-weight: 800;
+                        vertical-alignment: center;
+                    }
+                    ia := TouchArea {
+                        mouse-cursor: pointer;
+                        clicked => {
+                            root.current-index = i;
+                            root.current-value = item;
+                            root.selected(item);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Text field: dark glass with a ROG red focus ring; same API as LineEdit
+export component RRLineEdit inherits Rectangle {
+    in-out property <string> text <=> input.text;
+    in-out property <bool> enabled: true;
+    in property <string> placeholder-text;
+    callback accepted(string);
+    callback edited(string);
+
+    min-height: 30px;
+    min-width: 120px;
+    border-radius: 8px;
+    background: #00000059;
+    border-width: 1px;
+    border-color: input.has-focus ? RR.accent : ta.has-hover ? RR.ink.with-alpha(0.2) : RR.border;
+    opacity: root.enabled ? 1 : 0.45;
+    animate border-color { duration: 140ms; }
+    forward-focus: input;
+
+    ta := TouchArea {
+        mouse-cursor: MouseCursor.text;
+        clicked => {
+            input.focus();
+        }
+    }
+    Text {
+        x: 10px;
+        height: parent.height;
+        visible: input.text == "" && !input.has-focus;
+        text: root.placeholder-text;
+        color: RR.dim;
+        font-size: 13px;
+        vertical-alignment: center;
+    }
+    input := TextInput {
+        x: 10px;
+        width: parent.width - 20px;
+        height: parent.height;
+        enabled: root.enabled;
+        color: RR.foreground;
+        selection-background-color: RR.accent.with-alpha(0.4);
+        selection-foreground-color: RR.selection-foreground;
+        font-size: 13px;
+        vertical-alignment: center;
+        single-line: true;
+        accepted => {
+            root.accepted(self.text);
+        }
+        edited => {
+            root.edited(self.text);
+        }
+    }
+}
+
+// Segmented control like the RedRog system panel: a glass strip with a ROG
+// red highlight that slides to the active option
+export component RRSegmented inherits Rectangle {
+    in property <[string]> model;
+    in-out property <int> current-index: 0;
+    in property <bool> enabled: true;
+    callback changed(int);
+
+    min-height: 34px;
+    max-height: 34px;
+    min-width: root.model.length * 90px;
+    border-radius: 9px;
+    background: RR.ink.with-alpha(0.06);
+    border-width: 1px;
+    border-color: RR.ink.with-alpha(0.08);
+    opacity: root.enabled ? 1 : 0.45;
+    property <length> cell: (self.width - 6px) / max(1, root.model.length);
+
+    Rectangle {
+        x: 3px + root.cell * root.current-index;
+        y: 3px;
+        width: root.cell;
+        height: parent.height - 6px;
+        border-radius: 7px;
+        background: @linear-gradient(90deg, #d42a37 0%, RR.accent 100%);
+        drop-shadow-blur: 8px;
+        drop-shadow-color: RR.accent.with-alpha(0.33);
+        animate x { duration: 220ms; easing: ease-out; }
+    }
+
+    for item[i] in root.model: Rectangle {
+        x: 3px + root.cell * i;
+        y: 3px;
+        width: root.cell;
+        height: parent.height - 6px;
+        border-radius: 7px;
+        background: ta.has-hover && i != root.current-index ? RR.ink.with-alpha(0.08) : transparent;
+        Text {
+            width: parent.width;
+            height: parent.height;
+            text: item;
+            color: i == root.current-index ? #ffffff : RR.foreground;
+            font-size: 13px;
+            font-weight: i == root.current-index ? 700 : 500;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+            overflow: elide;
+        }
+        ta := TouchArea {
+            enabled: root.enabled;
+            mouse-cursor: pointer;
+            clicked => {
+                if (root.current-index != i) {
+                    root.current-index = i;
+                    root.changed(i);
+                }
+            }
+        }
+    }
+}
+
+// Group card with a small title, in place of Slint's GroupBox
+export component RRGroupBox inherits Rectangle {
+    in property <string> title;
+    in property <bool> enabled: true;
+    border-radius: 12px;
+    background: RR.ink.with-alpha(0.05);
+    border-width: 1px;
+    border-color: RR.ink.with-alpha(0.08);
+    opacity: root.enabled ? 1 : 0.5;
+
+    VerticalLayout {
+        padding: 12px;
+        spacing: 8px;
+        if root.title != "": Text {
+            text: root.title.to-uppercase();
+            color: RR.dim;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.4px;
+        }
+        @children
+    }
+}
+
+// Scroll view with a macOS overlay scroll bar: a thin translucent knob that
+// shows while scrolling or with the pointer near the edge, widens under the
+// pointer, can be dragged, and fades out a second later; used in place of
+// Slint's ScrollView (same children, same viewport properties)
+export component RRScrollView inherits Rectangle {
+    in-out property <length> viewport-width <=> fl.viewport-width;
+    in-out property <length> viewport-height <=> fl.viewport-height;
+    in-out property <length> viewport-x <=> fl.viewport-x;
+    in-out property <length> viewport-y <=> fl.viewport-y;
+    out property <length> visible-width: fl.width;
+    out property <length> visible-height: fl.height;
+    in property <bool> enabled: true;
+    property <bool> recent: false;
+    property <bool> scrollable: fl.viewport-height > fl.height + 1px;
+
+    fl := Flickable {
+        width: parent.width;
+        height: parent.height;
+        viewport-width: parent.width;
+        @children
+    }
+
+    // the bar shows while scrolling and fades out a moment after the last move
+    property <int> moves: 0;
+    changed viewport-y => {
+        root.moves += 1;
+        root.recent = true;
+    }
+    hide := Timer {
+        interval: 1200ms;
+        running: root.recent;
+        property <int> seen: 0;
+        triggered => {
+            if (self.seen == root.moves) {
+                root.recent = false;
+            }
+            self.seen = root.moves;
+        }
+    }
+
+    // edge zone: brings the bar up and lets the knob be dragged
+    zone := TouchArea {
+        x: parent.width - 16px;
+        width: 16px;
+        height: parent.height;
+        enabled: root.scrollable;
+        property <length> grab-y;
+        property <length> start-y;
+        pointer-event(event) => {
+            if (event.kind == PointerEventKind.down) {
+                self.grab-y = self.mouse-y;
+                self.start-y = fl.viewport-y;
+            }
+        }
+        moved => {
+            if (self.pressed) {
+                let ratio = fl.viewport-height / max(1px, fl.height);
+                fl.viewport-y = max(fl.height - fl.viewport-height, min(0px, self.start-y - (self.mouse-y - self.grab-y) * ratio));
+            }
+        }
+        scroll-event(event) => {
+            fl.viewport-y = max(fl.height - fl.viewport-height, min(0px, fl.viewport-y + event.delta-y));
+            return accept;
+        }
+    }
+
+    knob := Rectangle {
+        property <bool> wide: zone.has-hover || zone.pressed;
+        visible: root.scrollable;
+        width: self.wide ? 9px : 6px;
+        x: parent.width - self.width - 3px;
+        height: max(28px, fl.height * fl.height / max(1px, fl.viewport-height) - 6px);
+        y: 3px + (fl.height - self.height - 6px) * (-fl.viewport-y / max(1px, fl.viewport-height - fl.height));
+        border-radius: self.width / 2;
+        background: zone.pressed ? RR.ink.with-alpha(0.65) : self.wide ? RR.ink.with-alpha(0.5) : RR.ink.with-alpha(0.35);
+        opacity: root.recent || zone.has-hover || zone.pressed ? 1 : 0;
+        animate opacity { duration: 260ms; easing: ease-out; }
+        animate width { duration: 120ms; }
+    }
+}

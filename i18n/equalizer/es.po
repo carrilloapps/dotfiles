@@ -1,0 +1,29 @@
+# Spanish translation of the RedRog equalizer tray item (org.redrog.equalizer)
+msgid ""
+msgstr ""
+"Project-Id-Version: org.redrog.equalizer\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Equalizer"
+msgstr "Ecualizador"
+
+msgid "EasyEffects: click to open it"
+msgstr "EasyEffects: pulsa para abrirlo"
+
+msgid "EasyEffects is not running"
+msgstr "EasyEffects no está en marcha"
+
+msgid "Open EasyEffects"
+msgstr "Abrir EasyEffects"
+
+msgid "Bypass effects"
+msgstr "Omitir efectos"
+
+msgid "Output presets"
+msgstr "Perfiles de salida"
+
+msgid "Input presets"
+msgstr "Perfiles de entrada"

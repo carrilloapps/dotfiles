@@ -1,0 +1,15 @@
+{
+    "KPlugin": {
+        "Id": "Arc-Color",
+        "Name": "Arc Color",
+        "Version": "20220908",
+        "EnabledByDefault": true,
+        "Authors": [
+            {
+                "Name": "Alexey Varfolomeev",
+                "Email": "varlesh@gmail.com"
+            }
+        ]
+    },
+    "X-Plasma-API": "5.0"
+}

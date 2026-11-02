@@ -1,0 +1,297 @@
+#!/bin/bash
+# redrog-theme-switch: RedRog's light/dark switch (modules/theme-switch).
+#
+# Usage: redrog-theme-switch dark|light|toggle   switch now, and stay there
+#        redrog-theme-switch auto                follow Plasma's automatic
+#                                                light/dark switch
+#        redrog-theme-switch status              {"variant", "mode", "transition"}
+#        redrog-theme-switch transition on|off   the animated transition
+#        redrog-theme-switch sync                finish a switch Plasma made
+#        redrog-theme-switch watch               sync on every switch (service)
+#
+# Both variants are installed side by side (RedRog and RedRog Light, built by
+# the installer), so a switch rebuilds nothing: Plasma's global theme (color
+# scheme, Plasma style, window decoration, icons) and what it does not cover:
+# the accent color, Kvantum, GTK and GNOME apps, kitty, Spotify, OBS and the
+# files kept in both variants (~/.local/lib/redrog/variants). Firefox,
+# Thunderbird, Chrome and Audacity follow the system's light/dark mode
+# themselves. The choice is kept in ~/.local/state/redrog/theme-variant.
+set -u
+LIB="$HOME/.local/lib/redrog"
+STATE="${XDG_STATE_HOME:-$HOME/.local/state}/redrog"
+CFG="${XDG_CONFIG_HOME:-$HOME/.config}"
+mkdir -p "$STATE"
+
+variant_of_lnf() {
+  case "$(kreadconfig6 --file kdeglobals --group KDE --key LookAndFeelPackage)" in
+    org.redrog.light.desktop) echo light ;;
+    org.redrog.desktop) echo dark ;;
+    *) cat "$STATE/theme-variant" 2>/dev/null || echo dark ;;
+  esac
+}
+mode() { [ "$(kreadconfig6 --file kdeglobals --group KDE --key AutomaticLookAndFeel)" = true ] && echo auto || echo manual; }
+
+# Everything Plasma's global theme leaves out, for variant $1
+# The variant's wallpaper on every screen still showing one of RedRog's (the
+# image RedRog put there, or either variant's): wallpapers picked by hand
+# stay. The lock and login screens follow the main screen's
+# (redrog-wallpaper-sync).
+wallpapers() {   # new [other RedRog wallpapers...]
+  local new=$1 list="" w
+  esc() { printf '%s' "$1" | sed "s/'/\\\\'/g"; }
+  for w in "$@"; do [ -n "$w" ] && list="$list'$(esc "$w")',"; done
+  qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
+var target = '$(esc "$new")', ours = [${list%,}];
+desktops().forEach(function (d) {
+    d.currentConfigGroup = ['RedRog'];
+    var applied = String(d.readConfig('wallpaperApplied', ''));
+    if (d.wallpaperPlugin != 'org.kde.image') return;
+    d.currentConfigGroup = ['Wallpaper', 'org.kde.image', 'General'];
+    var image = String(d.readConfig('Image', '')).replace(/^file:\\/\\//, '').replace(/\\/$/, '');
+    if (image == target) return;
+    if (image != applied && ours.indexOf(image) < 0) return;
+    d.writeConfig('Image', 'file://' + target);
+    d.currentConfigGroup = ['RedRog'];
+    d.writeConfig('wallpaperApplied', target);
+    d.reloadConfig();
+});" >/dev/null 2>&1
+  printf '%s\n' "$new" > "$STATE/wallpaper-applied"
+}
+
+scheme() {
+  [ "$(kreadconfig6 --file kdeglobals --group General --key ColorScheme)" = "$1" ] ||
+    plasma-apply-colorscheme "$1" >/dev/null 2>&1
+}
+
+# Apps outside Plasma: GTK and GNOME, kitty, the palette files, OBS, Spotify.
+# They share no file with Plasma, so they run alongside it
+apps() {
+  local v=$1 id dest g f
+  {
+    for g in 3.0 4.0; do
+      f="$CFG/gtk-$g/settings.ini"
+      [ -f "$f" ] || continue
+      kwriteconfig6 --file "$f" --group Settings --key gtk-theme-name "$THEME_ID"
+      kwriteconfig6 --file "$f" --group Settings --key gtk-icon-theme-name "$ICON_THEME"
+      kwriteconfig6 --file "$f" --group Settings --key gtk-application-prefer-dark-theme "$DARK"
+    done
+    local g4="$CFG/gtk-4.0"
+    if [ -f "$g4/redrog-$v.css" ]; then
+      cp "$g4/redrog-$v.css" "$g4/redrog.css"
+      rm -rf "$g4/redrog-lights"
+      [ -d "$g4/redrog-lights-$v" ] && cp -r "$g4/redrog-lights-$v" "$g4/redrog-lights"
+    fi
+  } &
+  if command -v gsettings >/dev/null; then
+    { gsettings set org.gnome.desktop.interface gtk-theme "$THEME_ID"
+      gsettings set org.gnome.desktop.interface icon-theme "$ICON_THEME"
+      gsettings set org.gnome.desktop.interface color-scheme "$([ "$DARK" = true ] && echo prefer-dark || echo prefer-light)"; } &
+  fi
+  {
+    # kitty reloads its configuration on SIGUSR1
+    if [ -f "$CFG/kitty/redrog-theme-$v.conf" ]; then
+      cp "$CFG/kitty/redrog-theme-$v.conf" "$CFG/kitty/redrog-theme.conf"
+      pkill -USR1 -x kitty 2>/dev/null || true
+    fi
+    # files with the palette written in, kept in both variants (only ever in
+    # the home folder)
+    if [ -f "$LIB/variants/manifest" ]; then
+      while IFS='|' read -r id dest; do
+        case "$dest" in "$HOME"/*) ;; *) continue ;; esac
+        [ -f "$LIB/variants/$v/$id" ] && cp -p "$LIB/variants/$v/$id" "$dest"
+      done < "$LIB/variants/manifest"
+    fi
+    # OBS writes its settings when it quits: only while it is closed
+    if [ -f "$CFG/obs-studio/user.ini" ] && ! pgrep -x obs >/dev/null; then
+      kwriteconfig6 --file "$CFG/obs-studio/user.ini" --group Appearance --key Theme \
+        "com.redrog.obs$([ "$v" = light ] && echo .light)"
+    fi
+  } &
+  # Spotify (Spicetify) takes a few seconds: on its own, not waited for
+  if command -v spicetify >/dev/null && [ -f "$CFG/spicetify/Themes/RedRog/color.ini" ]; then
+    ( spicetify config color_scheme "$THEME_ID" >/dev/null 2>&1 && spicetify refresh -n >/dev/null 2>&1 ) 9>&- &
+    disown
+  fi
+}
+
+# Everything for variant $1; with a global theme ($2), that is applied first.
+# Plasma's own settings go one after the other (the global theme, the color
+# scheme, the accent and the window outline share files); the wallpapers and
+# the other apps go alongside them.
+finish() {
+  local v=$1 lnf=${2:-} THEME_ID LNF_ID ICON_THEME ACCENT_RGB DARK WALLPAPER WALLPAPER_FILE OUTLINE OUTLINE_INACTIVE other_wp
+  # shellcheck source=/dev/null
+  source "$LIB/theme/$v.env" || return 1
+  # the variant first: the watcher then knows this switch is ours
+  echo "$v" > "$STATE/theme-variant"
+  # the variant's wallpaper on the screens showing RedRog's (other variant's
+  # wallpaper, and the loose images of earlier versions, are RedRog's too)
+  if [ -n "$WALLPAPER" ]; then
+    other_wp=$(WALLPAPER=; WALLPAPER_FILE=; source "$LIB/theme/$([ "$v" = light ] && echo dark || echo light).env" 2>/dev/null
+               printf '%s\n%s' "$WALLPAPER" "$WALLPAPER_FILE")
+    mapfile -t others <<< "$other_wp"
+    wallpapers "$WALLPAPER" "${WALLPAPER_FILE:-}" "${others[@]}" &
+  fi
+  apps "$v"
+  # Plasma
+  [ -n "$lnf" ] && plasma-apply-lookandfeel -a "$lnf" >/dev/null 2>&1
+  # the global theme leaves the color scheme as it was when it is applied over
+  # another RedRog one (and, applied by Plasma itself, can write it back a
+  # moment later): set now, checked again once everything is done
+  scheme "$THEME_ID"
+  kwriteconfig6 --file kdeglobals --group General --key AccentColor "$ACCENT_RGB"
+  kwriteconfig6 --file "$CFG/Kvantum/kvantum.kvconfig" --group General --key theme "$THEME_ID"
+  # the hairline around rounded windows (modules/window-decoration), in the
+  # variant's tone: a light edge on light windows
+  if [ -n "${OUTLINE:-}" ]; then
+    kwriteconfig6 --file kwinrc --group Round-Corners --key OutlineColor "$OUTLINE"
+    kwriteconfig6 --file kwinrc --group Round-Corners --key InactiveOutlineColor "$OUTLINE_INACTIVE"
+    qdbus6 org.kde.KWin /Effects org.kde.kwin.Effects.reconfigureEffect kwin4_effect_shapecorners >/dev/null 2>&1
+  fi
+  wait
+  # the top bar's look over the new wallpaper (behind the transition's veil),
+  # and the color scheme once more (none of what outlives the switch keeps its
+  # lock)
+  [ -x "$LIB/redrog-panel-veil" ] && { "$LIB/redrog-panel-veil" >/dev/null 2>&1 9>&- & disown; }
+  { sleep 3; scheme "$THEME_ID"; } 9>&- & disown
+}
+
+# Every part of the variant checked once the switch is done, and set again if
+# it did not take (up to three rounds); then every app is told the palette and
+# style changed, whatever applied them. plasma-apply-colorscheme does nothing
+# when the scheme's name is already in kdeglobals (as Plasma's global theme can
+# leave it) and tells no app, which left menus in the old colors: the colors
+# themselves are compared with the scheme's, and a scheme that did not take is
+# applied through the other one. What had to be set again goes to
+# $STATE/switch.log.
+verify() {
+  local file="${XDG_DATA_HOME:-$HOME/.local/share}/color-schemes/$THEME_ID.colors" want_bg fixed round other
+  want_bg=$(kreadconfig6 --file "$file" --group Colors:Window --key BackgroundNormal 2>/dev/null)
+  other=$([ "$THEME_ID" = RedRog ] && echo RedRog-Light || echo RedRog)
+  for round in 1 2 3; do
+    fixed=""
+    if [ "$(kreadconfig6 --file kdeglobals --group KDE --key LookAndFeelPackage)" != "$LNF_ID" ]; then
+      plasma-apply-lookandfeel -a "$LNF_ID" >/dev/null 2>&1; fixed+=" global-theme"
+    fi
+    if [ "$(kreadconfig6 --file kdeglobals --group General --key ColorScheme)" != "$THEME_ID" ] ||
+       { [ -n "$want_bg" ] && [ "$(kreadconfig6 --file kdeglobals --group Colors:Window --key BackgroundNormal)" != "$want_bg" ]; }; then
+      plasma-apply-colorscheme "$other" >/dev/null 2>&1
+      plasma-apply-colorscheme "$THEME_ID" >/dev/null 2>&1; fixed+=" colors"
+    fi
+    # the application style that follows light/dark live (modules/kvantum)
+    if [ -e /usr/lib/qt6/plugins/styles/darkly6.so ] &&
+       [ "$(kreadconfig6 --file kdeglobals --group KDE --key widgetStyle)" != Darkly ]; then
+      kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle Darkly; fixed+=" style"
+    fi
+    if [ "$(kreadconfig6 --file plasmarc --group Theme --key name)" != "$THEME_ID" ]; then
+      kwriteconfig6 --file plasmarc --group Theme --key name "$THEME_ID"; fixed+=" plasma-style"
+    fi
+    if [ "$(kreadconfig6 --file kwinrc --group org.kde.kdecoration2 --key theme)" != "__aurorae__svg__$THEME_ID" ]; then
+      kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key theme "__aurorae__svg__$THEME_ID"
+      qdbus6 org.kde.KWin /KWin reconfigure >/dev/null 2>&1; fixed+=" decoration"
+    fi
+    if [ "$(kreadconfig6 --file kdeglobals --group Icons --key Theme)" != "$ICON_THEME" ]; then
+      /usr/lib/plasma-changeicons "$ICON_THEME" >/dev/null 2>&1; fixed+=" icons"
+    fi
+    if [ "$(kreadconfig6 --file "$CFG/Kvantum/kvantum.kvconfig" --group General --key theme)" != "$THEME_ID" ]; then
+      kwriteconfig6 --file "$CFG/Kvantum/kvantum.kvconfig" --group General --key theme "$THEME_ID"; fixed+=" kvantum"
+    fi
+    if command -v gsettings >/dev/null &&
+       [ "$(gsettings get org.gnome.desktop.interface color-scheme)" != "'$([ "$DARK" = true ] && echo prefer-dark || echo prefer-light)'" ]; then
+      gsettings set org.gnome.desktop.interface color-scheme "$([ "$DARK" = true ] && echo prefer-dark || echo prefer-light)"; fixed+=" gtk"
+    fi
+    [ -z "$fixed" ] && break
+    printf '%s %s: round %s set again:%s\n' "$(date '+%F %T')" "$THEME_ID" "$round" "$fixed" >> "$STATE/switch.log"
+  done
+  # palette (0) and style (2) changed, for every KDE/Qt app
+  for t in 0 2; do
+    dbus-send --session --type=signal /KGlobalSettings org.kde.KGlobalSettings.notifyChange int32:$t int32:0 2>/dev/null
+  done
+}
+
+# The animated transition (transition/Transition.qml), in the manner of
+# Samsung DeX: the screens fade into the new variant's color and the boot
+# splash's Arch logo charges in the middle; only then does the switch run,
+# unseen, and its check (verify); then the logo flashes and the veil fades
+# away over the new look. Off with
+# "redrog-theme-switch transition off" (or the tray's menu), when animations
+# are off in System Settings, outside a Wayland session or if anything is
+# missing; then the switch goes on as it is.
+VEIL=""
+cover() {
+  local speed run
+  [ "${REDROG_NO_TRANSITION:-0}" = 1 ] || [ -e "$STATE/transition-off" ] && return 0
+  [ -n "${WAYLAND_DISPLAY:-}" ] && [ -f "$LIB/theme/transition/Transition.qml" ] || return 0
+  command -v qml6 >/dev/null || return 0
+  speed=$(kreadconfig6 --file kdeglobals --group KDE --key AnimationDurationFactor)
+  awk -v s="${speed:-1}" 'BEGIN { exit !(s > 0) }' || return 0
+  run=$(mktemp -d "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/redrog-veil.XXXXXX") || return 0
+  QT_QPA_PLATFORM=wayland QT_WAYLAND_SHELL_INTEGRATION=layer-shell \
+  QML_XHR_ALLOW_FILE_READ=1 QML_XHR_ALLOW_FILE_WRITE=1 \
+    setsid qml6 "$LIB/theme/transition/Transition.qml" -- \
+      "$run" "#${BG:-1c1c1c}" "$LIB/theme/transition/arch" >/dev/null 2>&1 < /dev/null 9>&- &
+  disown
+  VEIL=$run
+  # veiled and charged within two seconds and a half, or the switch goes on
+  # regardless
+  for _ in $(seq 125); do [ -e "$run/charged" ] && break; sleep 0.02; done
+}
+uncover() {
+  [ -n "$VEIL" ] || return 0
+  # a moment for the apps to finish repainting behind the veil
+  sleep 0.15
+  echo 1 > "$VEIL/reveal" 2>/dev/null
+  { sleep 8; rm -f "$VEIL/charged" "$VEIL/reveal"; rmdir "$VEIL"; } >/dev/null 2>&1 9>&- & disown
+}
+
+switch_to() {
+  local v=$1 LNF_ID ACCENT_RGB BG ICON_THEME DARK
+  # shellcheck source=/dev/null
+  source "$LIB/theme/$v.env" || { echo "redrog-theme-switch: $v is not installed (./install.sh)" >&2; exit 1; }
+  # one switch at a time (a second click waits for the first)
+  exec 9> "$STATE/switch.lock"
+  flock -w 15 9 || exit 1
+  [ "$(variant_of_lnf)" = "$v" ] && [ "$(mode)" = manual ] && [ "$(cat "$STATE/theme-variant" 2>/dev/null)" = "$v" ] &&
+    [ "$(kreadconfig6 --file kdeglobals --group General --key ColorScheme)" = "$THEME_ID" ] && return 0
+  cover
+  kwriteconfig6 --file kdeglobals --group KDE --key AutomaticLookAndFeel false
+  finish "$v" "$LNF_ID"
+  verify
+  uncover
+}
+
+case "${1:-status}" in
+  dark|light) switch_to "$1" ;;
+  toggle) [ "$(variant_of_lnf)" = light ] && switch_to dark || switch_to light ;;
+  auto)
+    kwriteconfig6 --file kdeglobals --group KDE --key DefaultDarkLookAndFeel org.redrog.desktop
+    kwriteconfig6 --file kdeglobals --group KDE --key DefaultLightLookAndFeel org.redrog.light.desktop
+    kwriteconfig6 --file kdeglobals --group KDE --key AutomaticLookAndFeel true
+    finish "$(variant_of_lnf)" ;;
+  sync) finish "$(variant_of_lnf)" ;;
+  status) printf '{"variant": "%s", "mode": "%s", "transition": %s}\n' "$(variant_of_lnf)" "$(mode)" \
+            "$([ -e "$STATE/transition-off" ] && echo false || echo true)" ;;
+  transition)
+    case "${2:-}" in
+      on) rm -f "$STATE/transition-off" ;;
+      off) : > "$STATE/transition-off" ;;
+      *) [ -e "$STATE/transition-off" ] && echo off || echo on ;;
+    esac ;;
+  watch)
+    # Plasma changes the global theme itself in automatic mode (and from System
+    # Settings): when it lands on a RedRog theme, the rest follows
+    last=$(kreadconfig6 --file kdeglobals --group KDE --key LookAndFeelPackage)
+    while sleep 2; do
+      now=$(kreadconfig6 --file kdeglobals --group KDE --key LookAndFeelPackage)
+      [ "$now" = "$last" ] && continue
+      last=$now
+      v=$(variant_of_lnf)
+      # a switch made with this command is already finished
+      [ "$v" = "$(cat "$STATE/theme-variant" 2>/dev/null)" ] && continue
+      # Plasma may still be applying its global theme: let it finish first
+      for _ in $(seq 20); do pgrep -x plasma-apply-lookandfeel >/dev/null || break; sleep 0.5; done
+      sleep 1
+      case "$now" in org.redrog.desktop|org.redrog.light.desktop) finish "$v"; ( source "$LIB/theme/$v.env"; verify ) ;; esac
+    done ;;
+  *) sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+esac

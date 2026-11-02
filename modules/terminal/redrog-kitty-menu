@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# RedRog: right-click menu for kitty, installed by modules/terminal.
+# kitty runs it in the background with remote control and the clicked
+# window's id and folder:
+#   mouse_map right press ungrabbed launch --type=background
+#     --allow-remote-control --cwd=current redrog-kitty-menu @active-kitty-window-id
+# It shows menu.qml under the pointer and runs the chosen kitty action.
+wid="${1:?window id}"
+here="$(dirname "$(readlink -f "$0")")"
+
+# Agent CLIs that can be opened in a new pane: id:name:icon
+agents=()
+command -v claude >/dev/null && agents+=("claude:Claude Code:claude-desktop")
+command -v agy >/dev/null && agents+=("agy:Antigravity:antigravity")
+command -v codex >/dev/null && agents+=("codex:Codex:")
+command -v gemini >/dev/null && agents+=("gemini:Gemini CLI:")
+command -v opencode >/dev/null && agents+=("opencode:OpenCode:")
+command -v aider >/dev/null && agents+=("aider:Aider:")
+
+loc="${LC_ALL:-${LC_MESSAGES:-${LANG:-en}}}"
+# Qt logs to journald when stderr is not a terminal: force stderr to read the choice
+choice=$(QT_FORCE_STDERR_LOGGING=1 /usr/lib/qt6/bin/qml "$here/menu.qml" -- "lang=${loc%%_*}" \
+           "agents=$(IFS=,; echo "${agents[*]}")" 2>&1 | sed -n 's/.*ACTION //p' | head -n1)
+
+k() { kitten @ action --match "id:$wid" "$@"; }
+shell="$(getent passwd "$USER" | cut -d: -f7)"
+case "$choice" in
+  copy)     k copy_to_clipboard ;;
+  paste)    k paste_from_clipboard ;;
+  tab)      k new_tab_with_cwd ;;
+  right)    k launch --location=vsplit --cwd=current ;;
+  down)     k launch --location=hsplit --cwd=current ;;
+  zoom)     k toggle_layout stack ;;
+  rotate)   k layout_action rotate ;;
+  detach)   k detach_window new-tab ;;
+  close)    k close_window ;;
+  agent:*)  # the agent in a new pane; the shell stays when it exits
+            a="${choice#agent:}"
+            k launch --location=vsplit --cwd=current --title "$a" "$shell" -l -c "$a; exec $shell -l" ;;
+  search)   k launch --type=overlay --stdin-source=@screen_scrollback /usr/bin/less +G -R ;;
+  clear)    k clear_terminal to_cursor active ;;
+  files)    xdg-open "$PWD" >/dev/null 2>&1 & ;;
+  rename)   k set_tab_title ;;
+  settings) k edit_config_file ;;
+esac

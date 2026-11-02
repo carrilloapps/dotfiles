@@ -1,0 +1,220 @@
+#!/usr/bin/env python3
+"""EasyEffects remembers the preset of each device.
+
+Usage: redrog-audio-memory  (a user service, redrog-audio-memory.service)
+
+EasyEffects itself only knows one fixed preset per device (autoload) or one
+fallback for all. This keeps, for every output and microphone (device and
+route: the laptop's speakers and its headphone jack are two), the preset last
+used on it, and loads it again whenever that device becomes the one in use:
+streaming on the headset's microphone and bass on its sound come back after
+a while on the speakers.
+
+One exception, set by modules/audio: the built-in speakers always get their
+own preset ("forced", EasyEffects' autoload loads it), since it is what makes
+them sound right; it is never remembered for another device. A device met for
+the first time gets the preset modules/audio names for it ("first"), or else
+the neutral one.
+
+Devices are followed through PipeWire's events (a switch is applied in
+about a second); the preset in use is read every 10 s and remembered once the device has been in use for a few seconds.
+State: ~/.local/state/redrog/audio-presets.json.
+"""
+import configparser
+import json
+import os
+import subprocess
+import threading
+import time
+
+HOME = os.path.expanduser("~")
+STATE = os.path.join(os.environ.get("XDG_STATE_HOME", HOME + "/.local/state"), "redrog", "audio-presets.json")
+DEFAULTS = os.path.join(HOME, ".local/lib/redrog/audio/defaults.json")
+RC = os.path.join(os.environ.get("XDG_CONFIG_HOME", HOME + "/.config"), "easyeffects/db/easyeffectsrc")
+KINDS = ("output", "input")
+SAMPLE_EVERY = 10   # seconds between reads of the preset in use
+SETTLE = 6          # seconds a device must be in use before its preset is remembered
+
+
+# EasyEffects' command line (-s, -l) talks to the running EasyEffects and
+# needs no screen: on Qt's offscreen platform it works whatever this service's
+# environment (restarted without WAYLAND_DISPLAY, every call failed and was
+# retried every few seconds)
+EE_ENV = dict(os.environ, QT_QPA_PLATFORM="offscreen")
+
+
+def run(*args):
+    try:
+        r = subprocess.run(args, capture_output=True, text=True, timeout=10,
+                           env=EE_ENV if args and args[0] == "easyeffects" else None)
+        return r.returncode, r.stdout
+    except (OSError, subprocess.SubprocessError):
+        return 1, ""
+
+
+def read_json(path, default):
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return default
+
+
+def write_json(path, data):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+    os.replace(tmp, path)
+
+
+def ee_running():
+    return run("pgrep", "-x", "easyeffects")[0] == 0
+
+
+def rc_value(group, key):
+    cp = configparser.ConfigParser(interpolation=None, strict=False)
+    cp.optionxform = str
+    try:
+        cp.read(RC, encoding="utf-8")
+        return cp.get(group, key, fallback="")
+    except (configparser.Error, OSError):
+        return ""
+
+
+def route_of(kind, name):
+    """The active port's description of a sink or source, as EasyEffects names routes."""
+    code, out = run("pactl", "-f", "json", "list", "sinks" if kind == "output" else "sources")
+    if code:
+        return ""
+    try:
+        for dev in json.loads(out):
+            if dev.get("name") == name:
+                port = dev.get("active_port") or ""
+                return next((p.get("description") or p["name"] for p in dev.get("ports", [])
+                             if p["name"] == port), "")
+    except (ValueError, KeyError):
+        pass
+    return ""
+
+
+def current_devices():
+    """{kind: "device:route"} of the output and microphone in use."""
+    out = run("pactl", "get-default-sink")[1].strip()
+    if not out or out.startswith("easyeffects"):
+        out = rc_value("StreamOutputs", "outputDevice")
+    mic = rc_value("StreamInputs", "inputDevice")
+    devs = {}
+    for kind, name in (("output", out), ("input", mic)):
+        route = route_of(kind, name) if name else ""
+        if route:   # a device without its port yet is still appearing
+            devs[kind] = f"{name}:{route}"
+    return devs
+
+
+def presets_in_use():
+    code, out = run("easyeffects", "-s")
+    found = {}
+    if code == 0:
+        for line in out.splitlines():
+            kind, _, name = line.partition(":")
+            if kind.strip() in KINDS and name.strip():
+                found[kind.strip()] = name.strip()
+    return found
+
+
+class Memory:
+    def __init__(self):
+        self.defaults = read_json(DEFAULTS, {})
+        self.mem = read_json(STATE, {"output": {}, "input": {}})
+        for kind in KINDS:
+            self.mem.setdefault(kind, {})
+        self.active = {}        # kind -> device key last applied
+        self.since = {}         # kind -> when it became the device in use
+        self.lock = threading.Lock()
+
+    def forced(self, kind, key):
+        return self.defaults.get("forced", {}).get(kind, {}).get(key)
+
+    def target(self, kind, key):
+        if self.forced(kind, key):
+            return self.forced(kind, key)
+        if key in self.mem[kind]:
+            return self.mem[kind][key]
+        for rule in self.defaults.get("first", {}).get(kind, []):
+            if rule["match"] in key:
+                return rule["preset"]
+        return self.defaults.get("neutral", {}).get(kind)
+
+    def check(self, sample=False):
+        with self.lock:
+            if not ee_running():
+                self.active.clear()   # apply again once EasyEffects is back
+                return
+            devs = current_devices()
+            if any(devs.get(k) and devs[k] != self.active.get(k) for k in KINDS):
+                # a change only counts once it holds: loading a preset makes
+                # EasyEffects rebuild its streams, a passing flicker
+                time.sleep(0.3)
+                again = current_devices()
+                devs = {k: v for k, v in devs.items() if again.get(k) == v}
+            now = time.monotonic()
+            used = presets_in_use() if sample else {}
+            for kind in KINDS:
+                key = devs.get(kind)
+                if not key:
+                    continue
+                if key != self.active.get(kind):
+                    preset = self.target(kind, key)
+                    if preset and run("easyeffects", "-l", preset)[0] != 0:
+                        continue   # try again on the next event
+                    self.active[kind], self.since[kind] = key, now
+                    continue
+                preset = used.get(kind)
+                forced_presets = {p for d in self.defaults.get("forced", {}).values() for p in d.values()}
+                if (preset and now - self.since[kind] >= SETTLE and not self.forced(kind, key)
+                        and preset not in forced_presets and self.mem[kind].get(key) != preset):
+                    self.mem[kind][key] = preset
+                    write_json(STATE, self.mem)
+
+
+def main():
+    memory = Memory()
+    memory.check()
+
+    def sampler():
+        while True:
+            time.sleep(SAMPLE_EVERY)
+            memory.check(sample=True)
+
+    threading.Thread(target=sampler, daemon=True).start()
+    # Follow PipeWire: a new default device (server), a port change (card), a
+    # device plugged in or out (new/remove on a sink or source). Streams
+    # (sink-input, source-output) change all the time and are left out.
+    # One check 0.3 s after the first event of a burst; later events of the
+    # burst do not push it back
+    scheduled = threading.Event()
+
+    def run_check():
+        scheduled.clear()
+        memory.check()
+
+    def relevant(line):
+        words = line.split()   # Event 'change' on server #42
+        if len(words) < 4:
+            return False
+        event, facility = words[1].strip("'"), words[3]
+        return facility in ("server", "card") or (facility in ("sink", "source") and event in ("new", "remove"))
+
+    while True:
+        proc = subprocess.Popen(["pactl", "subscribe"], stdout=subprocess.PIPE, text=True)
+        for line in proc.stdout:
+            if relevant(line) and not scheduled.is_set():
+                scheduled.set()
+                threading.Timer(0.3, run_check).start()
+        proc.wait()
+        time.sleep(3)   # PipeWire restarted: subscribe again
+
+
+if __name__ == "__main__":
+    main()

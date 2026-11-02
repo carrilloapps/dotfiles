@@ -1,0 +1,23 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Id": "org.redrog.spectrumswitch",
+        "Name": "Audio Spectrum",
+        "Description": "Turns RedRog's desktop audio spectrum on or off; shown on the top bar only while it is on",
+        "Name[es]": "Espectro de audio",
+        "Description[es]": "Enciende o apaga el espectro de audio del escritorio de RedRog; se ve en la barra superior solo mientras está encendido",
+        "Icon": "spek",
+        "Category": "Multimedia",
+        "License": "GPL-2.0-or-later",
+        "Version": "1.0",
+        "EnabledByDefault": true,
+        "Authors": [
+            {
+                "Name": "RedRog"
+            }
+        ]
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-NotificationArea": "true",
+    "X-Plasma-NotificationAreaCategory": "ApplicationStatus"
+}

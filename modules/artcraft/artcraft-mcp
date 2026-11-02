@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+# artcraft-mcp APP: the MCP server (stdio) of a Craft app for Claude Code, agy
+# and any MCP client. When the app's window is open (it listens on its
+# control port, set for every app in environment.d/60-redrog-artcraft.conf)
+# the server drives that window, so you watch every change live; otherwise
+# it runs the app's headless engine, with file access confined to $HOME.
+# The choice is made when the client starts the server: after opening the
+# app, reconnect it (/mcp in Claude Code).
+set -euo pipefail
+app=${1:?usage: artcraft-mcp APP}
+shift
+cli=/usr/bin/$app-cli
+[ -x "$cli" ] || { echo "artcraft-mcp: $cli is not installed (./install.sh --only artcraft)" >&2; exit 1; }
+
+# ports and the control token, as the apps get them from the session
+# (environment.d and plasma-workspace/env/redrog-artcraft.sh)
+conf=${XDG_CONFIG_HOME:-$HOME/.config}/environment.d/60-redrog-artcraft.conf
+if [ -r "$conf" ]; then
+  while IFS='=' read -r k v; do
+    [[ $k =~ ^[A-Z]+_CONTROL_PORT$ && $v =~ ^[0-9]+$ ]] && export "$k=$v"
+  done < "$conf"
+fi
+token_file=${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/redrog-artcraft/token
+if [ -r "$token_file" ]; then
+  PHOTOCRAFT_CONTROL_TOKEN=$(<"$token_file")
+  export PHOTOCRAFT_CONTROL_TOKEN FILMCRAFT_CONTROL_TOKEN=$PHOTOCRAFT_CONTROL_TOKEN
+fi
+# the headless engines render on the discrete GPU too
+export WGPU_POWER_PREF=high
+var=${app^^}_CONTROL_PORT
+port=${!var:-}
+listening() { [ -n "$port" ] && (exec 3<>"/dev/tcp/127.0.0.1/$port") 2>/dev/null; }
+roots=(--automation-read-root "$HOME" --automation-write-root "$HOME")
+
+# SolidCraft makes its own secret at each start, in a file only the user can
+# read; it goes to the server through the environment (not argv, which other
+# users could see)
+if [ "$app" = solidcraft ] && listening; then
+  t=${XDG_DATA_HOME:-$HOME/.local/share}/solidcraft/control/$port.token
+  [ -r "$t" ] && { SOLIDCRAFT_CONTROL_TOKEN=$(tr -d '[:space:]' < "$t"); export SOLIDCRAFT_CONTROL_TOKEN; }
+fi
+
+if listening; then
+  case $app in
+    photocraft|effectcraft) set -- --bridge "$port" "$@" ;;
+    filmcraft)              set -- --bridge "127.0.0.1:$port" "$@" ;;
+    figcraft)               set -- --attach "$port" "$@" ;;
+    lightcraft)             set -- --connect "127.0.0.1:$port" --compact "$@" ;;
+    vectorcraft|wordcraft) set -- --connect "127.0.0.1:$port" "$@" ;;
+    solidcraft)             set -- --connect "127.0.0.1:$port" --allow-path "$HOME" "$@" ;;
+    pdfcraft)               set -- --compact "${roots[@]}" "$@" ;;   # no live mode
+    *)                      set -- --connect "$port" "$@" ;;
+  esac
+else
+  # the bridge variables would make some servers look for the app
+  unset PHOTOCRAFT_CONTROL_PORT
+  case $app in
+    vectorcraft)  set -- --headless "${roots[@]}" "$@" ;;
+    # its headless engine composites on the CPU unless asked (1.8-3.7x
+    # faster on the GPU, same pixels: effectcraft-cli bench --gpu)
+    effectcraft)  set -- --gpu "${roots[@]}" "$@" ;;
+    lightcraft)   set -- --compact "$@" ;;
+    # its headless screenshots are drawn on a GPU device, a hardware one
+    # (never its software or CPU fallback). Not --render-gpu (the path-traced
+    # image host): with it the 0.28.0 server never answers.
+    solidcraft)   export SOLIDCRAFT_GPU=hardware
+                  set -- --headless --allow-path "$HOME" "$@" ;;
+    pdfcraft)     set -- --compact "${roots[@]}" "$@" ;;
+    filmcraft|gridcraft) ;;
+    *)            set -- "${roots[@]}" "$@" ;;
+  esac
+fi
+# Headless engines are background work for an agent: they run in
+# redrog-artcraft.slice with the apps (together at most 75 % of the CPU and
+# 75-80 % of the memory; the GPU is capped at 76 % while any of them runs,
+# craft-gpu-cap), at low CPU and disk priority, with thread pools sized to
+# that share (four full-speed CPU renders once made the laptop unresponsive).
+export RAYON_NUM_THREADS=$(( $(nproc) * 3 / 4 ))
+if systemctl --user cat redrog-artcraft.slice >/dev/null 2>&1; then
+  exec systemd-run --user --scope --quiet --collect --slice=redrog-artcraft.slice \
+       nice -n 15 ionice -c 3 "$cli" mcp "$@"
+fi
+exec nice -n 15 ionice -c 3 "$cli" mcp "$@"

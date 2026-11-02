@@ -1,0 +1,215 @@
+// RedRog hardware monitor: one tile per chip (processor, dedicated and
+// integrated graphics, memory) with a large reading, a usage bar and its fan,
+// instead of long "Status | full model name" rows.
+// Inserted into pages/system.slint by packages/rog-control-center/redrog-theme.py
+// (it reads SystemPageData, defined there).
+
+component HwBar inherits Rectangle {
+    in property <float> value;
+    in property <color> tint: RR.accent;
+    height: 4px;
+    border-radius: 2px;
+    background: RR.ink.with-alpha(0.08);
+    Rectangle {
+        x: 0px;
+        width: parent.width * clamp(root.value, 0, 100) / 100;
+        height: parent.height;
+        border-radius: 2px;
+        background: root.tint;
+        animate width { duration: 400ms; easing: ease-out; }
+    }
+}
+
+component HwRow inherits HorizontalLayout {
+    in property <string> label;
+    in property <string> value;
+    spacing: 8px;
+    Text {
+        text: root.label;
+        color: RR.foreground.with-alpha(0.55);
+        font-size: 12px;
+        overflow: elide;
+        horizontal-stretch: 1;
+    }
+    Text {
+        text: root.value;
+        color: RR.foreground;
+        font-size: 12px;
+        font-weight: 600;
+        horizontal-alignment: right;
+    }
+}
+
+component HwTile inherits Rectangle {
+    in property <string> label;
+    in property <string> model;
+    in property <string> reading;
+    in property <color> reading-color: RR.foreground;
+    in property <float> usage: -1;
+    in property <string> usage-label;
+    in property <string> row-a-label;
+    in property <string> row-a-value;
+    in property <string> row-b-label;
+    in property <string> row-b-value;
+    horizontal-stretch: 1;
+    min-width: 0px;
+    background: RR.ink.with-alpha(0.03);
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: RR.border;
+
+    VerticalLayout {
+        padding: 14px;
+        padding-top: 12px;
+        spacing: 7px;
+        Text {
+            text: root.label.to-uppercase();
+            color: RR.accent;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.4px;
+            overflow: elide;
+        }
+        Text {
+            text: root.reading;
+            color: root.reading-color;
+            font-size: 24px;
+            font-weight: 600;
+            overflow: elide;
+        }
+        Text {
+            text: root.model;
+            color: RR.foreground.with-alpha(0.55);
+            font-size: 11px;
+            overflow: elide;
+        }
+        Rectangle { height: 2px; }
+        if root.usage >= 0: HwRow {
+            label: root.usage-label;
+            value: Math.round(root.usage) + " %";
+        }
+        if root.usage >= 0: HwBar {
+            value: root.usage;
+            tint: root.usage > 85 ? #ff5c5c : RR.accent;
+        }
+        if root.row-a-label != "": HwRow {
+            label: root.row-a-label;
+            value: root.row-a-value;
+        }
+        if root.row-b-label != "": HwRow {
+            label: root.row-b-label;
+            value: root.row-b-value;
+        }
+        Rectangle { }
+    }
+}
+
+component HwMonitor inherits Rectangle {
+    pure function temp-color(t: float) -> color {
+        return t <= 0 ? RR.foreground.with-alpha(0.55) : (t > 80 ? #ff5c5c : (t > 65 ? #f5b942 : #3ddc84));
+    }
+    pure function temp(t: float) -> string {
+        return t > 0 ? (Math.round(t) + " °C") : "—";
+    }
+    pure function freq(mhz: float) -> string {
+        return mhz >= 1000 ? (Math.round(mhz / 100) / 10 + " GHz") : (Math.round(mhz) + " MHz");
+    }
+    pure function rpm(r: int) -> string {
+        return r > 0 ? (r + " RPM") : @tr("HwMonitor" => "Stopped");
+    }
+
+    background: RR.alternate-background;
+    border-color: RR.border;
+    border-width: 1px;
+    border-radius: 12px;
+
+    VerticalLayout {
+        padding: 14px;
+        spacing: 12px;
+
+        HorizontalLayout {
+            spacing: 8px;
+            Text {
+                text: @tr("HwMonitor" => "Hardware monitor");
+                color: RR.foreground;
+                font-size: 14px;
+                font-weight: 700;
+                vertical-alignment: center;
+                horizontal-stretch: 1;
+            }
+            // live indicator
+            Rectangle {
+                width: live.preferred-width + 22px;
+                height: 22px;
+                border-radius: 11px;
+                background: #3ddc841a;
+                Rectangle {
+                    x: 9px;
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 3px;
+                    background: #3ddc84;
+                }
+                live := Text {
+                    x: 19px;
+                    text: @tr("HwMonitor" => "Live");
+                    color: #3ddc84;
+                    font-size: 11px;
+                    font-weight: 600;
+                    vertical-alignment: center;
+                }
+            }
+        }
+
+        HorizontalLayout {
+            spacing: 10px;
+            HwTile {
+                label: @tr("HwMonitor" => "Processor");
+                model: SystemPageData.cpu_name;
+                reading: root.temp(SystemPageData.cpu_temp_val);
+                reading-color: root.temp-color(SystemPageData.cpu_temp_val);
+                usage: SystemPageData.cpu_usage_val;
+                usage-label: @tr("HwMonitor" => "Usage");
+                row-a-label: @tr("HwMonitor" => "Frequency");
+                row-a-value: root.freq(SystemPageData.cpu_freq_mhz);
+                row-b-label: SystemPageData.cpu_fan_rpm >= 0 ? @tr("HwMonitor" => "Fan") : "";
+                row-b-value: root.rpm(SystemPageData.cpu_fan_rpm);
+            }
+            if SystemPageData.has_dgpu: HwTile {
+                label: @tr("HwMonitor" => "Dedicated graphics");
+                model: SystemPageData.dgpu_name;
+                reading: SystemPageData.dgpu_suspended ? @tr("HwMonitor" => "Asleep") : root.temp(SystemPageData.gpu_temp_val);
+                reading-color: SystemPageData.dgpu_suspended ? RR.foreground.with-alpha(0.55) : root.temp-color(SystemPageData.gpu_temp_val);
+                usage: SystemPageData.dgpu_suspended ? -1 : SystemPageData.gpu_usage_val;
+                usage-label: @tr("HwMonitor" => "Usage");
+                row-a-label: SystemPageData.dgpu_suspended ? @tr("HwMonitor" => "State") : "";
+                row-a-value: @tr("HwMonitor" => "Saving power");
+                row-b-label: SystemPageData.gpu_fan_rpm >= 0 ? @tr("HwMonitor" => "Fan") : "";
+                row-b-value: root.rpm(SystemPageData.gpu_fan_rpm);
+            }
+            if SystemPageData.has_igpu: HwTile {
+                label: @tr("HwMonitor" => "Integrated graphics");
+                model: SystemPageData.igpu_name;
+                // integrated GPUs rarely report a temperature: then the usage
+                // some report no sensors at all: say so instead of empty dashes
+                reading: SystemPageData.igpu_temp_val > 0 ? root.temp(SystemPageData.igpu_temp_val)
+                    : (SystemPageData.igpu_usage_val >= 0 ? Math.round(SystemPageData.igpu_usage_val) + " %"
+                    : @tr("HwMonitor" => "No sensors"));
+                reading-color: SystemPageData.igpu_temp_val > 0 ? root.temp-color(SystemPageData.igpu_temp_val)
+                    : (SystemPageData.igpu_usage_val >= 0 ? RR.foreground : RR.foreground.with-alpha(0.55));
+                usage: SystemPageData.igpu_temp_val > 0 ? SystemPageData.igpu_usage_val : -1;
+                usage-label: @tr("HwMonitor" => "Usage");
+            }
+            HwTile {
+                label: @tr("HwMonitor" => "Memory");
+                model: @tr("HwMonitor" => "System RAM");
+                reading: Math.round(SystemPageData.ram_usage_val) + " %";
+                usage: SystemPageData.ram_usage_val;
+                usage-label: @tr("HwMonitor" => "In use");
+                row-a-label: SystemPageData.mid_fan_rpm > 0 ? @tr("HwMonitor" => "Middle fan") : "";
+                row-a-value: root.rpm(SystemPageData.mid_fan_rpm);
+            }
+        }
+    }
+}
+

@@ -1,0 +1,19 @@
+#!/bin/bash
+# Rebuilds the RedRog glass effect from /usr/src/kwin-effect-redrog-glass
+# for the installed KWin (run by the pacman hook after a KWin update). If the
+# build fails the effect is removed, so KWin never loads a stale one: those
+# apps go back to opaque until the package is rebuilt.
+src=/usr/src/kwin-effect-redrog-glass
+so=/usr/lib/qt6/plugins/kwin/effects/plugins/redrogglass.so
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+if cmake -S "$src" -B "$tmp" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr >"$tmp.log" 2>&1 &&
+   cmake --build "$tmp" -j"$(nproc)" >>"$tmp.log" 2>&1 &&
+   cmake --install "$tmp" >>"$tmp.log" 2>&1; then
+  echo "RedRog glass rebuilt for KWin $(pacman -Q kwin | cut -d' ' -f2)"
+  rm -f "$tmp.log"
+else
+  rm -f "$so"
+  echo "RedRog glass could not be rebuilt (log: $tmp.log); turned off until: ./install.sh --packages"
+fi
+exit 0

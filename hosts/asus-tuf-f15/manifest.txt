@@ -1,0 +1,44 @@
+# Paths that capture.sh copies here and restore.sh puts back.
+# One per line, relative to $HOME. Directories end with /.
+# Lines starting with "/" are system paths: captured for reference only,
+# restore.sh never writes them.
+
+# --- KDE / Plasma ---
+.config/kdeglobals
+.config/kwinrc
+.config/kwinrulesrc
+.config/plasmarc
+.config/plasmashellrc
+.config/plasma-org.kde.plasma.desktop-appletsrc
+.config/kcminputrc
+.config/ksplashrc
+.config/kscreenlockerrc
+.config/ksmserverrc
+.config/kglobalshortcutsrc
+.config/breezerc
+.config/Kvantum/
+.config/gtk-3.0/
+.config/gtk-4.0/
+.config/kitty/
+.local/share/color-schemes/
+.config/plasma-workspace/env/
+
+# --- Own menu entries and shortcuts ---
+.local/share/applications/DaVinciResolve.desktop
+.local/share/applications/DaVinciControlPanelsSetup.desktop
+.config/menus/applications-merged/
+
+# --- Shell / terminal ---
+.config/fish/config.fish
+
+# --- System (reference only) ---
+/etc/asusd/asusd.ron
+/etc/asusd/fan_curves.ron
+/etc/asusd/aura_tuf.ron
+/etc/pacman.d/hooks/
+
+# --- No AI attribution (global hooks) ---
+.config/git/hooks/
+.claude/settings.json
+.claude/hooks/
+.local/bin/Xwayland

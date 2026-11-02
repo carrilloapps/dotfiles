@@ -1,0 +1,49 @@
+# Menu names in Spanish and short (modules/apps). Brand names stay as they
+# are, like on macOS; descriptive or long names are translated or shortened.
+# desktop id	Name[es] (empty: keep)	GenericName[es] (empty: keep)
+Affinity.desktop	Affinity	Diseño y fotografía
+Need for Speed Unbound.desktop	NFS Unbound	
+ai.storyteller.artcraft-launcher.desktop	ArtCraft	Lanzador de apps
+ai.storyteller.deckcraft.desktop		Presentaciones
+ai.storyteller.designcraft.desktop		Maquetación
+ai.storyteller.effectcraft.desktop		Gráficos en movimiento
+ai.storyteller.figcraft.desktop		Diseño de interfaces
+ai.storyteller.filmcraft.desktop		Editor de video
+ai.storyteller.gridcraft.desktop		Hoja de cálculo
+ai.storyteller.lightcraft.desktop		Fotos y revelado RAW
+ai.storyteller.pdfcraft.desktop		Editor de PDF
+ai.storyteller.photocraft.desktop		Editor de imágenes
+ai.storyteller.soundcraft.desktop		Estudio de audio
+ai.storyteller.vectorcraft.desktop		Gráficos vectoriales
+ai.storyteller.wordcraft.desktop		Procesador de texto
+blackmagicraw-player.desktop	Blackmagic RAW	Reproductor RAW
+btrfs-assistant.desktop	Asistente Btrfs	Instantáneas del sistema
+cachyos-pi.desktop	Instalar paquetes	
+com.anthropic.Claude.desktop		Asistente de IA
+com.github.wwmm.easyeffects.desktop	Ecualizador	Efectos de audio
+com.heroicgameslauncher.hgl.desktop	Heroic	Juegos de Epic y GOG
+com.microsoft.VSCode.desktop	VS Code	Editor de código
+com.obsproject.Studio.desktop		Grabación y transmisión
+discord.desktop		Mensajería
+io.missioncenter.MissionCenter.desktop	Monitor de actividad	
+kitty.desktop		Terminal
+klassy-settings.desktop	Ajustes de Klassy	Bordes de ventana
+kvantummanager.desktop	Kvantum	Estilo de las apps Qt
+limine-snapper-restore.desktop	Restaurar sistema	Volver a una instantánea
+notion.desktop		Notas y documentos
+onlyoffice-desktopeditors.desktop		Ofimática
+org.cachyos.KernelManager.desktop	Kernels	Gestor de kernels
+org.cachyos.scx-manager.desktop	Planificador de CPU	Planificadores sched-ext
+org.kde.kwalletmanager.desktop	Contraseñas	
+org.kde.partitionmanager.desktop	Particiones	Discos y particiones
+org.kde.plasma.emojier.desktop	Emojis	
+org.rncbc.qtractor.desktop		Secuenciador multipista
+redrog-audio-reset.desktop	Restaurar altavoces	
+rquickshare-x.desktop	Quick Share	Compartir con Android
+scrcpy.desktop		Control de Android
+spotify-launcher.desktop	Spotify	Música
+systemsettings.desktop	Ajustes	Ajustes del sistema
+virtualbox.desktop	VirtualBox	Máquinas virtuales
+vlc.desktop	VLC	Reproductor multimedia
+openscreen.desktop	OpenScreen	Demos de pantalla
+io.tangencylabs.solidcraft.desktop		CAD 3D paramétrico

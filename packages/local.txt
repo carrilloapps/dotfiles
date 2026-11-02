@@ -1,0 +1,11 @@
+# PKGBUILDs in this folder, with fixes over the AUR versions (see each README).
+arc-gtk-theme
+appgrid
+rog-control-center
+kwin-effect-redrog-glass
+obs-move-transition
+plasma6-applets-supergfxctl
+kwin-effects-better-blur-dx
+kwin-effect-rounded-corners-git
+qm-vamp-plugins
+audacity4-bin

@@ -1,0 +1,1355 @@
+# Spanish translation of ROG Control Center (asusctl).
+# Maintained in RedRog: https://github.com/ — installed by modules/system.
+# This file is distributed under the same license as asusctl (MPL-2.0).
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: rog-control-center 6.5.0\n"
+"POT-Creation-Date: 2026-07-23 18:09+0000\n"
+"PO-Revision-Date: 2026-10-16 15:15-0500\n"
+"Last-Translator: RedRog\n"
+"Language-Team: Spanish\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: rog-control-center/ui/pages/anime.slint:6
+msgctxt "Anime Brightness"
+msgid "Off"
+msgstr "Apagado"
+
+#: rog-control-center/ui/pages/anime.slint:7
+msgctxt "Anime Brightness"
+msgid "Low"
+msgstr "Bajo"
+
+#: rog-control-center/ui/pages/anime.slint:8
+msgctxt "Anime Brightness"
+msgid "Med"
+msgstr "Medio"
+
+#: rog-control-center/ui/pages/anime.slint:9
+msgctxt "Anime Brightness"
+msgid "High"
+msgstr "Alto"
+
+#: rog-control-center/ui/pages/anime.slint:23
+msgctxt "AnimePageData"
+msgid "Glitch Construction"
+msgstr "Glitch Construction"
+
+#: rog-control-center/ui/pages/anime.slint:23
+msgctxt "AnimePageData"
+msgid "Static Emergence"
+msgstr "Static Emergence"
+
+#: rog-control-center/ui/pages/anime.slint:25
+msgctxt "AnimePageData"
+msgid "Binary Banner Scroll"
+msgstr "Binary Banner Scroll"
+
+#: rog-control-center/ui/pages/anime.slint:25
+msgctxt "AnimePageData"
+msgid "Rog Logo Glitch"
+msgstr "Rog Logo Glitch"
+
+#: rog-control-center/ui/pages/anime.slint:27
+msgctxt "AnimePageData"
+msgid "Banner Swipe"
+msgstr "Banner Swipe"
+
+#: rog-control-center/ui/pages/anime.slint:27
+msgctxt "AnimePageData"
+msgid "Starfield"
+msgstr "Starfield"
+
+#: rog-control-center/ui/pages/anime.slint:29
+msgctxt "AnimePageData"
+msgid "Glitch Out"
+msgstr "Glitch Out"
+
+#: rog-control-center/ui/pages/anime.slint:29
+msgctxt "AnimePageData"
+msgid "See Ya"
+msgstr "Hasta luego"
+
+#: rog-control-center/ui/pages/anime.slint:47
+msgctxt "Anime Brightness"
+msgid "Brightness"
+msgstr "Brillo"
+
+#: rog-control-center/ui/pages/anime.slint:63
+msgctxt "PageAnime"
+msgid "Enable display"
+msgstr "Activar pantalla"
+
+#: rog-control-center/ui/pages/anime.slint:71
+msgctxt "PageAnime"
+msgid "Advanced"
+msgstr "Avanzado"
+
+#: rog-control-center/ui/pages/anime.slint:86
+msgctxt "PageAnime"
+msgid "Use built-in animations"
+msgstr "Usar animaciones integradas"
+
+#: rog-control-center/ui/pages/anime.slint:144
+msgctxt "PageAnime"
+msgid "Set which builtin animations are played"
+msgstr "Elige qué animaciones integradas se reproducen"
+
+#: rog-control-center/ui/pages/anime.slint:148
+msgctxt "Anime built-in selection"
+msgid "Boot Animation"
+msgstr "Animación de arranque"
+
+#: rog-control-center/ui/pages/anime.slint:158
+msgctxt "Anime built-in selection"
+msgid "Running Animation"
+msgstr "Animación en uso"
+
+#: rog-control-center/ui/pages/anime.slint:168
+msgctxt "Anime built-in selection"
+msgid "Sleep Animation"
+msgstr "Animación de suspensión"
+
+#: rog-control-center/ui/pages/anime.slint:178
+msgctxt "Anime built-in selection"
+msgid "Shutdown Animation"
+msgstr "Animación de apagado"
+
+#: rog-control-center/ui/pages/anime.slint:219
+msgctxt "PageAnime"
+msgid "Advanced Display Settings"
+msgstr "Ajustes avanzados de pantalla"
+
+#: rog-control-center/ui/pages/anime.slint:224
+msgctxt "PageAnime"
+msgid "Off when lid closed"
+msgstr "Apagar con la tapa cerrada"
+
+#: rog-control-center/ui/pages/anime.slint:233
+msgctxt "PageAnime"
+msgid "Off when suspended"
+msgstr "Apagar al suspender"
+
+#: rog-control-center/ui/pages/anime.slint:242
+msgctxt "PageAnime"
+msgid "Off when on battery"
+msgstr "Apagar con batería"
+
+#: rog-control-center/ui/pages/aura.slint:29
+msgctxt "PageAura"
+msgid "Brightness"
+msgstr "Brillo"
+
+#: rog-control-center/ui/pages/aura.slint:40
+msgctxt "PageAura"
+msgid "Aura mode"
+msgstr "Modo Aura"
+
+#: rog-control-center/ui/pages/aura.slint:65
+msgctxt "PageAura"
+msgid "Colour 1"
+msgstr "Color 1"
+
+#: rog-control-center/ui/pages/aura.slint:90
+msgctxt "PageAura"
+msgid "Colour 2"
+msgstr "Color 2"
+
+#: rog-control-center/ui/pages/aura.slint:120
+msgctxt "PageAura"
+msgid "Zone"
+msgstr "Zona"
+
+#: rog-control-center/ui/pages/aura.slint:141
+msgctxt "PageAura"
+msgid "Direction"
+msgstr "Dirección"
+
+#: rog-control-center/ui/pages/aura.slint:162
+msgctxt "PageAura"
+msgid "Speed"
+msgstr "Velocidad"
+
+#: rog-control-center/ui/pages/aura.slint:185
+msgctxt "PageAura"
+msgid "Power Settings"
+msgstr "Ajustes de energía"
+
+#: rog-control-center/ui/pages/aura.slint:304
+msgctxt "PageAura"
+msgid "Power Zones"
+msgstr "Zonas de energía"
+
+#: rog-control-center/ui/pages/fans.slint:27
+msgctxt "FanTab"
+msgid "This fan is not avilable on this machine"
+msgstr "Este ventilador no está disponible en este equipo"
+
+#: rog-control-center/ui/pages/fans.slint:42
+msgctxt "FanTab"
+msgid "Enabled"
+msgstr "Activado"
+
+#: rog-control-center/ui/pages/fans.slint:51
+msgctxt "FanTab"
+msgid "Apply"
+msgstr "Aplicar"
+
+#: rog-control-center/ui/pages/fans.slint:59
+msgctxt "FanTab"
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: rog-control-center/ui/pages/fans.slint:67
+msgctxt "FanTab"
+msgid "Factory Default (all fans)"
+msgstr "Valores de fábrica (todos los ventiladores)"
+
+#: rog-control-center/ui/pages/fans.slint:80
+msgctxt "PageFans"
+msgid "Balanced"
+msgstr "Equilibrado"
+
+#: rog-control-center/ui/pages/fans.slint:83
+msgctxt "PageFans"
+msgid "CPU"
+msgstr "CPU"
+
+#: rog-control-center/ui/pages/fans.slint:101
+msgctxt "PageFans"
+msgid "Mid"
+msgstr "Central"
+
+#: rog-control-center/ui/pages/fans.slint:119
+msgctxt "PageFans"
+msgid "GPU"
+msgstr "GPU"
+
+#: rog-control-center/ui/pages/fans.slint:139
+msgctxt "PageFans"
+msgid "Performance"
+msgstr "Rendimiento"
+
+#: rog-control-center/ui/pages/fans.slint:198
+msgctxt "PageFans"
+msgid "Quiet"
+msgstr "Silencioso"
+
+#: rog-control-center/ui/pages/slash.slint:51
+msgctxt "PageSlash"
+msgid "Slash lighting"
+msgstr "Iluminación Slash"
+
+#: rog-control-center/ui/pages/slash.slint:56
+msgctxt "PageSlash"
+msgid "Enable A-cover lighting"
+msgstr "Activar la iluminación de la tapa"
+
+#: rog-control-center/ui/pages/slash.slint:64
+msgctxt "PageSlash"
+msgid "Brightness"
+msgstr "Brillo"
+
+#: rog-control-center/ui/pages/slash.slint:77
+msgctxt "PageSlash"
+msgid "Animation speed"
+msgstr "Velocidad de animación"
+
+#: rog-control-center/ui/pages/slash.slint:90
+msgctxt "PageSlash"
+msgid "Animation"
+msgstr "Animación"
+
+#: rog-control-center/ui/pages/slash.slint:110
+msgctxt "PageSlash"
+msgid "Visibility triggers"
+msgstr "Cuándo se muestra"
+
+#: rog-control-center/ui/pages/slash.slint:115
+msgctxt "PageSlash"
+msgid "Show on boot"
+msgstr "Mostrar al arrancar"
+
+#: rog-control-center/ui/pages/slash.slint:123
+msgctxt "PageSlash"
+msgid "Show on shutdown"
+msgstr "Mostrar al apagar"
+
+#: rog-control-center/ui/pages/slash.slint:131
+msgctxt "PageSlash"
+msgid "Show on sleep"
+msgstr "Mostrar al suspender"
+
+#: rog-control-center/ui/pages/slash.slint:139
+msgctxt "PageSlash"
+msgid "Show on battery"
+msgstr "Mostrar con batería"
+
+#: rog-control-center/ui/pages/slash.slint:147
+msgctxt "PageSlash"
+msgid "Show low-battery warning"
+msgstr "Mostrar aviso de batería baja"
+
+#: rog-control-center/ui/pages/slash.slint:155
+msgctxt "PageSlash"
+msgid "Show when lid is closed"
+msgstr "Mostrar con la tapa cerrada"
+
+#: rog-control-center/ui/pages/slash.slint:170
+msgctxt "Slash_tip"
+msgid ""
+"Slash Lighting controls the A-cover LED strip found on supported Zephyrus "
+"models."
+msgstr ""
+"Slash Lighting controla la tira LED de la tapa en los modelos Zephyrus "
+"compatibles."
+
+#: rog-control-center/ui/pages/battery.slint:24
+msgctxt "PageBattery"
+msgid "Battery Information"
+msgstr "Información de la batería"
+
+#: rog-control-center/ui/pages/battery.slint:29
+msgctxt "PageBattery"
+msgid "Charge limit"
+msgstr "Límite de carga"
+
+#: rog-control-center/ui/pages/battery.slint:54
+msgctxt "PageBattery"
+msgid "Battery Health (Capacity):"
+msgstr "Salud de la batería (capacidad):"
+
+#: rog-control-center/ui/pages/battery.slint:67
+msgctxt "PageBattery"
+msgid "Status:"
+msgstr "Estado:"
+
+#: rog-control-center/ui/pages/battery.slint:80
+msgctxt "PageBattery"
+msgid "Power Draw:"
+msgstr "Consumo:"
+
+#: rog-control-center/ui/pages/battery.slint:93
+msgctxt "PageBattery"
+msgid "Time to Full:"
+msgstr "Tiempo hasta carga completa:"
+
+#: rog-control-center/ui/pages/battery.slint:93
+msgctxt "PageBattery"
+msgid "Time Remaining:"
+msgstr "Tiempo restante:"
+
+#: rog-control-center/ui/pages/app_settings.slint:27
+msgctxt "PageAppSettings"
+msgid "Run in background after closing"
+msgstr "Seguir en segundo plano al cerrar"
+
+#: rog-control-center/ui/pages/app_settings.slint:35
+msgctxt "PageAppSettings"
+msgid "Start app in background (UI closed)"
+msgstr "Iniciar en segundo plano (sin ventana)"
+
+#: rog-control-center/ui/pages/app_settings.slint:43
+msgctxt "PageAppSettings"
+msgid "Enable system tray icon"
+msgstr "Mostrar icono en la bandeja del sistema"
+
+#: rog-control-center/ui/pages/app_settings.slint:51
+msgctxt "PageAppSettings"
+msgid "Enable dGPU notifications"
+msgstr "Activar notificaciones de la GPU dedicada"
+
+#: rog-control-center/ui/pages/app_settings.slint:59
+msgctxt "PageAppSettings"
+msgid "Start app on system startup"
+msgstr "Iniciar con el sistema"
+
+#: rog-control-center/ui/pages/app_settings.slint:69
+msgctxt "PageAppSettings"
+msgid "Start in background on startup"
+msgstr "Iniciar en segundo plano al arrancar"
+
+#: rog-control-center/ui/pages/about.slint:27
+msgctxt "PageAbout"
+msgid ""
+"\n"
+"A powerful graphical interface for managing ASUS ROG, TUF, and ProArt "
+"laptops on Linux. It acts as the official GUI for the asusctl toolset, "
+"allowing for seamless hardware tuning without the command line."
+msgstr ""
+"\n"
+"Una potente interfaz gráfica para gestionar portátiles ASUS ROG, TUF y "
+"ProArt en Linux. Es la interfaz oficial de las herramientas asusctl y "
+"permite ajustar el hardware sin usar la línea de comandos."
+
+#: rog-control-center/ui/pages/about.slint:32
+msgctxt "PageAbout"
+msgid "Key Features:"
+msgstr "Funciones principales:"
+
+#: rog-control-center/ui/pages/about.slint:36
+msgctxt "PageAbout"
+msgid ""
+"      • Performance: Switch power profiles and customize fan curves.\n"
+"      • Aura Sync: Control keyboard backlighting and LED effects.\n"
+"      • Battery Health: Set charge limits to extend battery longevity.\n"
+"      • Display: Toggle Panel Overdrive and refresh rates.\n"
+"      • AniMe Matrix: Control AniMe Matrix displays."
+msgstr ""
+"      • Rendimiento: cambia perfiles de energía y personaliza las curvas de "
+"ventiladores.\n"
+"      • Aura Sync: controla la retroiluminación del teclado y los efectos "
+"LED.\n"
+"      • Salud de la batería: fija límites de carga para alargar su vida "
+"útil.\n"
+"      • Pantalla: activa el Panel Overdrive y las tasas de refresco.\n"
+"      • AniMe Matrix: controla las pantallas AniMe Matrix."
+
+#: rog-control-center/ui/pages/about.slint:41
+msgctxt "PageAbout"
+msgid "Requirements:"
+msgstr "Requisitos:"
+
+#: rog-control-center/ui/pages/about.slint:46
+msgctxt "PageAbout"
+msgid ""
+"      This software requires kernel version 6.19 or later. However due to "
+"active development, the latest kernel is always the recommended one."
+msgstr ""
+"      Este programa requiere el kernel 6.19 o posterior. Como está en "
+"desarrollo activo, siempre se recomienda el kernel más reciente."
+
+#: rog-control-center/ui/pages/about.slint:51
+msgctxt "PageAbout"
+msgid "Work in progress:"
+msgstr "En desarrollo:"
+
+#: rog-control-center/ui/pages/about.slint:55
+msgctxt "PageAbout"
+msgid ""
+"      • Theme the widgets\n"
+"      • Add a cpu/gpu temp/fan speed info bar\n"
+"      • Include fan speeds, temps in a bottom bar\n"
+"      • Screenpad controls\n"
+"      • ROG Ally specific settings"
+msgstr ""
+"      • Temas para los controles\n"
+"      • Barra con temperatura y ventiladores de CPU/GPU\n"
+"      • Velocidad de ventiladores y temperaturas en una barra inferior\n"
+"      • Controles del Screenpad\n"
+"      • Ajustes específicos de ROG Ally"
+
+#: rog-control-center/ui/pages/about.slint:60
+msgctxt "PageAbout"
+msgid "License:"
+msgstr "Licencia:"
+
+#: rog-control-center/ui/pages/about.slint:64
+msgctxt "PageAbout"
+msgid ""
+"      This project is open-source software licensed under the Mozilla Public "
+"License 2.0 (MPL-2.0)."
+msgstr ""
+"      Este proyecto es software libre con licencia Mozilla Public License "
+"2.0 (MPL-2.0)."
+
+#: rog-control-center/ui/pages/about.slint:69
+msgctxt "PageAbout"
+msgid "Links:"
+msgstr "Enlaces:"
+
+#: rog-control-center/ui/pages/about.slint:73
+msgctxt "PageAbout"
+msgid ""
+"      Source Code: https://github.com/OpenGamingCollective/asusctl\n"
+"      Website: https://asus-linux.org/"
+msgstr ""
+"      Código fuente: https://github.com/OpenGamingCollective/asusctl\n"
+"      Sitio web: https://asus-linux.org/"
+
+#: rog-control-center/ui/pages/system.slint:21
+msgctxt "SystemPageData"
+msgid "Balanced"
+msgstr "Equilibrado"
+
+#: rog-control-center/ui/pages/system.slint:21
+msgctxt "SystemPageData"
+msgid "Performance"
+msgstr "Rendimiento"
+
+#: rog-control-center/ui/pages/system.slint:21
+msgctxt "SystemPageData"
+msgid "Quiet"
+msgstr "Silencioso"
+
+#: rog-control-center/ui/pages/system.slint:21
+msgctxt "SystemPageData"
+msgid "LowPower"
+msgstr "Bajo consumo"
+
+#: rog-control-center/ui/pages/system.slint:27
+msgctxt "SystemPageData"
+msgid "Default"
+msgstr "Predeterminado"
+
+#: rog-control-center/ui/pages/system.slint:29
+msgctxt "SystemPageData"
+msgid "BalancePerformance"
+msgstr "Equilibrio (rendimiento)"
+
+#: rog-control-center/ui/pages/system.slint:30
+msgctxt "SystemPageData"
+msgid "BalancePower"
+msgstr "Equilibrio (ahorro)"
+
+#: rog-control-center/ui/pages/system.slint:31
+msgctxt "SystemPageData"
+msgid "Power"
+msgstr "Ahorro"
+
+#. 3-state set per device; the index is the value written over dbus.
+#: rog-control-center/ui/pages/system.slint:63
+msgctxt "SystemPageData"
+msgid "Off"
+msgstr "Apagado"
+
+#. 3-state set per device; the index is the value written over dbus.
+#: rog-control-center/ui/pages/system.slint:63
+msgctxt "SystemPageData"
+msgid "Multi-zone"
+msgstr "Multizona"
+
+#. 3-state set per device; the index is the value written over dbus.
+#: rog-control-center/ui/pages/system.slint:63
+msgctxt "SystemPageData"
+msgid "Multi-zone Strong"
+msgstr "Multizona intensa"
+
+#: rog-control-center/ui/pages/system.slint:213
+msgctxt "PageSystem"
+msgid "Power settings"
+msgstr "Ajustes de energía"
+
+#: rog-control-center/ui/pages/system.slint:235
+msgctxt "PageSystem"
+msgid "Hardware Monitor"
+msgstr "Monitor de hardware"
+
+#: rog-control-center/ui/pages/system.slint:248
+msgctxt "PageSystem"
+msgid "CPU Status"
+msgstr "Estado de la CPU"
+
+#: rog-control-center/ui/pages/system.slint:257
+msgctxt "PageSystem"
+msgid "Temperature:"
+msgstr "Temperatura:"
+
+#: rog-control-center/ui/pages/system.slint:270
+msgctxt "PageSystem"
+msgid "Usage:"
+msgstr "Uso:"
+
+#: rog-control-center/ui/pages/system.slint:283
+msgctxt "PageSystem"
+msgid "Frequency:"
+msgstr "Frecuencia:"
+
+#: rog-control-center/ui/pages/system.slint:296
+msgctxt "PageSystem"
+msgid "iGPU Status"
+msgstr "Estado de la GPU integrada"
+
+#: rog-control-center/ui/pages/system.slint:309
+msgctxt "PageSystem"
+msgid "N/A"
+msgstr "N/D"
+
+#: rog-control-center/ui/pages/system.slint:331
+msgctxt "PageSystem"
+msgid "Memory Status"
+msgstr "Estado de la memoria"
+
+#: rog-control-center/ui/pages/system.slint:340
+msgctxt "PageSystem"
+msgid "RAM Usage:"
+msgstr "Uso de RAM:"
+
+#: rog-control-center/ui/pages/system.slint:359
+msgctxt "PageSystem"
+msgid "dGPU Status"
+msgstr "Estado de la GPU dedicada"
+
+#: rog-control-center/ui/pages/system.slint:373
+#: rog-control-center/ui/pages/system.slint:386
+msgctxt "PageSystem"
+msgid "Suspended"
+msgstr "Suspendida"
+
+#: rog-control-center/ui/pages/system.slint:394
+msgctxt "PageSystem"
+msgid "Fan Speeds"
+msgstr "Velocidad de los ventiladores"
+
+#: rog-control-center/ui/pages/system.slint:403
+msgctxt "PageSystem"
+msgid "CPU Fan:"
+msgstr "Ventilador CPU:"
+
+#: rog-control-center/ui/pages/system.slint:416
+msgctxt "PageSystem"
+msgid "GPU Fan:"
+msgstr "Ventilador GPU:"
+
+#: rog-control-center/ui/pages/system.slint:429
+msgctxt "PageSystem"
+msgid "Mid Fan:"
+msgstr "Ventilador central:"
+
+#: rog-control-center/ui/pages/system.slint:448
+msgctxt "PageSystem"
+msgid "Platform Profile"
+msgstr "Perfil de plataforma"
+
+#: rog-control-center/ui/pages/system.slint:458
+msgctxt "PageSystem"
+msgid "Advanced"
+msgstr "Avanzado"
+
+#: rog-control-center/ui/pages/system.slint:478
+msgctxt "PageSystem"
+msgid "Screenpad brightness"
+msgstr "Brillo del Screenpad"
+
+#: rog-control-center/ui/pages/system.slint:502
+msgctxt "PageSystem"
+msgid "Sync with primary"
+msgstr "Sincronizar con la principal"
+
+#: rog-control-center/ui/pages/system.slint:522
+msgctxt "PageSystem"
+msgid "Armoury settings"
+msgstr "Ajustes de Armoury"
+
+#: rog-control-center/ui/pages/system.slint:532
+msgctxt "no_asus_armoury_driver_1"
+msgid "The asus-armoury driver is not loaded"
+msgstr "El controlador asus-armoury no está cargado"
+
+#: rog-control-center/ui/pages/system.slint:539
+msgctxt "no_asus_armoury_driver_2"
+msgid "For advanced features you will require a kernel with this driver added."
+msgstr ""
+"Para las funciones avanzadas necesitas un kernel que incluya este "
+"controlador."
+
+#: rog-control-center/ui/pages/system.slint:551
+msgctxt "PageSystem"
+msgid "Panel Overdrive"
+msgstr "Panel Overdrive"
+
+#: rog-control-center/ui/pages/system.slint:559
+msgctxt "PageSystem"
+msgid "POST boot sound"
+msgstr "Sonido de arranque (POST)"
+
+#: rog-control-center/ui/pages/system.slint:567
+msgctxt "PageSystem"
+msgid "Screen Auto Brightness"
+msgstr "Brillo automático de la pantalla"
+
+#: rog-control-center/ui/pages/system.slint:575
+msgctxt "PageSystem"
+msgid "MCU Powersave"
+msgstr "Ahorro de energía del MCU"
+
+#: rog-control-center/ui/pages/system.slint:584
+msgctxt "PageSystem"
+msgid "MiniLED Mode"
+msgstr "Modo MiniLED"
+
+#: rog-control-center/ui/pages/system.slint:602
+msgctxt "ppt_warning"
+msgid "The following settings are not applied until the toggle is enabled."
+msgstr "Los siguientes ajustes no se aplican hasta que actives el interruptor."
+
+#: rog-control-center/ui/pages/system.slint:607
+msgctxt "ppt_group_enabled"
+msgid "Enable Tuning"
+msgstr "Activar ajuste fino"
+
+#: rog-control-center/ui/pages/system.slint:630
+msgctxt "requires_fan_curve_warning"
+msgid ""
+"CPU power limits require an active custom fan curve. Enable a fan curve for "
+"the active profile in the Fans tab to unlock these controls."
+msgstr ""
+"Los límites de potencia de la CPU requieren una curva de ventilador "
+"personalizada. Actívala para el perfil en uso en la pestaña Ventiladores."
+
+#: rog-control-center/ui/pages/system.slint:640
+msgctxt "ppt_pl1_spl"
+msgid "CPU Sustained Power Limit"
+msgstr "Límite de potencia sostenida de la CPU"
+
+#: rog-control-center/ui/pages/system.slint:642
+msgctxt "ppt_pl1_spl_help"
+msgid ""
+"Long-term CPU power limit that affects sustained workload performance. "
+"Higher values may increase heat and power consumption."
+msgstr ""
+"Límite de potencia de la CPU a largo plazo. Valores más altos pueden "
+"aumentar el calor y el consumo."
+
+#: rog-control-center/ui/pages/system.slint:658
+msgctxt "ppt_pl2_sppt"
+msgid "CPU Turbo Power Limit"
+msgstr "Límite de potencia turbo de la CPU"
+
+#: rog-control-center/ui/pages/system.slint:660
+msgctxt "ppt_pl2_sppt_help"
+msgid ""
+"Short-term CPU power limit for boost periods. Controls maximum power during "
+"brief high-performance bursts."
+msgstr ""
+"Límite de potencia de la CPU a corto plazo. Controla la potencia máxima en "
+"ráfagas breves de alto rendimiento."
+
+#: rog-control-center/ui/pages/system.slint:676
+msgctxt "ppt_pl3_fppt"
+msgid "CPU Fast Burst Power Limit"
+msgstr "Límite de potencia de ráfaga de la CPU"
+
+#: rog-control-center/ui/pages/system.slint:678
+msgctxt "ppt_pl3_fppt_help"
+msgid ""
+"Ultra-short duration power limit for instantaneous CPU bursts. Affects "
+"responsiveness during sudden workload spikes."
+msgstr ""
+"Límite de potencia ultracorto para ráfagas instantáneas de la CPU. Afecta a "
+"la respuesta ante picos repentinos."
+
+#: rog-control-center/ui/pages/system.slint:693
+msgctxt "ppt_fppt"
+msgid "Fast Package Power Limit"
+msgstr "Límite de potencia rápida del paquete"
+
+#: rog-control-center/ui/pages/system.slint:695
+msgctxt "ppt_fppt_help"
+msgid ""
+"Ultra-short duration power limit for system package. Controls maximum power "
+"during millisecond-scale load spikes."
+msgstr ""
+"Límite de potencia de duración ultracorta del paquete. Controla la potencia "
+"máxima en picos de milisegundos."
+
+#: rog-control-center/ui/pages/system.slint:711
+msgctxt "ppt_apu_sppt"
+msgid "APU Sustained Power Limit"
+msgstr "Límite de potencia sostenida de la APU"
+
+#: rog-control-center/ui/pages/system.slint:713
+msgctxt "ppt_apu_sppt_help"
+msgid ""
+"Long-term power limit for integrated graphics and CPU combined. Affects "
+"sustained performance of APU-based workloads."
+msgstr ""
+"Límite de potencia a largo plazo para la gráfica integrada y la CPU juntas. "
+"Afecta al rendimiento sostenido de la APU."
+
+#: rog-control-center/ui/pages/system.slint:729
+msgctxt "ppt_platform_sppt"
+msgid "Platform Sustained Power Limit"
+msgstr "Límite de potencia sostenida de la plataforma"
+
+#: rog-control-center/ui/pages/system.slint:731
+msgctxt "ppt_platform_sppt_help"
+msgid ""
+"Overall system power limit for sustained operations. Controls total platform "
+"power consumption over extended periods."
+msgstr ""
+"Límite de potencia global del sistema para cargas sostenidas. Controla el "
+"consumo total durante periodos largos."
+
+#: rog-control-center/ui/pages/system.slint:747
+msgctxt "nv_dynamic_boost"
+msgid "GPU Power Boost"
+msgstr "Refuerzo de potencia de la GPU"
+
+#: rog-control-center/ui/pages/system.slint:749
+msgctxt "nv_dynamic_boost_help"
+msgid ""
+"Additional power allocation for GPU dynamic boost. Higher values increase "
+"GPU performance but generate more heat."
+msgstr ""
+"Potencia adicional para el Dynamic Boost de la GPU. Valores más altos "
+"aumentan el rendimiento pero generan más calor."
+
+#: rog-control-center/ui/pages/system.slint:765
+msgctxt "nv_tgp"
+msgid "GPU TGP"
+msgstr "TGP de la GPU"
+
+#: rog-control-center/ui/pages/system.slint:767
+msgctxt "nv_tgp_help"
+msgid ""
+"Total graphics power limit for the dedicated NVIDIA GPU. Higher values can "
+"improve performance at the cost of additional heat and power draw."
+msgstr ""
+"Límite total de potencia de la GPU NVIDIA dedicada. Valores más altos pueden "
+"mejorar el rendimiento a costa de más calor y consumo."
+
+#: rog-control-center/ui/pages/system.slint:783
+msgctxt "nv_temp_target"
+msgid "GPU Temperature Limit"
+msgstr "Límite de temperatura de la GPU"
+
+#: rog-control-center/ui/pages/system.slint:785
+msgctxt "nv_temp_target_help"
+msgid ""
+"Maximum GPU temperature threshold in Celsius. GPU will throttle to maintain "
+"temperature below this limit."
+msgstr ""
+"Temperatura máxima de la GPU en grados Celsius. La GPU reducirá su velocidad "
+"para mantenerse por debajo."
+
+#: rog-control-center/ui/pages/system.slint:839
+msgctxt "PageSystem"
+msgid "Energy Performance Preference linked to Throttle Policy"
+msgstr "Preferencia de energía (EPP) ligada al perfil térmico"
+
+#: rog-control-center/ui/pages/system.slint:843
+msgctxt "PageSystem"
+msgid "Change EPP based on Throttle Policy"
+msgstr "Cambiar EPP según el perfil térmico"
+
+#: rog-control-center/ui/pages/system.slint:851
+msgctxt "PageSystem"
+msgid "EPP for Balanced Policy"
+msgstr "EPP para el perfil Equilibrado"
+
+#: rog-control-center/ui/pages/system.slint:861
+msgctxt "PageSystem"
+msgid "EPP for Performance Policy"
+msgstr "EPP para el perfil Rendimiento"
+
+#: rog-control-center/ui/pages/system.slint:871
+msgctxt "PageSystem"
+msgid "EPP for "
+msgstr "EPP para "
+
+#: rog-control-center/ui/pages/system.slint:871
+msgctxt "PageSystem"
+msgid " Policy"
+msgstr " (política)"
+
+#: rog-control-center/ui/pages/system.slint:890
+msgctxt "PageSystem"
+msgid "Throttle Policy for power state"
+msgstr "Perfil térmico según la alimentación"
+
+#: rog-control-center/ui/pages/system.slint:896
+msgctxt "PageSystem"
+msgid "Throttle Policy on Battery"
+msgstr "Perfil térmico con batería"
+
+#: rog-control-center/ui/pages/system.slint:906
+msgctxt "PageSystem"
+msgid "Enabled"
+msgstr "Activado"
+
+#: rog-control-center/ui/pages/system.slint:917
+msgctxt "PageSystem"
+msgid "Throttle Policy on AC"
+msgstr "Perfil térmico con cargador"
+
+#: rog-control-center/ui/pages/gpu.slint:29
+msgctxt "PageGPU"
+msgid "Integrated"
+msgstr "Integrada"
+
+#: rog-control-center/ui/pages/gpu.slint:29
+msgctxt "PageGPU"
+msgid "Hybrid"
+msgstr "Híbrido"
+
+#: rog-control-center/ui/pages/gpu.slint:29
+msgctxt "PageGPU"
+msgid "Ultimate"
+msgstr "Ultimate"
+
+#: rog-control-center/ui/pages/gpu.slint:48
+msgctxt "PageGPU"
+msgid "Internal/Discrete GPU"
+msgstr "GPU integrada/dedicada"
+
+#: rog-control-center/ui/pages/gpu.slint:57
+msgctxt "PageGPU"
+msgid "This device has no switchable GPU."
+msgstr "Este equipo no tiene GPU conmutable."
+
+#: rog-control-center/ui/pages/gpu.slint:69
+msgctxt "PageGPU"
+msgid ""
+"Note: Changes take effect after a reboot. The dropdown always shows the "
+"current mode."
+msgstr ""
+"Nota: los cambios se aplican tras reiniciar. La lista siempre muestra el "
+"modo actual."
+
+#: rog-control-center/ui/pages/gpu.slint:76
+msgctxt "PageGPU"
+msgid "GPU mode"
+msgstr "Modo de GPU"
+
+#: rog-control-center/ui/pages/gpu.slint:97
+msgctxt "PageGPU"
+msgid "Note: Reserved GPU memory changes take effect after a reboot."
+msgstr "Nota: los cambios de memoria reservada de la GPU se aplican tras reiniciar."
+
+#: rog-control-center/ui/pages/gpu.slint:104
+msgctxt "PageGPU"
+msgid "Reserved GPU memory"
+msgstr "Memoria reservada de la GPU"
+
+#: rog-control-center/ui/pages/gpu.slint:118
+msgctxt "PageGPU"
+msgid "XG Mobile LED"
+msgstr "LED del XG Mobile"
+
+#: rog-control-center/ui/pages/gpu.slint:131
+msgctxt "PageGPU"
+msgid "Disable nvidia-powerd on battery"
+msgstr "Desactivar nvidia-powerd con batería"
+
+#: rog-control-center/ui/types/aura_types.slint:54
+msgctxt "Aura power zone"
+msgid "Logo"
+msgstr "Logo"
+
+#: rog-control-center/ui/types/aura_types.slint:55
+msgctxt "Aura power zone"
+msgid "Keyboard"
+msgstr "Teclado"
+
+#: rog-control-center/ui/types/aura_types.slint:56
+msgctxt "Aura power zone"
+msgid "Lightbar"
+msgstr "Barra de luz"
+
+#: rog-control-center/ui/types/aura_types.slint:57
+msgctxt "Aura power zone"
+msgid "Lid"
+msgstr "Tapa"
+
+#: rog-control-center/ui/types/aura_types.slint:58
+msgctxt "Aura power zone"
+msgid "Rear Glow"
+msgstr "Brillo trasero"
+
+#: rog-control-center/ui/types/aura_types.slint:59
+msgctxt "Aura power zone"
+msgid "Keyboard and Lightbar"
+msgstr "Teclado y barra de luz"
+
+#: rog-control-center/ui/types/aura_types.slint:60
+msgctxt "Aura power zone"
+msgid "Ally"
+msgstr "Ally"
+
+#: rog-control-center/ui/types/aura_types.slint:70
+msgctxt "Aura brightness"
+msgid "Off"
+msgstr "Apagado"
+
+#: rog-control-center/ui/types/aura_types.slint:71
+msgctxt "Aura brightness"
+msgid "Low"
+msgstr "Bajo"
+
+#: rog-control-center/ui/types/aura_types.slint:72
+msgctxt "Aura brightness"
+msgid "Med"
+msgstr "Medio"
+
+#: rog-control-center/ui/types/aura_types.slint:73
+msgctxt "Aura brightness"
+msgid "High"
+msgstr "Alto"
+
+#: rog-control-center/ui/types/aura_types.slint:78
+msgctxt "Basic aura mode"
+msgid "Static"
+msgstr "Estático"
+
+#: rog-control-center/ui/types/aura_types.slint:79
+msgctxt "Basic aura mode"
+msgid "Breathe"
+msgstr "Respiración"
+
+#: rog-control-center/ui/types/aura_types.slint:80
+msgctxt "Basic aura mode"
+msgid "Strobe"
+msgstr "Estroboscópico"
+
+#: rog-control-center/ui/types/aura_types.slint:81
+msgctxt "Basic aura mode"
+msgid "Rainbow"
+msgstr "Arcoíris"
+
+#: rog-control-center/ui/types/aura_types.slint:82
+msgctxt "Basic aura mode"
+msgid "Star"
+msgstr "Estrella"
+
+#: rog-control-center/ui/types/aura_types.slint:83
+msgctxt "Basic aura mode"
+msgid "Rain"
+msgstr "Lluvia"
+
+#: rog-control-center/ui/types/aura_types.slint:84
+msgctxt "Basic aura mode"
+msgid "Highlight"
+msgstr "Resaltado"
+
+#: rog-control-center/ui/types/aura_types.slint:85
+msgctxt "Basic aura mode"
+msgid "Laser"
+msgstr "Láser"
+
+#: rog-control-center/ui/types/aura_types.slint:86
+msgctxt "Basic aura mode"
+msgid "Ripple"
+msgstr "Onda"
+
+#: rog-control-center/ui/types/aura_types.slint:87
+msgctxt "Basic aura mode"
+msgid "Nothing"
+msgstr "Nada"
+
+#: rog-control-center/ui/types/aura_types.slint:88
+msgctxt "Basic aura mode"
+msgid "Pulse"
+msgstr "Pulso"
+
+#: rog-control-center/ui/types/aura_types.slint:89
+msgctxt "Basic aura mode"
+msgid "Comet"
+msgstr "Cometa"
+
+#: rog-control-center/ui/types/aura_types.slint:90
+msgctxt "Basic aura mode"
+msgid "Flash"
+msgstr "Destello"
+
+#: rog-control-center/ui/types/aura_types.slint:96
+msgctxt "Aura zone"
+msgid "None"
+msgstr "Ninguno"
+
+#: rog-control-center/ui/types/aura_types.slint:97
+msgctxt "Aura zone"
+msgid "Key1"
+msgstr "Tecla 1"
+
+#: rog-control-center/ui/types/aura_types.slint:98
+msgctxt "Aura zone"
+msgid "Key2"
+msgstr "Tecla 2"
+
+#: rog-control-center/ui/types/aura_types.slint:99
+msgctxt "Aura zone"
+msgid "Key3"
+msgstr "Tecla 3"
+
+#: rog-control-center/ui/types/aura_types.slint:100
+msgctxt "Aura zone"
+msgid "Key4"
+msgstr "Tecla 4"
+
+#: rog-control-center/ui/types/aura_types.slint:101
+msgctxt "Aura zone"
+msgid "Logo"
+msgstr "Logo"
+
+#: rog-control-center/ui/types/aura_types.slint:102
+msgctxt "Aura zone"
+msgid "Lightbar Left"
+msgstr "Barra de luz izquierda"
+
+#: rog-control-center/ui/types/aura_types.slint:103
+msgctxt "Aura zone"
+msgid "Lightbar Right"
+msgstr "Barra de luz derecha"
+
+#: rog-control-center/ui/types/aura_types.slint:106
+msgctxt "Aura direction"
+msgid "Right"
+msgstr "Derecha"
+
+#: rog-control-center/ui/types/aura_types.slint:107
+msgctxt "Aura direction"
+msgid "Left"
+msgstr "Izquierda"
+
+#: rog-control-center/ui/types/aura_types.slint:108
+msgctxt "Aura direction"
+msgid "Up"
+msgstr "Arriba"
+
+#: rog-control-center/ui/types/aura_types.slint:109
+msgctxt "Aura direction"
+msgid "Down"
+msgstr "Abajo"
+
+#: rog-control-center/ui/types/aura_types.slint:112
+msgctxt "Aura speed"
+msgid "Low"
+msgstr "Bajo"
+
+#: rog-control-center/ui/types/aura_types.slint:113
+msgctxt "Aura speed"
+msgid "Medium"
+msgstr "Medio"
+
+#: rog-control-center/ui/types/aura_types.slint:114
+msgctxt "Aura speed"
+msgid "High"
+msgstr "Alto"
+
+#: rog-control-center/ui/widgets/aura_power.slint:32
+msgctxt "AuraPowerGroup"
+msgid "Boot"
+msgstr "Arranque"
+
+#: rog-control-center/ui/widgets/aura_power.slint:42
+msgctxt "AuraPowerGroup"
+msgid "Awake"
+msgstr "Encendido"
+
+#: rog-control-center/ui/widgets/aura_power.slint:52
+msgctxt "AuraPowerGroup"
+msgid "Sleep"
+msgstr "Suspensión"
+
+#: rog-control-center/ui/widgets/aura_power.slint:62
+msgctxt "AuraPowerGroup"
+msgid "Shutdown"
+msgstr "Apagado"
+
+#: rog-control-center/ui/widgets/aura_power.slint:100
+msgctxt "AuraPowerGroupOld"
+msgid "Zone Selection"
+msgstr "Selección de zona"
+
+#: rog-control-center/ui/widgets/aura_power.slint:112
+msgctxt "AuraPowerGroupOld"
+msgid "Boot"
+msgstr "Arranque"
+
+#: rog-control-center/ui/widgets/aura_power.slint:122
+msgctxt "AuraPowerGroupOld"
+msgid "Awake"
+msgstr "Encendido"
+
+#: rog-control-center/ui/widgets/aura_power.slint:132
+msgctxt "AuraPowerGroupOld"
+msgid "Sleep"
+msgstr "Suspensión"
+
+#: rog-control-center/ui/widgets/common.slint:125
+msgctxt "confirm_reset"
+msgid "Are you sure you want to reset this?"
+msgstr "¿Seguro que quieres restablecer esto?"
+
+#: rog-control-center/ui/main_window.slint:80
+msgctxt "Menu1"
+msgid "System Control"
+msgstr "Control del sistema"
+
+#: rog-control-center/ui/main_window.slint:81
+msgctxt "Menu2"
+msgid "Keyboard Aura"
+msgstr "Aura del teclado"
+
+#: rog-control-center/ui/main_window.slint:82
+msgctxt "Menu3"
+msgid "AniMe Matrix"
+msgstr "AniMe Matrix"
+
+#: rog-control-center/ui/main_window.slint:83
+msgctxt "Menu4"
+msgid "Slash Lighting"
+msgstr "Iluminación Slash"
+
+#: rog-control-center/ui/main_window.slint:84
+msgctxt "Menu5"
+msgid "Fan Curves"
+msgstr "Curvas de ventiladores"
+
+#: rog-control-center/ui/main_window.slint:85
+msgctxt "Menu6"
+msgid "GPU Configuration"
+msgstr "Configuración de GPU"
+
+#: rog-control-center/ui/main_window.slint:86
+msgctxt "Menu9"
+msgid "Battery Info"
+msgstr "Información de la batería"
+
+#: rog-control-center/ui/main_window.slint:87
+msgctxt "Menu7"
+msgid "App Settings"
+msgstr "Ajustes de la aplicación"
+
+#: rog-control-center/ui/main_window.slint:88
+msgctxt "Menu8"
+msgid "About"
+msgstr "Acerca de"
+
+#: rog-control-center/ui/main_window.slint:97
+msgctxt "MainWindow"
+msgid "Quit App"
+msgstr "Salir"
+
+msgctxt "SideBar"
+msgid "Hardware"
+msgstr "Hardware"
+
+msgctxt "SideBar"
+msgid "Application"
+msgstr "Aplicación"
+
+msgctxt "PageAppSettings"
+msgid "Armory/ROG key to show/hide window (keep app running in background)"
+msgstr "Tecla Armoury/ROG para mostrar u ocultar la ventana (la app sigue en segundo plano)"
+
+msgctxt "PageAppSettings"
+msgid "WIP: some features like notifications are not complete"
+msgstr "En desarrollo: algunas funciones, como las notificaciones, aún no están completas"
+
+msgctxt "PageBattery"
+msgid "Charging"
+msgstr "Cargando"
+
+msgctxt "PageBattery"
+msgid "Discharging"
+msgstr "Descargando"
+
+msgctxt "PageBattery"
+msgid "Full"
+msgstr "Cargada"
+
+msgctxt "PageBattery"
+msgid "Not charging"
+msgstr "En pausa (límite de carga)"
+
+msgctxt "PageAbout"
+msgid "RedRog edition"
+msgstr "EDICIÓN REDROG"
+
+msgctxt "PageAbout"
+msgid "A RedRog presentation by Junior Carrillo: the same ROG Control Center from the asusctl project (OpenGamingCollective, MPL-2.0), with RedRog's look, modern controls and the Spanish translation."
+msgstr "Una presentación RedRog de Junior Carrillo: el mismo ROG Control Center del proyecto asusctl (OpenGamingCollective, MPL-2.0), con el aspecto de RedRog, controles modernos y la traducción al español."
+
+msgctxt "ColourSlider"
+msgid "Hue"
+msgstr "Tono"
+
+msgctxt "ColourSlider"
+msgid "Saturation"
+msgstr "Saturación"
+
+msgctxt "ColourSlider"
+msgid "Brightness"
+msgstr "Brillo"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "Hardware monitor"
+msgstr "Monitor de hardware"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "Live"
+msgstr "En vivo"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "Processor"
+msgstr "Procesador"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "Usage"
+msgstr "Uso"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "Frequency"
+msgstr "Frecuencia"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "Fan"
+msgstr "Ventilador"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "Stopped"
+msgstr "Detenido"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "Dedicated graphics"
+msgstr "Gráfica dedicada"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "Asleep"
+msgstr "En reposo"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "State"
+msgstr "Estado"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "Saving power"
+msgstr "Ahorrando energía"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "Integrated graphics"
+msgstr "Gráfica integrada"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "Memory"
+msgstr "Memoria"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "System RAM"
+msgstr "RAM del sistema"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "In use"
+msgstr "En uso"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "Middle fan"
+msgstr "Ventilador central"
+
+#: rog-control-center/ui/pages/system.slint
+msgctxt "HwMonitor"
+msgid "No sensors"
+msgstr "Sin sensores"

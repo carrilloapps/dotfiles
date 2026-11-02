@@ -1,0 +1,15 @@
+# RedRog: asusd's power limits applied at every start, and the power profile
+# picked by hand kept across restarts and charger changes (modules/system,
+# see asusd-profile-keeper)
+[Unit]
+Description=Keep the asusd power profile and its power limits
+After=asusd.service
+PartOf=asusd.service
+
+[Service]
+ExecStart=/usr/local/lib/redrog/asusd-profile-keeper
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=asusd.service

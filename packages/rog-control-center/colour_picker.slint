@@ -1,0 +1,189 @@
+// RedRog colour picker for ROG Control Center (Aura), copied over
+// ui/widgets/colour_picker.slint by redrog-theme.py. Same API and colour
+// logic as the original ColourSlider: hue, saturation and brightness tracks,
+// a hex field, released() when a change should be applied. Adds a large
+// preview with a glow and one-click presets.
+
+import { RRSlider, RRLineEdit } from "widgets/rr.slint";
+import { RR } from "globals.slint";
+
+component Track inherits Rectangle {
+    in property <string> label;
+    in property <brush> fill;
+    in property <bool> enabled;
+    in-out property <float> value <=> slider.value;
+    in property <float> maximum;
+    callback changed();
+    callback released();
+
+    height: 40px;
+    Text {
+        x: 0px;
+        y: 0px;
+        text: root.label.to-uppercase();
+        color: RR.dim;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+    }
+    Rectangle {
+        x: 0px;
+        y: 22px;
+        width: parent.width;
+        height: 12px;
+        border-radius: 6px;
+        background: root.enabled ? root.fill : RR.ink.with-alpha(0.07);
+        border-width: 1px;
+        border-color: RR.ink.with-alpha(0.12);
+    }
+    slider := RRSlider {
+        x: -9px;
+        y: 16px;
+        width: parent.width + 18px;
+        height: 24px;
+        bare: true;
+        enabled: root.enabled;
+        minimum: 0;
+        maximum: root.maximum;
+        step: 0;
+        changed => {
+            root.changed();
+        }
+        released => {
+            root.released();
+        }
+    }
+}
+
+export component ColourSlider inherits VerticalLayout {
+    spacing: 10px;
+    in-out property <bool> enabled;
+    property <string> hex: "#FF0000";
+    in-out property <float> c1value <=> c1.value;
+    in-out property <float> c2value <=> c2.value;
+    in-out property <float> c3value <=> c3.value;
+    property <color> base_colour: Colors.red;
+    in-out property <color> final_colour: Colors.red;
+    in-out property <brush> colourbox: final_colour;
+    callback hex_to_colour(string) -> color;
+    callback set_hex_from_colour(color) -> string;
+    callback released();
+
+    // the hue track: 36 steps around the colour wheel, as in the original
+    property <int> hues: 36;
+    property <int> steps: 11;
+    property <[color]> presets: [#ff0000, #ff4000, #ffaa00, #00ff40, #00c8ff, #2040ff, #b000ff, #ffffff];
+
+    function set_base_colour() {
+        root.base_colour = hsv(c1.value / root.hues * 360, 1, 1);
+        root.final_colour = hsv(root.base_colour.to-hsv().hue, (root.steps - c2.value) / root.steps, (root.steps - c3.value) / root.steps);
+        root.colourbox = root.final_colour;
+    }
+    function apply(c: color) {
+        root.base_colour = c;
+        root.final_colour = c;
+        root.colourbox = c;
+        root.external_colour_change();
+        root.released();
+    }
+
+    callback external_colour_change();
+    external_colour_change => {
+        if (root.final_colour.to-hsv().hue < 0) {
+            c1.value = root.hues * (root.final_colour.to-hsv().hue + 360) / 360;
+        } else {
+            c1.value = root.hues * root.final_colour.to-hsv().hue / 360;
+        }
+        c2.value = root.steps - root.steps * root.final_colour.to-hsv().saturation;
+        c3.value = root.steps - root.steps * root.final_colour.to-hsv().value;
+        root.set_base_colour();
+        root.hex = root.set_hex_from_colour(root.final_colour);
+    }
+
+    // Preview, hex value and presets
+    HorizontalLayout {
+        spacing: 14px;
+        Rectangle {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: root.enabled ? root.colourbox : RR.ink.with-alpha(0.07);
+            border-width: 1px;
+            border-color: RR.ink.with-alpha(0.18);
+            drop-shadow-blur: root.enabled ? 22px : 0px;
+            drop-shadow-color: root.enabled ? root.final_colour.with-alpha(0.55) : transparent;
+        }
+        VerticalLayout {
+            spacing: 8px;
+            alignment: center;
+            RRLineEdit {
+                enabled <=> root.enabled;
+                text <=> root.hex;
+                accepted => {
+                    root.apply(root.hex_to_colour(self.text));
+                }
+            }
+            HorizontalLayout {
+                spacing: 7px;
+                alignment: start;
+                for c in root.presets: Rectangle {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 10px;
+                    background: c;
+                    opacity: root.enabled ? 1 : 0.35;
+                    border-width: pa.has-hover ? 2px : 1px;
+                    border-color: pa.has-hover ? #ffffff : RR.ink.with-alpha(0.25);
+                    animate border-width { duration: 100ms; }
+                    pa := TouchArea {
+                        enabled: root.enabled;
+                        mouse-cursor: pointer;
+                        clicked => {
+                            root.apply(c);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    c1 := Track {
+        label: @tr("Hue");
+        enabled: root.enabled;
+        maximum: root.hues;
+        fill: @linear-gradient(90deg, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+        changed => {
+            root.set_base_colour();
+            root.hex = root.set_hex_from_colour(root.final_colour);
+        }
+        released => {
+            root.released();
+        }
+    }
+    c2 := Track {
+        label: @tr("Saturation");
+        enabled: root.enabled;
+        maximum: root.steps;
+        fill: @linear-gradient(90deg, hsv(root.base_colour.to-hsv().hue, 1, 1) 0%, #ffffff 100%);
+        changed => {
+            root.set_base_colour();
+            root.hex = root.set_hex_from_colour(root.final_colour);
+        }
+        released => {
+            root.released();
+        }
+    }
+    c3 := Track {
+        label: @tr("Brightness");
+        enabled: root.enabled;
+        maximum: root.steps;
+        fill: @linear-gradient(90deg, hsv(root.base_colour.to-hsv().hue, 1, 1) 0%, #000000 100%);
+        changed => {
+            root.set_base_colour();
+            root.hex = root.set_hex_from_colour(root.final_colour);
+        }
+        released => {
+            root.released();
+        }
+    }
+}

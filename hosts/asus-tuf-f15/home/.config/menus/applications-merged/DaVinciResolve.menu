@@ -1,0 +1,10 @@
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+    "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd">
+<!-- Quita la carpeta propia de DaVinci; sus apps van en Multimedia por categoría -->
+<Menu>
+    <Name>Applications</Name>
+    <Menu>
+        <Name>DaVinciResolve</Name>
+        <Deleted/>
+    </Menu>
+</Menu>

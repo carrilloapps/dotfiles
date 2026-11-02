@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Community Discussions
+    url: https://github.com/carrilloapps/dotfiles/discussions
+    about: Ask questions, share your custom setups, or discuss ideas.
+  - name: Documentation Index
+    url: https://github.com/carrilloapps/dotfiles/tree/main/docs
+    about: Read the complete architecture, customization, and troubleshooting guides.

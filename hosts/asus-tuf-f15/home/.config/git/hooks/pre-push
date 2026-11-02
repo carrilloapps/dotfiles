@@ -1,0 +1,24 @@
+#!/bin/sh
+# Rechaza el push si algún commit nuevo trae atribución de IA, la haya creado
+# la herramienta que sea (amend, rebase, cherry-pick, otra máquina...).
+. "$(dirname "$0")/no-ai-attribution.sh"
+zero=0000000000000000000000000000000000000000
+input="$(cat)"
+echo "$input" | while read -r lref lsha rref rsha; do
+  [ -z "$lsha" ] && continue
+  case "$lsha" in *[!0]*) ;; *) continue ;; esac            # borrado de rama
+  if [ "$rsha" = "$zero" ] || ! git cat-file -e "$rsha" 2>/dev/null; then
+    range="$lsha --not --remotes"
+  else
+    range="$rsha..$lsha"
+  fi
+  bad=$(git log --format='%h %s%n%B%x00' $range | tr '\0' '\n' | grep -iEc "$AI_ATTRIBUTION_RE")
+  if [ "$bad" -gt 0 ]; then
+    echo "pre-push: hay commits con atribución de IA en $lref. Límpialos antes de subir:" >&2
+    git log --format='  %h %s' $range --grep='co-authored-by' -i >&2
+    exit 1
+  fi
+done || exit 1
+h="$(git rev-parse --git-path hooks/pre-push)"
+[ -x "$h" ] && [ "$(realpath "$h")" != "$(realpath "$0")" ] && { echo "$input" | "$h" "$@"; exit $?; }
+exit 0

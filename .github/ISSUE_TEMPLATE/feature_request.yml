@@ -1,0 +1,41 @@
+name: Feature Request
+description: Suggest an idea or enhancement for RedRog
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea for a new module, theming refinement, or hardware integration? We'd love to hear it!
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or Motivation
+      description: Is your feature request related to a problem or limitation? Please describe.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Solution / Feature
+      description: Describe what you would like to see implemented and how it should behave.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative solutions or workarounds you've explored.
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - "Theming & Appearance (KWin, Kvantum, GTK, Plasma)"
+        - "Audio & DSP Pipeline (PipeWire, EasyEffects)"
+        - "Hardware & Power Management (ASUS, thermals, supergfxctl)"
+        - "Shell & Terminal (Kitty, fish, zsh)"
+        - "Installer & Tooling (install.sh, CLI utilities)"
+        - "Documentation & Localization"
+    validations:
+      required: true

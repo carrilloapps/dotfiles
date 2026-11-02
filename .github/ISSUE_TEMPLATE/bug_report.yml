@@ -1,0 +1,61 @@
+name: Bug Report
+description: Create a report to help us improve RedRog
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report an issue! Please ensure you have tested with `./install.sh --dry-run` and reviewed [docs/TROUBLESHOOTING.md](https://github.com/carrilloapps/dotfiles/blob/main/docs/TROUBLESHOOTING.md) before submitting.
+  - type: input
+    id: environment
+    attributes:
+      label: System Environment
+      description: Distribution, Linux kernel version, and GPU hardware.
+      placeholder: "e.g., CachyOS Linux 6.13, ASUS TUF Gaming F15 (Intel + NVIDIA RTX 3050)"
+    validations:
+      required: true
+  - type: dropdown
+    id: plasma-version
+    attributes:
+      label: KDE Plasma Version
+      description: Version of KDE Plasma and display server.
+      options:
+        - "Plasma 6.8+ (Wayland)"
+        - "Plasma 6.8+ (X11)"
+        - "Plasma 6.0 - 6.7"
+        - "Other / Rolling"
+    validations:
+      required: true
+  - type: input
+    id: module-affected
+    attributes:
+      label: Affected Module / Component
+      description: Specify the module (e.g., `modules/window-decoration`, `modules/audio`, `kitty`, `redrog-theme-switch`).
+      placeholder: "e.g., modules/window-decoration"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the Bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Step-by-step instructions to reproduce the issue.
+      placeholder: |
+        1. Run './install.sh --module ...'
+        2. Open Application ...
+        3. See error ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Logs or Output
+      description: Paste any terminal output, `journalctl --user` entries, or dry-run logs here.
+      render: shell

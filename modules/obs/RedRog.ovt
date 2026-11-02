@@ -1,0 +1,34 @@
+@OBSThemeMeta {
+    name: 'RedRog';
+    id: 'com.redrog.obs';
+    extends: 'com.obsproject.Yami';
+    author: 'Junior Carrillo';
+    dark: 'true';
+}
+
+/* RedRog: OBS in the RedRog palette, neutral near-black grays and the
+   accent red, with macOS-like rounded corners (modules/obs) */
+@OBSThemeVars {
+    --grey1: #5a5a58;
+    --grey2: #4a4a48;
+    --grey3: #3a3a39;
+    --grey4: #313131;
+    --grey5: #2a2a29;
+    --grey6: #252524;
+    --grey7: #1c1c1c;
+    --grey8: #141414;
+
+    --bg_window: var(--grey7);
+    --bg_base: var(--grey6);
+    --bg_preview: var(--grey8);
+
+    --primary: #c42a36;
+    --primary_light: #ef3340;
+    --primary_lighter: #f8485e;
+    --primary_dark: #a1172e;
+    --primary_darker: #7d1224;
+
+    --border_radius: 6px;
+    --border_radius_small: 4px;
+    --border_radius_large: 8px;
+}

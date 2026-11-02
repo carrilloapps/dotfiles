@@ -1,0 +1,13 @@
+{
+    "KPlugin": {
+        "Id": "redrogglass",
+        "Name": "RedRog glass",
+        "Name[es]": "Vidrio RedRog",
+        "Description": "Translucent, blurred content for apps that paint an opaque background, matching their title bar",
+        "Description[es]": "Contenido translúcido y desenfocado para apps que pintan un fondo opaco, igual que su barra de título",
+        "Category": "Appearance",
+        "EnabledByDefault": false,
+        "License": "GPL-3.0-or-later",
+        "Authors": [{ "Name": "Junior Carrillo" }]
+    }
+}

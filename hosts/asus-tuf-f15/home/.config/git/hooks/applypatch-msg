@@ -1,0 +1,5 @@
+#!/bin/sh
+# Pasarela: ejecuta el hook applypatch-msg propio del repositorio (core.hooksPath es global).
+h="$(git rev-parse --git-path hooks/applypatch-msg)"
+[ -x "$h" ] && [ "$(realpath "$h")" != "$(realpath "$0")" ] && exec "$h" "$@"
+exit 0

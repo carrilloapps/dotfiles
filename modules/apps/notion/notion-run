@@ -1,0 +1,21 @@
+#!/bin/bash
+# RedRog: Notion (notion-app-electron) like the macOS app: traffic lights at
+# the top left of its own tab bar instead of the Windows-style buttons, which
+# on this desktop (buttons on the left) covered the workspace name. A patched
+# copy of app.asar (notion-patch.py) is kept here and remade whenever the
+# package updates; if the patch no longer applies, the stock Notion starts.
+src=/usr/lib/notion-app
+dir="$HOME/.local/lib/redrog/notion"
+if [ ! -f "$dir/app.asar" ] || [ "$src/app.asar" -nt "$dir/app.asar" ]; then
+  if python3 -I "$dir/notion-patch.py" "$src/app.asar" "$dir/app.asar.new" 2>/dev/null; then
+    mv "$dir/app.asar.new" "$dir/app.asar"
+    ln -sfn "$src/app.asar.unpacked" "$dir/app.asar.unpacked"
+  else
+    rm -f "$dir/app.asar.new" "$dir/app.asar"
+  fi
+fi
+[ -f "$dir/app.asar" ] || exec /usr/bin/notion-app "$@"
+flags=""
+conf="${XDG_CONFIG_HOME:-$HOME/.config}/notion-flags.conf"
+[ -f "$conf" ] && flags="$(grep -v '^#' "$conf")"
+cd "$dir" && exec electron43 "$dir/app.asar" $flags "$@"

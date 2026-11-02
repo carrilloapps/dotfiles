@@ -1,0 +1,25 @@
+/* RedRog: Dolphin's Places sidebar with room on the left (KDE draws its
+   items 4 px from the edge and no theme setting can change that), sharing
+   the window's translucent pane. Its scroll bar is Kvantum's transient one,
+   as everywhere else: hidden until you scroll or point near it, like macOS. */
+KFilePlacesView {
+    padding-left: 10px;
+    padding-right: 4px;
+    background: transparent;
+}
+/* Free space in the status bar, as in Finder: just the text. The capacity
+   bar is hidden and the text button gets compact padding (as a toolbar
+   button it was too tall for the status bar and its text was cut off). */
+StatusBarSpaceInfo KCapacityBar {
+    max-width: 0px;
+    min-width: 0px;
+}
+StatusBarSpaceInfo QToolButton {
+    border: none;
+    background: transparent;
+    padding: 0px 6px;
+}
+StatusBarSpaceInfo QToolButton:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+}

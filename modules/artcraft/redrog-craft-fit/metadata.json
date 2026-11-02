@@ -1,0 +1,16 @@
+{
+    "KPlugin": {
+        "Id": "redrog-craft-fit",
+        "Name": "RedRog: Craft windows fit the screen",
+        "Name[es]": "RedRog: ventanas Craft a la medida de la pantalla",
+        "Description": "ArtCraft apps, Antigravity and Audacity 4 open no larger than the screen they appear on (its usable area at its own scale), centered",
+        "Description[es]": "Las apps de ArtCraft, Antigravity y Audacity 4 se abren sin pasar del tamaño de la pantalla donde aparecen (su área útil a su propia escala), centradas",
+        "License": "GPL-3.0-or-later",
+        "Version": "1.0",
+        "EnabledByDefault": false,
+        "Authors": [{ "Name": "RedRog" }]
+    },
+    "X-Plasma-API": "javascript",
+    "X-Plasma-MainScript": "code/main.js",
+    "KPackageStructure": "KWin/Script"
+}

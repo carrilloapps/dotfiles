@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.11'
+
+      - name: Validate Shell Scripts Syntax
+        run: |
+          echo "Checking shell scripts syntax..."
+          find . -type f -name "*.sh" -not -path "*/.git/*" -not -path "*/vendor/*" | while read -r script; do
+            bash -n "$script" || exit 1
+          done
+          echo "All shell scripts passed syntax checks."
+
+      - name: Validate Python Scripts Syntax
+        run: |
+          echo "Checking Python scripts syntax..."
+          find . -type f -name "*.py" -not -path "*/.git/*" -not -path "*/vendor/*" | while read -r pyscript; do
+            python3 -m py_compile "$pyscript" || exit 1
+          done
+          echo "All Python scripts compiled successfully."
+
+      - name: Validate Documentation Internal Markdown Links
+        run: |
+          python3 -c "
+          import os, re, urllib.parse, sys
+
+          link_re = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
+          errors = 0
+          checked = 0
+
+          for root, dirs, files in os.walk('.'):
+              if any(p in root for p in ['.git', 'vendor']):
+                  continue
+              for f in files:
+                  if not f.endswith('.md'):
+                      continue
+                  path = os.path.join(root, f)
+                  dir_path = os.path.dirname(path)
+                  with open(path, 'r', encoding='utf-8') as fh:
+                      content = fh.read()
+                  for text, link in link_re.findall(content):
+                      if link.startswith(('http://', 'https://', 'mailto:', '#', 'conversation://')):
+                          continue
+                      target = link.split('#')[0]
+                      if not target:
+                          continue
+                      resolved = os.path.normpath(os.path.join(dir_path, urllib.parse.unquote(target)))
+                      checked += 1
+                      if not os.path.exists(resolved):
+                          print(f'::error file={path}::Broken relative link: {link} -> {resolved}')
+                          errors += 1
+
+          print(f'Checked {checked} relative links. Errors: {errors}')
+          if errors > 0:
+              sys.exit(1)
+          "

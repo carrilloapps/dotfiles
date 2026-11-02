@@ -1,0 +1,8 @@
+#!/bin/sh
+# Hook global (core.hooksPath): quita atribución/coautoría de IA del mensaje y
+# luego ejecuta el commit-msg propio del repositorio, si existe.
+. "$(dirname "$0")/no-ai-attribution.sh"
+strip_ai_attribution "$1"
+h="$(git rev-parse --git-path hooks/commit-msg)"
+[ -x "$h" ] && [ "$(realpath "$h")" != "$(realpath "$0")" ] && exec "$h" "$@"
+exit 0

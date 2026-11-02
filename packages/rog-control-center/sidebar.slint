@@ -1,0 +1,242 @@
+// RedRog sidebar for ROG Control Center: a macOS-style source list with ROG
+// accents. Replaces ui/widgets/sidebar.slint when the package is built
+// (packages/rog-control-center/redrog-theme.py); same API as the original.
+// Copyright © SixtyFPS GmbH <info@slint.dev> (original); MIT
+
+import { RR } from "globals.slint";
+
+component SideBarItem inherits Rectangle {
+    in property <bool> selected;
+    in property <bool> has-focus;
+    in property <image> icon;
+    in property <string> header;      // section title shown above the item
+    in-out property <string> text <=> label.text;
+    callback clicked <=> touch.clicked;
+    min-height: self.visible ? (root.header != "" ? 30px : 0px) + 36px : 0px;
+
+    if root.header != "": Text {
+        x: 12px;
+        y: 10px;
+        text: root.header.to-uppercase();
+        color: RR.dim;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.4px;
+    }
+
+    row := Rectangle {
+        y: parent.height - 36px;
+        height: 36px;
+        border-radius: 9px;
+        // active page: a red glass pill; hover: a faint highlight
+        background: root.selected ? @linear-gradient(90deg, RR.accent.with-alpha(0.38) 0%, RR.accent.with-alpha(0.12) 100%)
+                  : touch.pressed ? RR.ink.with-alpha(0.1) : touch.has-hover ? RR.ink.with-alpha(0.06) : transparent;
+        border-width: root.selected || root.has-focus ? 1px : 0px;
+        border-color: root.selected ? RR.accent.with-alpha(0.35) : RR.ink.with-alpha(0.15);
+        animate background { duration: 160ms; }
+
+        // ROG red bar on the active page
+        Rectangle {
+            x: 0px;
+            y: (parent.height - self.height) / 2;
+            width: 3px;
+            height: root.selected ? 18px : 0px;
+            border-radius: 1.5px;
+            background: RR.accent;
+            animate height { duration: 180ms; easing: ease-out; }
+        }
+
+        Image {
+            x: 13px;
+            y: (parent.height - self.height) / 2;
+            width: 18px;
+            height: 18px;
+            source: root.icon;
+            colorize: root.selected ? RR.accent : RR.soft;
+        }
+
+        label := Text {
+            x: 42px;
+            width: parent.width - 50px;
+            height: parent.height;
+            vertical-alignment: center;
+            overflow: elide;
+            font-size: 13px;
+            font-weight: root.selected ? 600 : 400;
+            color: root.selected ? RR.emphasis : RR.strong;
+        }
+
+        touch := TouchArea { }
+    }
+}
+
+export component SideBar inherits Rectangle {
+    in property <[string]> model: [];
+    in property <[bool]> available: [];
+    in property <bool> is_tuf: false;
+    out property <int> current-item: 0;
+    out property <int> current-focused: fs.has-focus ? fs.focused-tab : -1;
+    // one icon per page, in the order of the model
+    property <[image]> icons: [
+        @image-url("../icons/system.svg"),
+        @image-url("../icons/keyboard.svg"),
+        @image-url("../icons/anime.svg"),
+        @image-url("../icons/slash.svg"),
+        @image-url("../icons/fans.svg"),
+        @image-url("../icons/gpu.svg"),
+        @image-url("../icons/battery.svg"),
+        @image-url("../icons/settings.svg"),
+        @image-url("../icons/about.svg"),
+    ];
+
+    width: 252px;
+    forward-focus: fs;
+    accessible-role: tab;
+    accessible-delegate-focus: root.current-focused >= 0 ? root.current-focused : root.current-item;
+    // same glass as the page, like Dolphin's places panel: only a hairline
+    background: transparent;
+
+    // hairline between the sidebar and the page
+    Rectangle {
+        x: parent.width - 1px;
+        width: 1px;
+        background: RR.border;
+    }
+
+    fs := FocusScope {
+        key-pressed(event) => {
+            if (event.text == "\n") {
+                root.current-item = root.current-focused;
+                return accept;
+            }
+            if (event.text == Key.UpArrow) {
+                self.focused-tab = Math.max(self.focused-tab - 1, 0);
+                return accept;
+            }
+            if (event.text == Key.DownArrow) {
+                self.focused-tab = Math.min(self.focused-tab + 1, root.model.length - 1);
+                return accept;
+            }
+            return reject;
+        }
+        key-released(event) => {
+            if (event.text == " ") {
+                root.current-item = root.current-focused;
+                return accept;
+            }
+            return reject;
+        }
+        property <int> focused-tab: 0;
+        x: 0;
+        width: 0;
+    }
+
+    VerticalLayout {
+        padding-left: 12px;
+        padding-right: 13px;
+        padding-top: 18px;
+        spacing: 2px;
+        alignment: start;
+
+        // Brand: the ROG eye and the app name
+        HorizontalLayout {
+            spacing: 10px;
+            padding-left: 6px;
+            padding-bottom: 10px;
+            Image {
+                width: 46px;
+                height: 46px;
+                source: @image-url("../../data/rog-control-center.png");
+                image-fit: contain;
+            }
+            VerticalLayout {
+                alignment: center;
+                spacing: 1px;
+                Text {
+                    text: "ROG";
+                    color: RR.foreground;
+                    font-size: 17px;
+                    font-weight: 800;
+                    letter-spacing: 4px;
+                }
+                Text {
+                    text: "CONTROL CENTER";
+                    color: RR.accent;
+                    font-size: 9px;
+                    font-weight: 600;
+                    letter-spacing: 1.8px;
+                }
+            }
+        }
+        Rectangle {
+            height: 1px;
+            background: @linear-gradient(90deg, RR.accent 0%, RR.accent.with-alpha(0) 85%);
+        }
+
+        for item[index] in root.model: SideBarItem {
+            visible: root.available[index];
+            header: index == 0 ? @tr("SideBar" => "Hardware")
+                  : index == 7 ? @tr("SideBar" => "Application") : "";
+            icon: root.icons[index];
+            text: item;
+            selected: index == root.current-item;
+            has-focus: index == root.current-focused;
+            clicked => {
+                root.current-item = index;
+            }
+        }
+
+        VerticalLayout {
+            padding: 0px;
+            @children
+        }
+    }
+}
+
+// Quit button at the foot of the sidebar
+export component SideBarQuit inherits Rectangle {
+    in property <string> text;
+    callback clicked <=> t.clicked;
+    height: 56px;
+    // same glass as the page, like Dolphin's places panel: only a hairline
+    background: transparent;
+
+    Rectangle {
+        x: parent.width - 1px;
+        width: 1px;
+        background: RR.border;
+    }
+
+    Rectangle {
+        x: 12px;
+        y: 8px;
+        width: parent.width - 25px;
+        height: 36px;
+        border-radius: 9px;
+        background: t.pressed ? RR.accent.with-alpha(0.35) : t.has-hover ? RR.accent.with-alpha(0.14) : RR.ink.with-alpha(0.05);
+        border-width: 1px;
+        border-color: t.has-hover ? RR.accent.with-alpha(0.5) : RR.border;
+        animate background, border-color { duration: 150ms; }
+
+        HorizontalLayout {
+            alignment: center;
+            spacing: 8px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            Image {
+                width: 16px;
+                height: 16px;
+                source: @image-url("../icons/power.svg");
+                colorize: t.has-hover ? RR.accent : RR.foreground;
+            }
+            Text {
+                text: root.text;
+                vertical-alignment: center;
+                color: RR.foreground;
+                font-size: 13px;
+            }
+        }
+
+        t := TouchArea { }
+    }
+}

@@ -1,0 +1,36 @@
+# Based on the AUR arc-gtk-theme-git PKGBUILD (Joonas Henriksson and others).
+# Change: only the GTK2/3/4 themes are built. The original also builds GNOME
+# Shell 45 and Cinnamon 6.0 and fails because that folder no longer exists in
+# Arc's current code. KDE only needs the GTK themes.
+pkgname=arc-gtk-theme-git
+_pkgname=arc-theme
+pkgver=20221218.r24.g94ac8c7d
+pkgrel=1
+pkgdesc="A flat theme suite with transparent elements (solo GTK2/3/4)."
+arch=('any')
+url="https://github.com/jnsh/arc-theme"
+license=('GPL3')
+makedepends=('meson' 'sassc' 'inkscape' 'git')
+optdepends=('gtk-engine-murrine: GTK2 support'
+            'gnome-themes-extra: GTK2 support')
+provides=('arc-gtk-theme')
+conflicts=('arc-gtk-theme')
+source=("${_pkgname}::git+https://github.com/jnsh/${_pkgname}.git")
+md5sums=('SKIP')
+
+pkgver() {
+  cd "${_pkgname}"
+  git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+build() {
+  cd "${_pkgname}"
+  meson setup --prefix=/usr build -Dthemes=gtk2,gtk3,gtk4
+  # Inkscape crashes on parallel exports (D-Bus clash), so build serially
+  meson compile -C build -j 1
+}
+
+package() {
+  cd "${_pkgname}"
+  DESTDIR="$pkgdir" meson install -C build
+}

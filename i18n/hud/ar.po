@@ -1,0 +1,57 @@
+# Arabic translation of RedRog.
+# Copyright (C) 2026 RedRog contributors
+# This file is distributed under the same license as the redrog-hud package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: redrog-hud\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-16 20:35-0500\n"
+"PO-Revision-Date: 2026-10-16 20:35-0500\n"
+"Last-Translator: \n"
+"Language-Team: none\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:162
+#, kde-format
+msgid "SYSTEM"
+msgstr "النظام"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:206
+#, kde-format
+msgid "NVIDIA resting"
+msgstr "NVIDIA خاملة"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:216
+#, kde-format
+msgid "Memory"
+msgstr "الذاكرة"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:221
+#, kde-format
+msgid "Frequency"
+msgstr "التردد"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:226
+#, kde-format
+msgid "Fans"
+msgstr "المراوح"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:231
+#, kde-format
+msgid "Disk"
+msgstr "القرص"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:236
+#, kde-format
+msgid "Network"
+msgstr "الشبكة"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:241
+#, kde-format
+msgid "Battery"
+msgstr "البطارية"

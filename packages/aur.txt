@@ -1,0 +1,68 @@
+# AUR packages (installed with paru or yay). One per line.
+papirus-folders
+apple_cursor
+plasma6-applets-panel-colorizer
+# The Qt application style (a Lightly fork: rounded, translucent, blurred):
+# it reads the color scheme, so every open app follows the light/dark switch
+# live (Kvantum can't)
+darkly
+# Must be built against the installed KWin version (docs/TROUBLESHOOTING.md)
+# Runs cava for the RedRog Spectrum wallpaper (and is a desktop visualizer widget)
+plasma6-applets-kurve-git
+# GPU mode switching (Hybrid / Integrated / Ultimate) with a tray icon and
+# ROG Control Center's GPU section, on Intel/AMD + NVIDIA laptops
+supergfxctl
+spicetify-cli
+# OBS: per-application audio, background removal, transitions, effects and
+# per-source recording (modules/obs)
+obs-pipewire-audio-capture
+obs-backgroundremoval
+obs-composite-blur
+obs-source-record
+obs-advanced-masks
+obs-stroke-glow-shadow
+# Audacity: more effects and analysis (modules/audacity)
+tap-plugins
+airwindows-lv2
+# OBS for streaming: audio spectrum (Waveform), shaders, vertical canvas
+# (Shorts/TikTok at the same time), instant replay, freeze, scale-to-sound,
+# 3D and retro effects, gradients, source clone, downstream keyer, media
+# controls, transition table, scene as transition, Teleport (NDI-like),
+# now-playing (Tuna) and the Advanced Scene Switcher (automation)
+obs-plugin-waveform-git
+obs-shaderfilter-git
+obs-vertical-canvas
+obs-replay-source
+obs-freeze-filter
+obs-scale-to-sound
+obs-3d-effect
+obs-retro-effects
+obs-gradient-source
+obs-source-clone
+obs-downstream-keyer
+obs-media-controls
+obs-transition-table
+obs-scene-as-transition
+obs-teleport
+obs-tuna
+obs-advanced-scene-switcher
+# ArtCraft launcher: installs and opens the Craft apps on demand
+# Notion (desktop app, Electron)
+notion-app-electron
+# Quick Share with Android phones (Google has no Linux app): the RQuickShare
+# fork with dark mode
+rquickshare-x-bin
+# boot splash: the animated Arch logo (modules/system)
+plymouth-theme-arch-charge-big
+antigravity
+# gaming: udev rules for more controllers (PlayStation, Switch Pro, 8BitDo...)
+game-devices-udev
+# Slack (official build, repackaged)
+slack-desktop
+# Android development: Android Studio (official build) and the native
+# debugger's ncurses5
+android-studio
+ncurses5-compat-libs
+# OpenScreen: screen recordings polished into demos (zoom, cursor,
+# backgrounds), the official build repackaged
+openscreen

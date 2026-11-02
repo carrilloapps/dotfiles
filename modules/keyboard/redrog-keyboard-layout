@@ -1,0 +1,213 @@
+#!/usr/bin/env python3
+"""The keyboard layout follows the keyboard in use.
+
+Usage: redrog-keyboard-layout  (a user service, redrog-keyboard-layout.service)
+
+Plasma offers the layouts set by modules/keyboard (Latin American Spanish
+"es" and US English "en" by default) with its tray selector and Meta+Alt+K.
+On top of that:
+  - when one of the keyboards listed in ~/.config/redrog/keyboard.json
+    ("auto_devices", parts of their names) connects, the layout switches to
+    its layout ("connected_layout", English by default); when the last of
+    them goes away, back to "disconnected_layout" (Spanish);
+  - in between the layout is the user's: whatever is picked by hand stays,
+    and the last one picked comes back at the next login (with a listed
+    keyboard already connected, its layout instead).
+Keyboards are followed through udev events; the layout picked by hand through
+Plasma's layoutChanged signal. State: ~/.local/state/redrog/keyboard-layout.
+The automatic switch can be turned off from the top bar widget
+(org.redrog.keyboard: the file keyboard-auto-off in the same folder); the
+widget reads what this service sees in keyboard-status.json.
+"""
+import json
+import os
+import re
+import subprocess
+import threading
+import time
+
+HOME = os.path.expanduser("~")
+CONF = os.path.join(os.environ.get("XDG_CONFIG_HOME", HOME + "/.config"), "redrog", "keyboard.json")
+STATE_DIR = os.path.join(os.environ.get("XDG_STATE_HOME", HOME + "/.local/state"), "redrog")
+STATE = os.path.join(STATE_DIR, "keyboard-layout")
+AUTO_OFF = os.path.join(STATE_DIR, "keyboard-auto-off")
+STATUS = os.path.join(STATE_DIR, "keyboard-status.json")
+# input devices that report keys but are not keyboards one types on
+NOT_KEYBOARDS = re.compile(r"power button|sleep button|video bus|lid switch|wmi|hotkeys|consumer control|hid events|"
+                           r"button array|camera|^ITE|touchpad|stylus|pen |accel|"
+                           r"system control|mouse|virtual|ydotool|headset|speaker|hdmi|webcam|uvc", re.I)
+
+
+def run(*args):
+    try:
+        r = subprocess.run(args, capture_output=True, text=True, timeout=10)
+        return r.returncode, r.stdout
+    except (OSError, subprocess.SubprocessError):
+        return 1, ""
+
+
+def config():
+    try:
+        with open(CONF, encoding="utf-8") as f:
+            c = json.load(f)
+    except (OSError, ValueError):
+        c = {}
+    return {"auto_devices": c.get("auto_devices", []),
+            "connected_layout": c.get("connected_layout", "us"),
+            "disconnected_layout": c.get("disconnected_layout", "latam")}
+
+
+def layouts():
+    """Plasma's layouts, in order: ["latam", "us"]."""
+    code, out = run("qdbus6", "--literal", "org.kde.keyboard", "/Layouts", "org.kde.KeyboardLayouts.getLayoutsList")
+    return re.findall(r'\(sss\) "([^"]*)"', out) if code == 0 else []
+
+
+def current():
+    names = layouts()
+    code, out = run("qdbus6", "org.kde.keyboard", "/Layouts", "org.kde.KeyboardLayouts.getLayout")
+    try:
+        return names[int(out.strip())]
+    except (ValueError, IndexError):
+        return None
+
+
+def set_layout(name):
+    names = layouts()
+    if name in names:
+        run("qdbus6", "org.kde.keyboard", "/Layouts", "org.kde.KeyboardLayouts.setLayout", str(names.index(name)))
+
+
+def keyboards():
+    """Names of the keyboards connected now (laptop, USB, Bluetooth)."""
+    try:
+        text = open("/proc/bus/input/devices", encoding="utf-8", errors="replace").read()
+    except OSError:
+        return []
+    found = []
+    for block in text.split("\n\n"):
+        name = re.search(r'^N: Name="(.*)"$', block, re.M)
+        handlers = re.search(r"^H: Handlers=(.*)$", block, re.M)
+        if name and handlers and "kbd" in handlers.group(1).split() and not NOT_KEYBOARDS.search(name.group(1)):
+            if name.group(1) not in found:
+                found.append(name.group(1))
+    return found
+
+
+def matching(devices, names):
+    """The connected keyboards that are one of the listed ones."""
+    return [n for n in names if any(d.lower() in n.lower() for d in devices if d)]
+
+
+def write_status(names, auto, devices, enabled):
+    os.makedirs(STATE_DIR, exist_ok=True)
+    with open(STATUS + ".tmp", "w", encoding="utf-8") as f:
+        json.dump({"keyboards": names, "auto_keyboards": auto, "auto_devices": devices,
+                   "auto_enabled": enabled}, f, ensure_ascii=False)
+    os.replace(STATUS + ".tmp", STATUS)
+
+
+def save(name):
+    os.makedirs(os.path.dirname(STATE), exist_ok=True)
+    with open(STATE + ".tmp", "w") as f:
+        f.write(name + "\n")
+    os.replace(STATE + ".tmp", STATE)
+
+
+def saved():
+    try:
+        return open(STATE).read().strip() or None
+    except OSError:
+        return None
+
+
+class Follower:
+    def __init__(self):
+        self.lock = threading.Lock()
+        self.present = None
+
+    def check(self, startup=False):
+        with self.lock:
+            c = config()
+            names = keyboards()
+            auto = matching(c["auto_devices"], names)
+            enabled = not os.path.exists(AUTO_OFF)
+            write_status(names, auto, c["auto_devices"], enabled)
+            now = bool(auto)
+            # other keyboards coming and going never change anything
+            if now == self.present and not startup:
+                return
+            if not enabled:
+                self.present = now
+                if startup:
+                    set_layout(saved() or c["disconnected_layout"])
+                return
+            self.present = now
+            if now:
+                set_layout(c["connected_layout"])
+            elif startup:
+                set_layout(saved() or c["disconnected_layout"])
+            else:
+                set_layout(c["disconnected_layout"])
+
+
+def main():
+    # Plasma's keyboard service comes up with the session
+    for _ in range(60):
+        if layouts():
+            break
+        time.sleep(1)
+    follower = Follower()
+    follower.check(startup=True)
+
+    # the layout picked by hand (or set here) is remembered for the next login
+    def remember():
+        while True:
+            proc = subprocess.Popen(["dbus-monitor", "--session",
+                                     "type='signal',interface='org.kde.KeyboardLayouts',member='layoutChanged'"],
+                                    stdout=subprocess.PIPE, text=True)
+            for line in proc.stdout:
+                if "member=layoutChanged" in line:
+                    time.sleep(0.2)
+                    name = current()
+                    if name:
+                        save(name)
+            proc.wait()
+            time.sleep(3)
+
+    threading.Thread(target=remember, daemon=True).start()
+
+    # keyboards plugged in or out (USB, Bluetooth): one check per burst of events
+    pending = threading.Event()
+
+    def check_later():
+        time.sleep(1.0)   # the device's input nodes appear one by one
+        pending.clear()
+        follower.check()
+
+    # the widget turns the automatic switch on or off: a status refresh
+    def watch_switch():
+        last = os.path.exists(AUTO_OFF)
+        while True:
+            time.sleep(1)
+            now = os.path.exists(AUTO_OFF)
+            if now != last:
+                last = now
+                follower.present = None if not now else follower.present
+                follower.check()
+
+    threading.Thread(target=watch_switch, daemon=True).start()
+
+    while True:
+        proc = subprocess.Popen(["udevadm", "monitor", "--udev", "--subsystem-match=input"],
+                                stdout=subprocess.PIPE, text=True)
+        for line in proc.stdout:
+            if (" add " in line or " remove " in line) and not pending.is_set():
+                pending.set()
+                threading.Thread(target=check_later, daemon=True).start()
+        proc.wait()
+        time.sleep(3)
+
+
+if __name__ == "__main__":
+    main()

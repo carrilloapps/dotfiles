@@ -1,0 +1,7 @@
+#!/bin/sh
+# También aquí, porque `git commit --no-verify` se salta commit-msg pero no este.
+. "$(dirname "$0")/no-ai-attribution.sh"
+strip_ai_attribution "$1"
+h="$(git rev-parse --git-path hooks/prepare-commit-msg)"
+[ -x "$h" ] && [ "$(realpath "$h")" != "$(realpath "$0")" ] && exec "$h" "$@"
+exit 0

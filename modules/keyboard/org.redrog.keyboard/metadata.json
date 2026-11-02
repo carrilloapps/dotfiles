@@ -1,0 +1,23 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Id": "org.redrog.keyboard",
+        "Name": "Keyboard Layout",
+        "Description": "Current keyboard layout in the system tray, as a key cap; click it to switch layouts and see the keyboards in use and the automatic switch",
+        "Name[es]": "Distribución de teclado",
+        "Description[es]": "Distribución de teclado actual en la bandeja del sistema, como una tecla; al pulsarla cambia de distribución y muestra los teclados en uso y el cambio automático",
+        "Icon": "input-keyboard",
+        "Category": "System Information",
+        "License": "GPL-2.0-or-later",
+        "Version": "1.0",
+        "EnabledByDefault": true,
+        "Authors": [
+            {
+                "Name": "RedRog"
+            }
+        ]
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-NotificationArea": "true",
+    "X-Plasma-NotificationAreaCategory": "Hardware"
+}

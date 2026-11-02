@@ -1,0 +1,51 @@
+# Spanish translation of the RedRog keyboard layout widget (org.redrog.keyboard)
+msgid ""
+msgstr ""
+"Project-Id-Version: org.redrog.keyboard\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Keyboard layout"
+msgstr "Distribución de teclado"
+
+msgid "%1 connected: automatic layout"
+msgstr "%1 conectado: distribución automática"
+
+msgid "Meta+Alt+K switches layouts"
+msgstr "Meta+Alt+K cambia de distribución"
+
+msgid "Set by %1"
+msgstr "Puesta por %1"
+
+msgid "Chosen by you: it stays until you change it"
+msgstr "Elegida por ti: se mantiene hasta que la cambies"
+
+msgid "Automatic layout"
+msgstr "Distribución automática"
+
+msgid "no keyboard set"
+msgstr "ningún teclado configurado"
+
+msgid "%1 connected: English while it stays connected"
+msgstr "%1 conectado: inglés mientras siga conectado"
+
+msgid "%1 connected (automatic switch off)"
+msgstr "%1 conectado (cambio automático desactivado)"
+
+msgid "Not connected: Spanish. Connecting it switches to English"
+msgstr "Sin conectar: español. Al conectarlo pasa a inglés"
+
+msgid "Only this keyboard switches the layout; any other keyboard changes nothing."
+msgstr "Solo este teclado cambia la distribución; cualquier otro teclado no cambia nada."
+
+msgid "Keyboards connected"
+msgstr "Teclados conectados"
+
+msgid "Laptop keyboard"
+msgstr "Teclado del portátil"
+
+msgid "Keyboard settings…"
+msgstr "Configuración del teclado…"

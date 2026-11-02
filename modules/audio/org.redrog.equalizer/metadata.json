@@ -1,0 +1,23 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Id": "org.redrog.equalizer",
+        "Name": "Equalizer",
+        "Description": "EasyEffects in the system tray, among the hardware items: opens it and turns its effects on or off",
+        "Name[es]": "Ecualizador",
+        "Description[es]": "EasyEffects en la bandeja del sistema, entre los elementos de hardware: lo abre y activa u omite sus efectos",
+        "Icon": "com.github.wwmm.easyeffects",
+        "Category": "Multimedia",
+        "License": "GPL-2.0-or-later",
+        "Version": "1.0",
+        "EnabledByDefault": true,
+        "Authors": [
+            {
+                "Name": "RedRog"
+            }
+        ]
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-NotificationArea": "true",
+    "X-Plasma-NotificationAreaCategory": "Hardware"
+}

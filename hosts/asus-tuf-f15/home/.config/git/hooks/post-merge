@@ -1,0 +1,5 @@
+#!/bin/sh
+# Pasarela: ejecuta el hook post-merge propio del repositorio (core.hooksPath es global).
+h="$(git rev-parse --git-path hooks/post-merge)"
+[ -x "$h" ] && [ "$(realpath "$h")" != "$(realpath "$0")" ] && exec "$h" "$@"
+exit 0

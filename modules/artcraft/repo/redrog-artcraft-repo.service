@@ -1,0 +1,30 @@
+[Unit]
+Description=Refresh the local ArtCraft package repository
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/lib/redrog/artcraft-repo-sync
+# an unprivileged system user (redrog-sysusers.conf) that can write only
+# /var/lib/redrog-artcraft-repo; the folder stays readable for checkupdates
+User=redrog-artcraft
+Group=redrog-artcraft
+StateDirectory=redrog-artcraft-repo
+StateDirectoryMode=0755
+Nice=19
+IOSchedulingClass=idle
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+NoNewPrivileges=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+CapabilityBoundingSet=

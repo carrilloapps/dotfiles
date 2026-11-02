@@ -1,0 +1,15 @@
+#!/bin/sh
+# RedRog (modules/asus-laptop): on hybrid graphics Xwayland loads only the
+# integrated GPU's (Mesa) EGL driver, so the NVIDIA card can sleep until a
+# game or app asks for it. Only when the integrated GPU drives the built-in
+# screen: in MUX / dGPU mode the NVIDIA card does, Mesa EGL fails there and
+# every X11 app (Steam, games, Resolve) fell back to llvmpipe, drawn by the
+# CPU. KWin finds Xwayland through PATH (~/.local/bin first).
+for c in /sys/class/drm/card*-eDP-*; do
+    [ "$(cat "$c/status" 2>/dev/null)" = connected ] || continue
+    case "$(basename "$(readlink -f "$c/device/device/driver")")" in
+        i915|xe|amdgpu) export __EGL_VENDOR_LIBRARY_FILENAMES=/usr/share/glvnd/egl_vendor.d/50_mesa.json ;;
+    esac
+    break
+done
+exec /usr/bin/Xwayland "$@"

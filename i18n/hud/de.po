@@ -1,0 +1,57 @@
+# German translation of RedRog.
+# Copyright (C) 2026 RedRog contributors
+# This file is distributed under the same license as the redrog-hud package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: redrog-hud\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-16 20:35-0500\n"
+"PO-Revision-Date: 2026-10-16 20:35-0500\n"
+"Last-Translator: \n"
+"Language-Team: none\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:162
+#, kde-format
+msgid "SYSTEM"
+msgstr "SYSTEM"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:206
+#, kde-format
+msgid "NVIDIA resting"
+msgstr "NVIDIA im Ruhezustand"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:216
+#, kde-format
+msgid "Memory"
+msgstr "Speicher"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:221
+#, kde-format
+msgid "Frequency"
+msgstr "Frequenz"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:226
+#, kde-format
+msgid "Fans"
+msgstr "Lüfter"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:231
+#, kde-format
+msgid "Disk"
+msgstr "Festplatte"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:236
+#, kde-format
+msgid "Network"
+msgstr "Netzwerk"
+
+#: modules/hud/org.redrog.hud/contents/ui/main.qml:241
+#, kde-format
+msgid "Battery"
+msgstr "Akku"
