@@ -1,0 +1,9 @@
+[Daemon]
+Autolock=false
+Timeout=0
+
+[Greeter]
+WallpaperPluginId=org.kde.image
+
+[Greeter][Wallpaper][org.kde.image][General]
+Image=file:///home/m/Imágenes/Wallpapers/fondo-general.jpg

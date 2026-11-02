@@ -1,0 +1,45 @@
+# Maintainer: Nico <d3sox at protonmail dot com>
+# RedRog: the AUR package, plus its sources in /usr/src and a pacman hook that
+# rebuilds it after every KWin update (a KWin effect only loads in the KWin it
+# was built for: after KWin 6.8.0 -> 6.8.1 the System Monitor, System Settings
+# and the other glass apps lost their blur until it was rebuilt by hand).
+
+pkgname=kwin-effects-better-blur-dx
+pkgver=2.6.0
+pkgrel=3
+pkgdesc="KWin Better Blur DX effect fork with window class force blur feature (Wayland)"
+arch=('x86_64')
+url="https://github.com/xarblu/kwin-effects-better-blur-dx"
+license=(GPL-3.0-or-later)
+# cmake, extra-cmake-modules and qt6-tools stay installed: the hook builds with them
+depends=(kio knotifications kcrash kglobalaccel kcmutils libepoxy kwin vulkan-headers
+         cmake extra-cmake-modules qt6-tools gcc make)
+makedepends=(cmake extra-cmake-modules qt6-tools kwin)
+conflicts=("kwin-effects-forceblur")
+replaces=("kwin-effects-forceblur")
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
+install="$pkgname.install"
+sha256sums=('ab205ef7ca700cfe8cdb8201934b59a9d734ddf3a98afc5cdf65b153538fe497')
+
+build() {
+    local _cmake_args=(
+        -B build
+        -S "$pkgname-$pkgver"
+        -W no-dev
+        -D CMAKE_BUILD_TYPE=None
+        -D CMAKE_INSTALL_PREFIX=/usr
+        -D BETTERBLUR_X11=OFF
+    )
+
+    cmake "${_cmake_args[@]}"
+    cmake --build build
+}
+
+package() {
+    DESTDIR="${pkgdir}" cmake --install build
+    # what the pacman hook rebuilds from after a KWin update
+    install -d "$pkgdir/usr/src/$pkgname"
+    cp -r "$srcdir/$pkgname-$pkgver/." "$pkgdir/usr/src/$pkgname/"
+    install -Dm755 "$startdir/hook/rebuild" "$pkgdir/usr/lib/$pkgname/rebuild"
+    install -Dm644 "$startdir/hook/$pkgname.hook" "$pkgdir/usr/share/libalpm/hooks/90-$pkgname.hook"
+}

@@ -1,0 +1,434 @@
+# Vietnamese translation of RedRog.
+# Copyright (C) 2026 RedRog contributors
+# This file is distributed under the same license as the redrog-batterypercent package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: redrog-batterypercent\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-25 16:24-0500\n"
+"PO-Revision-Date: 2026-10-16 20:55-0500\n"
+"Last-Translator: \n"
+"Language-Team: none\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/CpuEqualizer.qml:103
+msgid "Performance core"
+msgstr "Lõi hiệu năng"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/CpuEqualizer.qml:103
+msgid "Efficiency core"
+msgstr "Lõi tiết kiệm"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/CpuEqualizer.qml:103
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:743
+msgid "Core"
+msgstr "Lõi"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/CpuEqualizer.qml:102
+msgid "Thread %1 · %2"
+msgstr "Luồng %1 · %2"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/CpuEqualizer.qml:104
+msgid "Load %1 %"
+msgstr "Tải %1 %"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/CpuEqualizer.qml:122
+msgid "P-cores · up to %1 GHz"
+msgstr "Nhân P · tối đa %1 GHz"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/CpuEqualizer.qml:129
+msgid "E-cores · up to %1 GHz"
+msgstr "Nhân E · tối đa %1 GHz"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:63
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:368
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:499
+msgid "System"
+msgstr "Hệ thống"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:313
+msgid "Could not apply the change"
+msgstr "Không thể áp dụng thay đổi"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:370
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:625
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:854
+msgid "Processor"
+msgstr "Bộ xử lý"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:371
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:628
+msgid "%1 cores · %2 threads"
+msgstr "%1 nhân · %2 luồng"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:374
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:651
+msgid "Graphics"
+msgstr "Đồ họa"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:376
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:569
+msgid "NVIDIA resting"
+msgstr "NVIDIA đang nghỉ"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:382
+msgid "Power profile"
+msgstr "Hồ sơ nguồn"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:385
+msgid "throttled"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:386
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:574
+msgid "Battery"
+msgstr "Pin"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:388
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:880
+msgid "Charge limit"
+msgstr "Giới hạn sạc"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:390
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:607
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:774
+msgid "RAM"
+msgstr "RAM"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:391
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:780
+msgid "Swap"
+msgstr "Swap"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:393
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:787
+msgid "Available"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:393
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:788
+msgid "Pressure"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:395
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:608
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:911
+msgid "Disk"
+msgstr "Ổ đĩa"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:397
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:609
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:921
+msgid "Network"
+msgstr "Mạng"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:398
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:950
+msgid "Up %1"
+msgstr "Đã bật %1"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:412
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:438
+msgid "Quiet"
+msgstr "Yên tĩnh"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:413
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:437
+msgid "Balanced"
+msgstr "Cân bằng"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:414
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:436
+msgid "Performance"
+msgstr "Hiệu năng"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:416
+msgid ""
+"The CPU is held back: %1 GHz at %2 % load. Pick the profile again to reapply "
+"its power limits."
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:422
+msgid ""
+"NVIDIA drives the screen directly (MUX): the most frames and the lowest "
+"latency in games, at a higher power draw. The Intel GPU rests."
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:424
+msgid ""
+"Intel draws the desktop; NVIDIA wakes only for a game or an app that asks "
+"for it, then goes back to sleep at 0 W."
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:426
+msgid ""
+"Only the Intel GPU works and NVIDIA is switched off: the longest battery "
+"life, no games on NVIDIA."
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:432
+msgid "full speed"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:432
+msgid "medium"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:432
+msgid "idle"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:439
+msgid "Low power"
+msgstr "Tiết kiệm điện"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:445
+msgid "Limit %1 %"
+msgstr "Giới hạn %1 %"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:446
+msgid "Charging"
+msgstr "Đang sạc"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:447
+msgid "Discharging"
+msgstr "Đang xả"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:448
+msgid "Fully charged"
+msgstr "Đã sạc đầy"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:449
+msgid "Not charging"
+msgstr "Không sạc"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:518
+#, fuzzy
+msgid "Full view"
+msgstr "Đầy sau %1"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:518
+msgid "Minimal view"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:527
+msgid "Copied"
+msgstr "Đã sao chép"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:527
+msgid "Copy all data"
+msgstr "Sao chép toàn bộ dữ liệu"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:568
+msgid "NVIDIA after restart"
+msgstr "NVIDIA sau khi khởi động lại"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:654
+msgid "needs supergfxctl"
+msgstr "cần supergfxctl"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:655
+msgid "Restart to apply"
+msgstr "Khởi động lại để áp dụng"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:657
+msgid "Pending: %1"
+msgstr "Đang chờ: %1"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:663
+msgid "Intel"
+msgstr "Intel"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:664
+msgid "Automatic"
+msgstr "Tự động"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:665
+msgid "NVIDIA"
+msgstr "NVIDIA"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:683
+msgid "NVIDIA only needs a restart"
+msgstr "Chỉ NVIDIA cần khởi động lại"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:684
+msgid "Intel only may need a logout"
+msgstr "Chỉ Intel có thể cần đăng xuất"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:685
+msgid "Automatic may need a restart"
+msgstr "Tự động có thể cần khởi động lại"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:690
+msgid "Cancel"
+msgstr "Hủy"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:692
+msgid "Switch"
+msgstr "Chuyển"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:702
+msgid "The new graphics mode starts after a restart"
+msgstr "Chế độ đồ họa mới có hiệu lực sau khi khởi động lại"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:708
+msgid "Restart now"
+msgstr "Khởi động lại ngay"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:716
+msgid "Video memory"
+msgstr "Bộ nhớ video"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:722
+msgid "Dedicated memory of the NVIDIA card"
+msgstr "Bộ nhớ riêng của card NVIDIA"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:723
+msgid "The Intel GPU borrows it from the RAM"
+msgstr "GPU Intel mượn nó từ RAM"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:730
+msgid "Screen"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:731
+msgid "awake"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:731
+msgid "asleep · 0 W"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:732
+msgid "Temperature"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:733
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:840
+msgid "Power"
+msgstr "Nguồn"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:741
+#, fuzzy
+msgid "Load"
+msgstr "Tải %1 %"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:742
+msgid "State"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:747
+msgid "Driver"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:749
+#, fuzzy
+msgid "resting"
+msgstr "NVIDIA đang nghỉ"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:750
+#, fuzzy
+msgid "Intel power"
+msgstr "Intel"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:770
+msgid "Memory"
+msgstr "Bộ nhớ"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:777
+msgid "Working memory used by open apps"
+msgstr "Bộ nhớ làm việc mà các ứng dụng đang mở dùng"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:783
+msgid "zram: compressed space inside the RAM, used only when it fills up"
+msgstr "zram: vùng nén bên trong RAM, chỉ dùng khi RAM đầy"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:797
+msgid "Disk cache"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:799
+msgid "Shared"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:800
+#, fuzzy
+msgid "To write"
+msgstr "Đọc / ghi"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:802
+msgid "empty"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:803
+msgid "Compression"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:809
+msgid "Using the most"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:820
+msgid ""
+"Linux fills free RAM with disk cache to speed things up and hands it back as "
+"soon as an app needs it: \"available\" is what apps can still use. Pressure "
+"above 0 % means apps are waiting for memory."
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:855
+#, fuzzy
+msgid "limit %1/%2 W"
+msgstr "Giới hạn %1 %"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:857
+msgid "Now · the profile's sustained / burst limit"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:860
+msgid "Frequency"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:861
+msgid "avg %1 · max %2 GHz"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:877
+msgid "%1 left"
+msgstr "Còn %1"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:879
+msgid "Full in %1"
+msgstr "Đầy sau %1"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:898
+msgid "80 % makes the battery last more years; use 100 % before a trip"
+msgstr "80 % giúp pin bền lâu hơn; dùng 100 % trước chuyến đi"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:907
+msgid "Storage and network"
+msgstr "Lưu trữ và mạng"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:916
+msgid "Read / write"
+msgstr "Đọc / ghi"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:924
+msgid "Wi-Fi signal %1 %"
+msgstr "Tín hiệu Wi-Fi %1 %"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/MoreToggle.qml:16
+msgid "Fewer details"
+msgstr ""
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/MoreToggle.qml:16
+msgid "More details"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Memory clock"
+#~ msgstr "Bộ nhớ"

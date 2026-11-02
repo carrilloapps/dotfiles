@@ -1,0 +1,11 @@
+# RedRog (modules/artcraft): every ArtCraft app and MCP engine runs in this
+# slice, so together they use at most about three quarters of the machine
+# and the desktop stays responsive. @CPUQUOTA@ is 75 % of the CPU threads.
+[Unit]
+Description=ArtCraft suite (at most 75 % of the CPU and 75-80 % of the memory)
+
+[Slice]
+CPUQuota=@CPUQUOTA@
+MemoryHigh=75%
+MemoryMax=80%
+IOWeight=50

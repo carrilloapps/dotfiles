@@ -1,0 +1,19 @@
+{
+    "KPlugin": {
+        "Id": "Arc",
+        "Name": "Arc",
+        "Version": "1.0",
+        "License": "Attribution-ShareAlike 4.0 International",
+        "EnabledByDefault": true,
+        "Authors": [
+            {
+                "Name": "varlesh",
+                "Email": "varlesh@gmail.com"
+            }
+        ],
+        "ServiceTypes": [
+            "aurorae"
+        ]
+    },
+    "KPackageStructure": "aurorae"
+}

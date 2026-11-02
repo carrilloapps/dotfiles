@@ -1,0 +1,45 @@
+#!/bin/bash
+# RedRog: the desktop audio spectrum on or off (modules/visualizer).
+# Usage: redrog-spectrum-ctl on|off|toggle|status
+#
+# Off stops it altogether (no CAVA, no layers over the screens, no GPU work)
+# and keeps it off across logins and reinstalls; on starts it again. The tray
+# item (org.redrog.spectrumswitch) and the settings window call this.
+UNIT=redrog-spectrum.service
+OFF="${XDG_STATE_HOME:-$HOME/.local/state}/redrog/spectrum-off"
+CFG="${XDG_CONFIG_HOME:-$HOME/.config}/redrog/spectrum.json"
+
+# "Show on the desktop" in the settings file, for a spectrum already running
+shown() {
+  [ -f "$CFG" ] || return 0
+  python3 -I - "$CFG" "$1" <<'PY'
+import json, os, sys
+path, on = sys.argv[1], sys.argv[2] == "true"
+try:
+    cfg = json.load(open(path))
+except (OSError, ValueError):
+    sys.exit(0)
+if cfg.get("enabled", True) != on:
+    cfg["enabled"] = on
+    with open(path + ".tmp", "w") as f:
+        json.dump(cfg, f, indent=2)
+        f.write("\n")
+    os.replace(path + ".tmp", path)
+PY
+}
+
+case "${1:-status}" in
+  on)
+    rm -f "$OFF"
+    shown true
+    systemctl --user enable --now "$UNIT" >/dev/null 2>&1 ;;
+  off)
+    mkdir -p "$(dirname "$OFF")" && : > "$OFF"
+    shown false
+    systemctl --user disable --now "$UNIT" >/dev/null 2>&1 ;;
+  toggle)
+    if systemctl --user -q is-active "$UNIT"; then "$0" off; else "$0" on; fi ;;
+  status)
+    systemctl --user -q is-active "$UNIT" && echo on || echo off ;;
+  *) sed -n '3,7p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+esac

@@ -1,0 +1,63 @@
+# Spanish translation of the RedRog light/dark switch (org.redrog.themeswitch)
+msgid ""
+msgstr ""
+"Project-Id-Version: org.redrog.themeswitch\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Light appearance"
+msgstr "Apariencia clara"
+
+msgid "Dark appearance"
+msgstr "Apariencia oscura"
+
+msgid "Automatic: follows Plasma's light/dark schedule"
+msgstr "Automático: sigue el horario claro/oscuro de Plasma"
+
+msgid "Click for dark"
+msgstr "Pulsa para pasar a oscuro"
+
+msgid "Click for light"
+msgstr "Pulsa para pasar a claro"
+
+msgid "Transition effect"
+msgstr "Efecto de transición"
+
+msgid "Theme settings…"
+msgstr "Ajustes del tema…"
+
+msgid "Appearance"
+msgstr "Apariencia"
+
+msgid "automatic"
+msgstr "automático"
+
+msgid "light"
+msgstr "claro"
+
+msgid "dark"
+msgstr "oscuro"
+
+msgid "Light"
+msgstr "Claro"
+
+msgid "Dark"
+msgstr "Oscuro"
+
+msgid "Automatic"
+msgstr "Automático"
+
+msgid "Follows Plasma: light by day, dark at night (the schedule of Night Light)."
+msgstr "Sigue a Plasma: claro de día y oscuro de noche (el horario de la luz nocturna)."
+
+msgid "Stays as you chose it, also after restarting."
+msgstr "Se queda como lo elegiste, también al reiniciar."
+
+msgid "Preview"
+msgstr "Vista previa"
+
+msgid "Global themes…"
+msgstr "Temas globales…"

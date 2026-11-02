@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# Mirrors the newest official Arch packages of the ArtCraft suite (the ArtCraft
+# launcher and the Craft apps, github.com/storytold, and SolidCraft,
+# github.com/tangency-labs) into the local pacman
+# repository [redrog-artcraft], so pacman, arch-update and its tray icon see
+# and install their updates like those of any other package.
+# A package enters the repository only if its checksum matches its release's
+# SHA256SUMS.txt and its name is the one expected for that project
+# (ai.storyteller.<app>, io.tangencylabs.solidcraft): a release can never offer an update to any other
+# package of the system. Only the newest version of each package stays.
+# Runs from redrog-artcraft-repo.service as the unprivileged system user
+# redrog-artcraft, which can write only the repository folder. Exits with an
+# error when a project could not be checked, so the unit shows as failed.
+set -euo pipefail
+REPO=${STATE_DIRECTORY:-/var/lib/redrog-artcraft-repo}
+DB=$REPO/redrog-artcraft.db.tar.gz
+PROJECTS=(craft-launcher photocraft vectorcraft filmcraft lightcraft pdfcraft effectcraft
+          designcraft figcraft soundcraft wordcraft gridcraft deckcraft solidcraft)
+# the GitHub organization and package name prefix of each project
+owner() { case $1 in solidcraft) echo tangency-labs ;; *) echo storytold ;; esac; }
+prefix() { case $1 in solidcraft) echo io.tangencylabs ;; *) echo ai.storyteller ;; esac; }
+ARCH=$(uname -m)
+
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+added=0 failed=()
+for p in "${PROJECTS[@]}"; do
+  # the latest release's tag, from the redirect of /releases/latest (the
+  # GitHub API allows only 60 requests an hour without an account)
+  tag=$(curl -fsSI --proto '=https' --retry 3 --max-time 60 "https://github.com/$(owner "$p")/$p/releases/latest" \
+        | sed -n 's|^[Ll]ocation: .*/releases/tag/\(v[0-9][0-9A-Za-z.+_-]*\).*|\1|p' | tr -d '\r')
+  [ -n "$tag" ] || { failed+=("$p"); continue; }
+  name=$p; [ "$p" = craft-launcher ] && name=artcraft-launcher
+  file="$name-${tag#v}-linux-$ARCH.pkg.tar.zst"
+  [ -f "$REPO/$file" ] && continue
+  base="https://github.com/$(owner "$p")/$p/releases/download/$tag"
+  if curl -fsSL --proto '=https' --retry 3 --max-time 900 -o "$tmp/$file" "$base/$file" \
+     && curl -fsSL --proto '=https' --retry 3 --max-time 60 -o "$tmp/SHA256SUMS.txt" "$base/SHA256SUMS.txt" \
+     && (cd "$tmp" && grep -E " \*?$file\$" SHA256SUMS.txt | sha256sum -c --status -) \
+     && pkgname=$(bsdtar -xOf "$tmp/$file" .PKGINFO | sed -n 's/^pkgname = //p') \
+     && [ "$pkgname" = "$(prefix "$p").$name" ]; then
+    install -m 644 "$tmp/$file" "$REPO/$file"
+    # -R deletes the file of the version it replaces
+    repo-add -q -R "$DB" "$REPO/$file"
+    added=$((added + 1))
+  else
+    echo "redrog-artcraft: $p $tag rejected (download, checksum or package name)" >&2
+    failed+=("$p")
+  fi
+  rm -f "$tmp/$file" "$tmp/SHA256SUMS.txt"
+done
+# an empty but valid database the first time, so pacman -Sy does not fail
+[ -e "$DB" ] || repo-add -q "$DB"
+echo "redrog-artcraft: $added new packages${failed[*]:+, not checked: ${failed[*]}}"
+[ ${#failed[@]} -eq 0 ]

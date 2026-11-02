@@ -1,0 +1,102 @@
+category	name	desktop
+Graphics	Affinity Suite	Affinity.desktop
+Game	Counter-Strike 2	Counter-Strike 2.desktop
+AudioVideo	DaVinci Control Panels Setup	DaVinciControlPanelsSetup.desktop
+AudioVideo	DaVinci Resolve	DaVinciResolve.desktop
+Game	Need for Speed™ Unbound	Need for Speed Unbound.desktop
+Game	World of Warplanes	World of Warplanes.desktop
+Utility	ArtCraft Launcher	ai.storyteller.artcraft-launcher.desktop
+Office	DeckCraft	ai.storyteller.deckcraft.desktop
+Graphics	DesignCraft	ai.storyteller.designcraft.desktop
+AudioVideo	EffectCraft	ai.storyteller.effectcraft.desktop
+Graphics	FigCraft	ai.storyteller.figcraft.desktop
+AudioVideo	FilmCraft	ai.storyteller.filmcraft.desktop
+Office	GridCraft	ai.storyteller.gridcraft.desktop
+Graphics	LightCraft	ai.storyteller.lightcraft.desktop
+Office	PdfCraft	ai.storyteller.pdfcraft.desktop
+Graphics	PhotoCraft	ai.storyteller.photocraft.desktop
+AudioVideo	SoundCraft	ai.storyteller.soundcraft.desktop
+Graphics	VectorCraft	ai.storyteller.vectorcraft.desktop
+Office	WordCraft	ai.storyteller.wordcraft.desktop
+Utility	Cachy-Update	arch-update.desktop
+Development	Qt Assistant	assistant.desktop
+AudioVideo	Audacity	audacity.desktop
+Video	Blackmagic RAW Player	blackmagicraw-player.desktop
+Video	Blackmagic RAW Speed Test	blackmagicraw-speedtest.desktop
+Network	Brave	brave-browser.desktop
+System	btop++	btop.desktop
+System	Btrfs Assistant	btrfs-assistant.desktop
+System	CachyOS Hello	cachyos-hello.desktop
+System	CachyOS Package Installer	cachyos-pi.desktop
+Development	CMake	cmake-gui.desktop
+Utility	Claude	com.anthropic.Claude.desktop
+System	Czkawka	com.github.qarmin.czkawka.desktop
+AudioVideo	Easy Effects	com.github.wwmm.easyeffects.desktop
+Game	Heroic Games Launcher	com.heroicgameslauncher.hgl.desktop
+Development	Visual Studio Code	com.microsoft.VSCode.desktop
+AudioVideo	OBS Studio	com.obsproject.Studio.desktop
+System	Shelly	com.shellyorg.shelly.desktop
+Development	Qt Widgets Designer	designer.desktop
+Network	Discord	discord.desktop
+Network	Firefox	firefox.desktop
+Network	Google Chrome	google-chrome.desktop
+AudioVideo	HyperFrames	hyperframes.desktop
+Game	Faugus	io.github.Faugus.faugus-launcher.desktop
+Game	Goverlay	io.github.benjamimgois.goverlay.desktop
+System	OpenJDK Java 27 Console	jconsole-java-openjdk.desktop
+System	OpenJDK Java 27 Shell	jshell-java-openjdk.desktop
+Settings	KDE System Settings	kdesystemsettings.desktop
+System	kitty	kitty.desktop
+Settings	Klassy Settings	klassy-settings.desktop
+Utility	Kvantum Manager	kvantummanager.desktop
+Utility	Limine-snapper-restore	limine-snapper-restore.desktop
+Development	Qt Linguist	linguist.desktop
+System	Hardware Locality lstopo	lstopo.desktop
+Utility	Micro	micro.desktop
+AudioVideo	mpv Media Player	mpv.desktop
+Game	Lutris	net.lutris.Lutris.desktop
+Settings	NVIDIA X Server Settings	nvidia-settings.desktop
+System	Octopi CacheCleaner	octopi-cachecleaner.desktop
+System	Octopi Notifier	octopi-notifier.desktop
+System	Octopi Repository Editor	octopi-repoeditor.desktop
+System	Octopi	octopi.desktop
+Office	ONLYOFFICE	onlyoffice-desktopeditors.desktop
+System	BleachBit	org.bleachbit.BleachBit.desktop
+System	CachyOS Kernel Manager	org.cachyos.KernelManager.desktop
+System	SchedExt GUI Manager	org.cachyos.scx-manager.desktop
+Graphics	Image Viewer (Loupe)	org.gnome.Loupe.desktop
+Development	Meld	org.gnome.Meld.desktop
+Utility	Text Editor	org.gnome.TextEditor.desktop
+Utility	Ark	org.kde.ark.desktop
+System	Dolphin	org.kde.dolphin.desktop
+Utility	Filelight	org.kde.filelight.desktop
+AudioVideo	Haruna	org.kde.haruna.desktop
+Utility	KCalc	org.kde.kcalc.desktop
+Network	KDE Connect	org.kde.kdeconnect.app.desktop
+Network	KDE Connect Indicator	org.kde.kdeconnect.nonplasma.desktop
+Network	KDE Connect SMS	org.kde.kdeconnect.sms.desktop
+System	Info Center	org.kde.kinfocenter.desktop
+System	Menu Editor	org.kde.kmenuedit.desktop
+System	KWalletManager	org.kde.kwalletmanager.desktop
+System	KDE Partition Manager	org.kde.partitionmanager.desktop
+System	System Monitor	org.kde.plasma-systemmonitor.desktop
+Utility	Emoji Selector	org.kde.plasma.emojier.desktop
+Utility	Spectacle	org.kde.spectacle.desktop
+Settings	ROG Control Center	org.opengamingcollective.rog-control-center.desktop
+AudioVideo	Volume Control (pavucontrol)	org.pulseaudio.pavucontrol.desktop
+Audio	Qtractor	org.rncbc.qtractor.desktop
+Utility	Protontricks	protontricks.desktop
+Development	Qt D-Bus Viewer	qdbusviewer.desktop
+AudioVideo	Qt V4L2 test Utility	qv4l2.desktop
+AudioVideo	Qt V4L2 video capture utility	qvidcap.desktop
+AudioVideo	Reset Speaker Audio	redrog-audio-reset.desktop
+Utility	scrcpy (console)	scrcpy-console.desktop
+Utility	scrcpy	scrcpy.desktop
+Audio	Spotify (Launcher)	spotify-launcher.desktop
+Network	Steam	steam.desktop
+Settings	System Settings	systemsettings.desktop
+Utility	Vim	vim.desktop
+System	Oracle VirtualBox	virtualbox.desktop
+AudioVideo	VLC Media Player	vlc.desktop
+System	WinBoat	winboat.desktop
+Utility	Winetricks	winetricks.desktop

@@ -1,0 +1,18 @@
+#!/bin/bash
+# Rebuilds Better Blur DX from /usr/src/kwin-effects-better-blur-dx for the
+# installed KWin (run by the pacman hook after a KWin update). If the build
+# fails, the installed copy stays (KWin just won't load it) until the package
+# is rebuilt: ./install.sh --packages
+src=/usr/src/kwin-effects-better-blur-dx
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+if cmake -B "$tmp" -S "$src" -W no-dev -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr \
+         -D BETTERBLUR_X11=OFF >"$tmp.log" 2>&1 &&
+   cmake --build "$tmp" -j"$(nproc)" >>"$tmp.log" 2>&1 &&
+   cmake --install "$tmp" >>"$tmp.log" 2>&1; then
+  echo "Better Blur DX rebuilt for KWin $(pacman -Q kwin | cut -d' ' -f2); log out and in to load it"
+  rm -f "$tmp.log"
+else
+  echo "Better Blur DX could not be rebuilt (log: $tmp.log); run: ./install.sh --packages"
+fi
+exit 0

@@ -1,0 +1,35 @@
+#!/bin/bash
+# RedRog: Claude desktop with macOS traffic lights instead of Chromium's grey
+# window buttons. Electron loads resources/app.asar next to its executable, so
+# a copy of the app is kept here: the executable copied, every other file
+# linked to /usr/lib/claude-desktop, and app.asar patched (claude-patch.py).
+# Remade whenever the package updates; if anything fails, the stock app starts.
+src=/usr/lib/claude-desktop
+dir="$HOME/.local/lib/redrog/claude"
+app="$dir/app"
+stamp="$app/.redrog-version"
+want="$(stat -c %Y "$src/claude-desktop" "$src/resources/app.asar" 2>/dev/null | paste -sd-)"
+if [ "$(cat "$stamp" 2>/dev/null)" != "$want" ]; then
+  rm -rf "$app.new"
+  mkdir -p "$app.new/resources"
+  ok=1
+  for f in "$src"/*; do
+    case "${f##*/}" in
+      claude-desktop) cp "$f" "$app.new/" || ok=0 ;;
+      resources) ;;
+      *) ln -s "$f" "$app.new/" ;;
+    esac
+  done
+  for f in "$src"/resources/*; do
+    [ "${f##*/}" = app.asar ] || ln -s "$f" "$app.new/resources/"
+  done
+  python3 -I "$dir/claude-patch.py" "$src/resources/app.asar" "$app.new/resources/app.asar" 2>/dev/null || ok=0
+  if [ "$ok" = 1 ]; then
+    echo "$want" > "$app.new/.redrog-version"
+    rm -rf "$app" && mv "$app.new" "$app"
+  else
+    rm -rf "$app.new" "$app"
+  fi
+fi
+[ -x "$app/claude-desktop" ] || exec "$src/claude-desktop" "$@"
+exec "$app/claude-desktop" "$@"

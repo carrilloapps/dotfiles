@@ -1,0 +1,70 @@
+# ==============================================================================
+# Configuración personal y local del sistema (wallpaper, apps, boot title)
+# ==============================================================================
+config/user.conf
+hosts/*/system/packages-*.txt
+
+# ==============================================================================
+# Secretos, credenciales y claves privadas
+# ==============================================================================
+.env
+.env.*
+.env.local
+*.key
+*.pem
+*.crt
+*.pfx
+*.p12
+id_rsa*
+id_ed25519*
+id_ecdsa*
+id_dsa*
+kubeconfig
+.netrc
+.npmrc
+.pypirc
+
+# ==============================================================================
+# Artefactos de empaquetado (makepkg en packages/)
+# ==============================================================================
+packages/*/src/
+packages/*/pkg/
+packages/*/*.pkg.tar.*
+packages/*/*.tar.gz
+packages/*/*.log
+
+# Traducciones compiladas en tiempo de instalación
+*.mo
+
+# ==============================================================================
+# Caches, entornos virtuales y dependencias
+# ==============================================================================
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.cache/
+
+# ==============================================================================
+# Entornos de desarrollo y editores (IDE / editores)
+# ==============================================================================
+.vscode/
+.idea/
+*.kate-swp
+*.swp
+*~
+
+# ==============================================================================
+# Archivos temporales, respaldos, parches y logs
+# ==============================================================================
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
+*.rej
+
+# Metadatos del sistema de archivos y exploradores
+.directory
+.DS_Store

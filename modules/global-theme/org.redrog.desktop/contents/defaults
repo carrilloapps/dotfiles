@@ -1,0 +1,24 @@
+# RedRog global theme. No contents/layouts: applying it does not touch the
+# panels (the macOS-like layout comes from the layout module).
+[kdeglobals][KDE]
+widgetStyle=kvantum
+
+[kdeglobals][General]
+ColorScheme=RedRog
+
+[kdeglobals][Icons]
+Theme=Papirus-Dark
+
+[plasmarc][Theme]
+name=RedRog
+
+[kcminputrc][Mouse]
+cursorTheme=macOS
+
+[kwinrc][org.kde.kdecoration2]
+library=org.kde.kwin.aurorae
+theme=__aurorae__svg__RedRog
+
+[ksplashrc][KSplash]
+Engine=none
+Theme=None

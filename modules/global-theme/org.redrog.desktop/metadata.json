@@ -1,0 +1,15 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Id": "org.redrog.desktop",
+        "Name": "RedRog",
+        "Description": "Oscuro y plano, acento rojo ROG, iconos Papirus y ventanas tipo macOS",
+        "Authors": [{ "Name": "RedRog" }],
+        "License": "GPL-3.0-or-later",
+        "Version": "1.0",
+        "Website": "https://github.com/",
+        "Category": "Plasma 6 Global Theme"
+    },
+    "X-Plasma-APIVersion": "2",
+    "X-Plasma-MainScript": "defaults"
+}

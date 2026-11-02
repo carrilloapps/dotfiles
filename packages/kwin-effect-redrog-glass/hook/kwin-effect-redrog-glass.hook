@@ -1,0 +1,12 @@
+# Rebuilds the RedRog glass effect against the new KWin after every KWin
+# update (a KWin effect only loads in the KWin it was built for)
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = kwin
+
+[Action]
+Description = Rebuilding the RedRog glass effect for the new KWin...
+When = PostTransaction
+Exec = /usr/lib/kwin-effect-redrog-glass/rebuild

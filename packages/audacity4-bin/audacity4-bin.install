@@ -1,0 +1,9 @@
+post_install() {
+  # an earlier build left /opt/audacity4-bin and its folders as 0700, and
+  # pacman keeps the permissions of directories that already exist
+  chmod -R u+rwX,go+rX,go-w /opt/audacity4-bin
+}
+
+post_upgrade() {
+  post_install
+}

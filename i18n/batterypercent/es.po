@@ -1,0 +1,435 @@
+# Spanish translation of the RedRog battery percentage and RedRog panel.
+msgid ""
+msgstr ""
+"Project-Id-Version: redrog-batterypercent\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-25 16:24-0500\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/CpuEqualizer.qml:103
+msgid "Performance core"
+msgstr "Núcleo de rendimiento"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/CpuEqualizer.qml:103
+msgid "Efficiency core"
+msgstr "Núcleo de eficiencia"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/CpuEqualizer.qml:103
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:743
+msgid "Core"
+msgstr "Núcleo"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/CpuEqualizer.qml:102
+msgid "Thread %1 · %2"
+msgstr "Hilo %1 · %2"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/CpuEqualizer.qml:104
+msgid "Load %1 %"
+msgstr "Carga %1 %"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/CpuEqualizer.qml:122
+msgid "P-cores · up to %1 GHz"
+msgstr "Núcleos P · hasta %1 GHz"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/CpuEqualizer.qml:129
+msgid "E-cores · up to %1 GHz"
+msgstr "Núcleos E · hasta %1 GHz"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:63
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:368
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:499
+msgid "System"
+msgstr "Sistema"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:313
+msgid "Could not apply the change"
+msgstr "No se pudo aplicar el cambio"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:370
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:625
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:854
+msgid "Processor"
+msgstr "Procesador"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:371
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:628
+msgid "%1 cores · %2 threads"
+msgstr "%1 núcleos · %2 hilos"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:374
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:651
+msgid "Graphics"
+msgstr "Gráficos"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:376
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:569
+msgid "NVIDIA resting"
+msgstr "NVIDIA en reposo"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:382
+msgid "Power profile"
+msgstr "Perfil de energía"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:385
+msgid "throttled"
+msgstr "limitada"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:386
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:574
+msgid "Battery"
+msgstr "Batería"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:388
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:880
+msgid "Charge limit"
+msgstr "Límite de carga"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:390
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:607
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:774
+msgid "RAM"
+msgstr "RAM"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:391
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:780
+msgid "Swap"
+msgstr "Intercambio"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:393
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:787
+msgid "Available"
+msgstr "Disponible"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:393
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:788
+msgid "Pressure"
+msgstr "Presión"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:395
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:608
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:911
+msgid "Disk"
+msgstr "Disco"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:397
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:609
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:921
+msgid "Network"
+msgstr "Red"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:398
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:950
+msgid "Up %1"
+msgstr "Encendido %1"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:412
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:438
+msgid "Quiet"
+msgstr "Silencioso"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:413
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:437
+msgid "Balanced"
+msgstr "Equilibrado"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:414
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:436
+msgid "Performance"
+msgstr "Rendimiento"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:416
+msgid ""
+"The CPU is held back: %1 GHz at %2 % load. Pick the profile again to reapply "
+"its power limits."
+msgstr ""
+"La CPU está limitada: %1 GHz con %2 % de uso. Elija de nuevo el perfil para "
+"reaplicar sus límites de potencia."
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:422
+msgid ""
+"NVIDIA drives the screen directly (MUX): the most frames and the lowest "
+"latency in games, at a higher power draw. The Intel GPU rests."
+msgstr ""
+"La NVIDIA maneja la pantalla directamente (MUX): más cuadros y la menor "
+"latencia en juegos, con un consumo mayor. La GPU Intel descansa."
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:424
+msgid ""
+"Intel draws the desktop; NVIDIA wakes only for a game or an app that asks "
+"for it, then goes back to sleep at 0 W."
+msgstr ""
+"La Intel dibuja el escritorio; la NVIDIA despierta solo para un juego o una "
+"app que la pida y luego vuelve a dormir a 0 W."
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:426
+msgid ""
+"Only the Intel GPU works and NVIDIA is switched off: the longest battery "
+"life, no games on NVIDIA."
+msgstr ""
+"Solo trabaja la GPU Intel y la NVIDIA queda apagada: la mayor duración de "
+"batería, sin juegos en la NVIDIA."
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:432
+msgid "full speed"
+msgstr "máxima velocidad"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:432
+msgid "medium"
+msgstr "media"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:432
+msgid "idle"
+msgstr "reposo"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:439
+msgid "Low power"
+msgstr "Bajo consumo"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:445
+msgid "Limit %1 %"
+msgstr "Límite %1 %"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:446
+msgid "Charging"
+msgstr "Cargando"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:447
+msgid "Discharging"
+msgstr "Descargando"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:448
+msgid "Fully charged"
+msgstr "Completa"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:449
+msgid "Not charging"
+msgstr "Sin cargar"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:518
+msgid "Full view"
+msgstr "Vista completa"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:518
+msgid "Minimal view"
+msgstr "Vista mínima"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:527
+msgid "Copied"
+msgstr "Copiado"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:527
+msgid "Copy all data"
+msgstr "Copiar todos los datos"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:568
+msgid "NVIDIA after restart"
+msgstr "NVIDIA al reiniciar"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:654
+msgid "needs supergfxctl"
+msgstr "requiere supergfxctl"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:655
+msgid "Restart to apply"
+msgstr "Reinicia para aplicar"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:657
+msgid "Pending: %1"
+msgstr "Pendiente: %1"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:663
+msgid "Intel"
+msgstr "Intel"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:664
+msgid "Automatic"
+msgstr "Automático"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:665
+msgid "NVIDIA"
+msgstr "NVIDIA"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:683
+msgid "NVIDIA only needs a restart"
+msgstr "Solo NVIDIA requiere reiniciar"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:684
+msgid "Intel only may need a logout"
+msgstr "Solo Intel puede requerir cerrar sesión"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:685
+msgid "Automatic may need a restart"
+msgstr "Automático puede requerir reiniciar"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:690
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:692
+msgid "Switch"
+msgstr "Cambiar"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:702
+msgid "The new graphics mode starts after a restart"
+msgstr "El nuevo modo gráfico se aplica al reiniciar"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:708
+msgid "Restart now"
+msgstr "Reiniciar ahora"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:716
+msgid "Video memory"
+msgstr "Memoria de vídeo"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:722
+msgid "Dedicated memory of the NVIDIA card"
+msgstr "Memoria propia de la tarjeta NVIDIA"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:723
+msgid "The Intel GPU borrows it from the RAM"
+msgstr "La GPU Intel la toma prestada de la RAM"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:730
+msgid "Screen"
+msgstr "Pantalla"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:731
+msgid "awake"
+msgstr "despierta"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:731
+msgid "asleep · 0 W"
+msgstr "dormida · 0 W"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:732
+msgid "Temperature"
+msgstr "Temperatura"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:733
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:840
+msgid "Power"
+msgstr "Energía"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:741
+msgid "Load"
+msgstr "Uso"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:742
+msgid "State"
+msgstr "Estado"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:747
+msgid "Driver"
+msgstr "Driver"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:749
+msgid "resting"
+msgstr "en reposo"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:750
+msgid "Intel power"
+msgstr "Consumo Intel"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:770
+msgid "Memory"
+msgstr "Memoria"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:777
+msgid "Working memory used by open apps"
+msgstr "Memoria de trabajo que usan las apps abiertas"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:783
+msgid "zram: compressed space inside the RAM, used only when it fills up"
+msgstr "zram: espacio comprimido dentro de la RAM, solo se usa cuando se llena"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:797
+msgid "Disk cache"
+msgstr "Caché de disco"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:799
+msgid "Shared"
+msgstr "Compartida"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:800
+msgid "To write"
+msgstr "Por escribir"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:802
+msgid "empty"
+msgstr "vacía"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:803
+msgid "Compression"
+msgstr "Compresión"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:809
+msgid "Using the most"
+msgstr "Las que más usan"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:820
+msgid ""
+"Linux fills free RAM with disk cache to speed things up and hands it back as "
+"soon as an app needs it: \"available\" is what apps can still use. Pressure "
+"above 0 % means apps are waiting for memory."
+msgstr ""
+"Linux llena la RAM libre con caché de disco para ir más rápido y la devuelve "
+"apenas una app la necesita: «disponible» es lo que las apps todavía pueden "
+"usar. Una presión mayor que 0 % significa que hay apps esperando memoria."
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:855
+msgid "limit %1/%2 W"
+msgstr "límite %1/%2 W"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:857
+msgid "Now · the profile's sustained / burst limit"
+msgstr "Ahora · límite sostenido / de ráfaga del perfil"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:860
+msgid "Frequency"
+msgstr "Frecuencia"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:861
+msgid "avg %1 · max %2 GHz"
+msgstr "prom. %1 · máx. %2 GHz"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:877
+msgid "%1 left"
+msgstr "Quedan %1"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:879
+msgid "Full in %1"
+msgstr "Llena en %1"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:898
+msgid "80 % makes the battery last more years; use 100 % before a trip"
+msgstr "80 % alarga la vida de la batería; usa 100 % antes de un viaje"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:907
+msgid "Storage and network"
+msgstr "Almacenamiento y red"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:916
+msgid "Read / write"
+msgstr "Lectura / escritura"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/main.qml:924
+msgid "Wi-Fi signal %1 %"
+msgstr "Señal Wi-Fi %1 %"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/MoreToggle.qml:16
+msgid "Fewer details"
+msgstr "Menos detalles"
+
+#: ../../modules/layout/org.redrog.batterypercent/contents/ui/MoreToggle.qml:16
+msgid "More details"
+msgstr "Más detalles"
+
+#~ msgid "Average of all cores · the fastest one"
+#~ msgstr "Promedio de todos los núcleos · el más rápido"
+
+#~ msgid "Memory clock"
+#~ msgstr "Reloj de memoria"

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- RedRog badge: the emblem cut out of a solid circle, for small sizes
+       such as the top bar, where the plain emblem gets lost. One flat color,
+       the theme accent (replaced by the installer with ACCENT). -->
+  <defs>
+    <mask id="emblem">
+      <rect width="200" height="200" fill="white"/>
+      <path fill="black" fill-rule="evenodd"
+            transform="translate(100 100) scale(0.66) translate(-102 -108)" d="
+    M6 118 L118 74 L198 58 L170 98 L118 128 L60 136 L34 154 L36 134 Z
+    M98 82 L106 106 L96 132 L90 106 Z
+    M150 40 C139.1 58.3 130.2 99.4 122 150 C136.1 100.9 147.8 62.9 150 40 Z
+    M170 34 C159.2 51.5 150.2 91.2 142 140 C156.1 92.7 167.8 56.1 170 34 Z
+    M190 30 C179.2 46.0 170.3 82.7 162 128 C176.0 84.3 187.8 50.6 190 30 Z
+  "/>
+    </mask>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="#ef3340" mask="url(#emblem)"/>
+</svg>

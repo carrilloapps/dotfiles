@@ -1,0 +1,25 @@
+{
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
+  "includeCoAuthoredBy": false,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I ~/.claude/hooks/no-ai-attribution.py",
+            "timeout": 10,
+            "statusMessage": "Revisando atribución de IA"
+          }
+        ]
+      }
+    ]
+  },
+  "theme": "dark",
+  "agentPushNotifEnabled": true
+}

@@ -1,0 +1,31 @@
+# Maintainer: Junior Carrillo
+#
+# RedRog glass: a KWin effect that makes the content of apps that paint an
+# opaque background (System Settings, Discover, System Monitor, Info Center,
+# EasyEffects)
+# translucent at the title bar's opacity and asks KWin's own blur behind
+# them, so the whole window is one glass like Dolphin or kitty. Like other
+# KWin effects it must be rebuilt after a KWin update: its pacman hook does it
+# by itself (sources in /usr/src, so cmake and the KWin headers stay installed).
+pkgname=kwin-effect-redrog-glass
+pkgver=1.0
+pkgrel=2
+pkgdesc="KWin effect: translucent, blurred content for opaque KDE apps (RedRog)"
+arch=('x86_64')
+license=('GPL-3.0-or-later')
+depends=('kwin' 'cmake' 'extra-cmake-modules' 'gcc' 'make')
+source=()
+
+build() {
+    cmake -S "${startdir}" -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+    cmake --build build
+}
+
+package() {
+    DESTDIR="${pkgdir}" cmake --install build
+    # what the pacman hook rebuilds from after a KWin update
+    install -Dm644 "${startdir}/CMakeLists.txt" "${pkgdir}/usr/src/${pkgname}/CMakeLists.txt"
+    cp -r "${startdir}/effect" "${pkgdir}/usr/src/${pkgname}/effect"
+    install -Dm755 "${startdir}/hook/rebuild" "${pkgdir}/usr/lib/${pkgname}/rebuild"
+    install -Dm644 "${startdir}/hook/${pkgname}.hook" "${pkgdir}/usr/share/libalpm/hooks/90-${pkgname}.hook"
+}

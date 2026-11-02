@@ -1,0 +1,89 @@
+# German translation of RedRog.
+# Copyright (C) 2026 RedRog contributors
+# This file is distributed under the same license as the redrog package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: redrog\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-25 16:25-0500\n"
+"PO-Revision-Date: 2026-10-16 15:35-0500\n"
+"Last-Translator: \n"
+"Language-Team: none\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: modules/rog-notify/redrog-rog-notify.py:32
+msgid "Balanced"
+msgstr "Ausgewogen"
+
+#: modules/rog-notify/redrog-rog-notify.py:33
+msgid "Performance"
+msgstr "Leistung"
+
+#: modules/rog-notify/redrog-rog-notify.py:34
+msgid "Quiet"
+msgstr "Leise"
+
+#: modules/rog-notify/redrog-rog-notify.py:35
+msgid "Low power"
+msgstr "Energiesparen"
+
+#: modules/rog-notify/redrog-rog-notify.py:108
+msgid "RedRog panel open"
+msgstr ""
+
+#: modules/rog-notify/redrog-rog-notify.py:125
+msgid "Custom"
+msgstr "Benutzerdefiniert"
+
+#: modules/rog-notify/redrog-rog-notify.py:126
+#, python-format
+msgid "Power profile: %s"
+msgstr "Leistungsprofil: %s"
+
+#: modules/rog-notify/redrog-rog-notify.py:130
+#, python-format
+msgid "The battery will stop charging at %d %%."
+msgstr "Der Akku hört bei %d %% auf zu laden."
+
+#: modules/rog-notify/redrog-rog-notify.py:131
+msgid "The battery will charge to 100 %."
+msgstr "Der Akku wird bis 100 % geladen."
+
+#: modules/rog-notify/redrog-rog-notify.py:132
+#, python-format
+msgid "Charge limit: %d %%"
+msgstr "Ladegrenze: %d %%"
+
+#: modules/rog-notify/redrog-rog-notify.py:144
+msgid "Dedicated GPU disabled"
+msgstr "Dedizierte GPU deaktiviert"
+
+#: modules/rog-notify/redrog-rog-notify.py:144
+msgid "Dedicated GPU enabled"
+msgstr "Dedizierte GPU aktiviert"
+
+#: modules/rog-notify/redrog-rog-notify.py:145
+msgid "Changes take effect after a reboot or logout."
+msgstr "Änderungen werden nach Neustart oder Abmelden wirksam."
+
+#: modules/rog-notify/redrog-rog-notify.py:147
+#, python-format
+msgid "GPU mode: %s"
+msgstr "GPU-Modus: %s"
+
+#: modules/rog-notify/redrog-rog-notify.py:147
+msgid "Hybrid"
+msgstr "Hybrid"
+
+#: modules/rog-notify/redrog-rog-notify.py:147
+msgid "Ultimate (dGPU only)"
+msgstr "Ultimate (nur dGPU)"
+
+#: modules/rog-notify/redrog-rog-notify.py:148
+msgid "Reboot to apply the change."
+msgstr "Neu starten, um die Änderung anzuwenden."

@@ -1,0 +1,88 @@
+{
+    "input": {
+        "blocklist": [],
+        "plugins_order": [
+            "equalizer#0",
+            "rnnoise#0",
+            "autogain#0",
+            "limiter#0"
+        ],
+        "equalizer#0": {
+            "bypass": false,
+            "balance": 0.0,
+            "input-gain": 0.0,
+            "output-gain": 0.0,
+            "mode": "IIR",
+            "num-bands": 1,
+            "split-channels": false,
+            "pitch-left": 0.0,
+            "pitch-right": 0.0,
+            "left": {
+                "band0": {
+                    "type": "Hi-pass",
+                    "mode": "RLC (BT)",
+                    "slope": "x2",
+                    "frequency": 80.0,
+                    "gain": 0.0,
+                    "q": 0.7,
+                    "width": 4.0,
+                    "mute": false,
+                    "solo": false
+                }
+            },
+            "right": {
+                "band0": {
+                    "type": "Hi-pass",
+                    "mode": "RLC (BT)",
+                    "slope": "x2",
+                    "frequency": 80.0,
+                    "gain": 0.0,
+                    "q": 0.7,
+                    "width": 4.0,
+                    "mute": false,
+                    "solo": false
+                }
+            }
+        },
+        "rnnoise#0": {
+            "bypass": false,
+            "input-gain": 0.0,
+            "output-gain": 0.0,
+            "model-name": "",
+            "use-standard-model": true,
+            "enable-vad": false,
+            "vad-thres": 50.0,
+            "wet": 0.0,
+            "release": 20.0
+        },
+        "autogain#0": {
+            "bypass": false,
+            "input-gain": 0.0,
+            "output-gain": 0.0,
+            "target": -19.0,
+            "reference": "Geometric Mean (MSI)",
+            "maximum-history": 15,
+            "silence-threshold": -60.0,
+            "force-silence": false
+        },
+        "limiter#0": {
+            "bypass": false,
+            "input-gain": 0.0,
+            "output-gain": 0.0,
+            "mode": "Herm Thin",
+            "oversampling": "None",
+            "dithering": "None",
+            "threshold": -1.0,
+            "lookahead": 5.0,
+            "attack": 5.0,
+            "release": 10.0,
+            "stereo-link": 100.0,
+            "gain-boost": false,
+            "sidechain-preamp": 0.0,
+            "alr": false,
+            "alr-attack": 5.0,
+            "alr-release": 50.0,
+            "alr-knee": 0.0
+        }
+    }
+}

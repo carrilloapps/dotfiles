@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# RedRog: puts the built-in speaker sound back to its original tuning,
+# installed by modules/audio (also run at login with --login). It restores the "RedRog Laptop Speakers" preset
+# and its autoload files from the installed copy (undoing any change saved
+# over them) and reloads the preset that belongs to the current output.
+lib="$(dirname "$(readlink -f "$0")")"
+
+# --login: run from the session's autostart; wait for EasyEffects (started by
+# its own autostart entry) so the right preset is on from the first sound,
+# even when the audio devices show up late
+if [ "${1:-}" = --login ]; then
+  for _ in $(seq 30); do pgrep -x easyeffects >/dev/null && break; sleep 1; done
+  pgrep -x easyeffects >/dev/null || exit 0
+  sleep 4
+  set -- --quiet
+fi
+ee="${XDG_DATA_HOME:-$HOME/.local/share}/easyeffects"
+mkdir -p "$ee/output" "$ee/input" "$ee/autoload/output"
+# output presets to the output list, microphone presets to the input list
+for f in "$lib"/presets/*.json; do
+  install -m 444 "$f" "$ee/output/$(basename "$f")"
+done
+for f in "$lib"/presets/input/*.json; do
+  [ -f "$f" ] && install -m 444 "$f" "$ee/input/$(basename "$f")"
+done
+for f in "$lib"/autoload/*.json; do
+  install -m 444 "$f" "$ee/autoload/output/$(basename "$f")"
+done
+
+# Load the preset that belongs to the output playing now: the one autoloaded
+# for that device and route (the speakers get RedRog's), else the fallback
+read -r sink route < <(pactl -f json list sinks 2>/dev/null | python3 -Ic '
+import json, subprocess, sys
+default = subprocess.run(["pactl", "get-default-sink"], capture_output=True, text=True).stdout.strip()
+for s in json.load(sys.stdin):
+    if s["name"] == default:
+        port = s.get("active_port") or ""
+        route = next((p.get("description") or p["name"] for p in s.get("ports", []) if p["name"] == port), "")
+        print(s["name"], route.replace(" ", "\x1f"))
+')
+route="${route//$'\x1f'/ }"
+preset=""
+if [ -n "$sink" ] && [ -f "$ee/autoload/output/$sink:$route.json" ]; then
+  preset=$(python3 -Ic 'import json, sys; print(json.load(open(sys.argv[1])).get("preset-name", ""))' \
+           "$ee/autoload/output/$sink:$route.json" 2>/dev/null)
+fi
+if [ -z "$preset" ]; then
+  rc="${XDG_CONFIG_HOME:-$HOME/.config}/easyeffects/db/easyeffectsrc"
+  [ "$(kreadconfig6 --file "$rc" --group Window --key outputAutoloadingUsesFallback)" = true ] &&
+    preset=$(kreadconfig6 --file "$rc" --group Window --key outputAutoloadingFallbackPreset)
+fi
+# (Qt's offscreen platform: the command needs no screen, whatever the environment)
+[ -n "$preset" ] && QT_QPA_PLATFORM=offscreen easyeffects -l "$preset" >/dev/null 2>&1
+
+[ "${1:-}" = --quiet ] && exit 0
+case "${LC_ALL:-${LC_MESSAGES:-$LANG}}" in
+  es*) title="Sonido de los altavoces restaurado"; body="Se volvió al ajuste original de RedRog." ;;
+  *)   title="Speaker sound restored"; body="Back to RedRog's original tuning." ;;
+esac
+notify-send -a RedRog -i audio-speakers "$title" "$body" 2>/dev/null || true

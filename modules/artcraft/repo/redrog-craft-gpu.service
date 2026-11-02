@@ -1,0 +1,13 @@
+[Unit]
+Description=Cap the NVIDIA GPU at 76 % while ArtCraft apps run
+
+[Service]
+ExecStart=/usr/local/lib/redrog/craft-gpu-cap
+Restart=on-failure
+Nice=10
+ProtectHome=read-only
+PrivateTmp=yes
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,19 @@
+{
+    "KPackageStructure": "KWin/Script",
+    "KPlugin": {
+        "Id": "redrog-menu-placement",
+        "Name": "RedRog menu placement",
+        "Description": "Opens RedRog's terminal context menu with its corner at the pointer, like a menu",
+        "Name[es]": "Colocación del menú de RedRog",
+        "Description[es]": "Abre el menú contextual de la terminal de RedRog con la esquina en el puntero, como un menú",
+        "License": "GPL-3.0-or-later",
+        "Version": "1.0",
+        "EnabledByDefault": true,
+        "Authors": [
+            {
+                "Name": "RedRog"
+            }
+        ]
+    },
+    "X-Plasma-API": "javascript"
+}

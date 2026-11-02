@@ -1,0 +1,144 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "General"
+msgstr "General"
+
+msgid "Modes:"
+msgstr "Modos:"
+
+msgid "Show unsupported modes"
+msgstr "Mostrar modos no compatibles"
+
+msgid "Plasmoid Status"
+msgstr "Estado del widget"
+
+msgid "Active"
+msgstr "Activo"
+
+msgid "Passive"
+msgstr "Pasivo"
+
+msgid "dGPU active on battery"
+msgstr "GPU dedicada activa con batería"
+
+msgid "dGPU inactive on battery"
+msgstr "GPU dedicada inactiva con batería"
+
+msgid "dGPU active on AC"
+msgstr "GPU dedicada activa con cargador"
+
+msgid "dGPU inactive on AC"
+msgstr "GPU dedicada inactiva con cargador"
+
+msgid "These options will work only when the plasmoid visibility is set to 'Shown when relevant'"
+msgstr "Estas opciones solo funcionan si la visibilidad del widget es «Mostrar cuando sea relevante»"
+
+msgid "Graphics mode: %1, dGPU power: %2"
+msgstr "Modo gráfico: %1, GPU dedicada: %2"
+
+msgid "dGPU power: %1"
+msgstr "GPU dedicada: %1"
+
+msgid "Run journalctl -b -u supergfxd for more information"
+msgstr "Ejecuta journalctl -b -u supergfxd para más información"
+
+msgid "%1 is required to switch to %2"
+msgstr "Hay que %1 para cambiar a %2"
+
+msgid "Revert to %1"
+msgstr "Volver a %1"
+
+msgid "supergfxd daemon is outdated"
+msgstr "El servicio supergfxd está desactualizado"
+
+msgid "Can't connect to daemon"
+msgstr "No se puede conectar con el servicio"
+
+msgid "Switch to %1 is required"
+msgstr "Antes hay que cambiar a %1"
+
+msgid "Disabled in configuration"
+msgstr "Desactivado en la configuración"
+
+msgid "Switch to Integrated"
+msgstr "cambiar a Integrado"
+
+msgid "Switch to Integrated or Hybrid"
+msgstr "cambiar a Integrado o Híbrido"
+
+msgid "Unknown"
+msgstr "Desconocido"
+
+msgid "Logout"
+msgstr "cerrar sesión"
+
+msgid "Reboot"
+msgstr "reiniciar"
+
+msgid "Nothing"
+msgstr "nada"
+
+msgid "Optimus Mode (ASUS MUX)"
+msgstr "Modo Optimus (MUX ASUS)"
+
+msgid "Hybrid"
+msgstr "Híbrido"
+
+msgid "Integrated"
+msgstr "Integrado"
+
+msgid "NvidiaNoModeset"
+msgstr "NvidiaNoModeset"
+
+msgid "vfio"
+msgstr "vfio"
+
+msgid "eGPU (ASUS)"
+msgstr "eGPU (ASUS)"
+
+msgid "dGPU (ASUS MUX)"
+msgstr "GPU dedicada (MUX ASUS)"
+
+msgid "Activated"
+msgstr "Activo"
+
+msgid "Available"
+msgstr "Disponible"
+
+msgid "Unavailable"
+msgstr "No disponible"
+
+msgid "Unsupported"
+msgstr "No compatible"
+
+msgctxt "gpu power"
+msgid "Active"
+msgstr "activa"
+
+msgid "Suspended"
+msgstr "suspendida"
+
+msgid "Disabled"
+msgstr "desactivada"
+
+msgid "Active (ASUS MUX)"
+msgstr "activa (MUX ASUS)"
+
+msgid "Off"
+msgstr "apagada"
+
+msgid "Graphics"
+msgstr "Gráficos"
+
+msgid "%1 · dGPU %2"
+msgstr "%1 · GPU dedicada %2"
+
+msgid "Modes"
+msgstr "MODOS"
+
+msgid "Switch"
+msgstr "Cambiar"

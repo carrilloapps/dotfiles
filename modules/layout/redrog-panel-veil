@@ -1,0 +1,242 @@
+#!/usr/bin/env python3
+"""The top bar's icons and veil, per screen, from the wallpaper behind it.
+
+Usage: redrog-panel-veil   (run by modules/layout, redrog-wallpaper-sync when a
+                            wallpaper or a screen changes, and the light/dark
+                            switch)
+
+While no window is maximized the top bar is clear (Panel Colorizer's "RedRog
+Clear" style), so its icons sit on the wallpaper. Like the macOS menu bar, it
+measures the brightness of the strip of wallpaper behind each screen's bar
+and gives the bar's icons and text the color that stands out on it, whatever
+the light/dark variant: light over a dark wallpaper, dark over a light one,
+(light icons with a faint shadow); over mid-bright ones the variant's own
+color. A soft veil helps only over split wallpapers, light on one side of
+the bar and dark on the other.
+
+Each look is its own Panel Colorizer preset ("RedRog Clear light-black-12":
+icon color, veil color and alpha in the name), since Panel Colorizer only
+loads a preset whose path changes; each screen's colorizer points its "no
+maximized window" preset at it. Unused ones are removed. Nothing is written
+when nothing changed.
+"""
+import json
+import os
+import shutil
+import subprocess
+from pathlib import Path
+
+HOME = Path.home()
+CONFIG = Path(os.environ.get("XDG_CONFIG_HOME", HOME / ".config"))
+STATE = Path(os.environ.get("XDG_STATE_HOME", HOME / ".local/state")) / "redrog"
+PRESETS = CONFIG / "panel-colorizer/presets"
+BASE = PRESETS / "RedRog Clear"
+FROSTED = PRESETS / "RedRog Frosted"
+COLORIZER = "luisbocanegra.panel.colorizer"
+CACHE = STATE / "panel-veil-cache.json"   # luminance per image, size and mtime
+
+
+def plasma(script):
+    r = subprocess.run(["qdbus6", "org.kde.plasmashell", "/PlasmaShell", "org.kde.PlasmaShell.evaluateScript", script],
+                       capture_output=True, text=True, timeout=20)
+    return r.stdout.strip()
+
+
+def layout():
+    """Screens (size, wallpaper) and the colorizers of the top bars."""
+    out = plasma("""
+var out = {screens: {}, bars: []};
+for (var i = 0; i < screenCount; i++) {
+    var g = screenGeometry(i);
+    out.screens[i] = {w: g.width, h: g.height, image: ""};
+}
+desktops().forEach(function (d) {
+    if (!(d.screen in out.screens) || d.wallpaperPlugin != "org.kde.image") return;
+    d.currentConfigGroup = ["Wallpaper", "org.kde.image", "General"];
+    out.screens[d.screen].image = String(d.readConfig("Image", ""));
+});
+panels().forEach(function (p) {
+    if (p.location != "top") return;
+    p.widgetIds.forEach(function (id) {
+        var w = p.widgetById(id);
+        if (w.type != "%s") return;
+        w.currentConfigGroup = ["General"];
+        out.bars.push({panel: p.id, widget: id, screen: p.screen, autoload: String(w.readConfig("presetAutoloading", "{}"))});
+    });
+});
+print(JSON.stringify(out));
+""" % COLORIZER)
+    return json.loads(out or "{}")
+
+
+def image_file(url):
+    path = url.removeprefix("file://")
+    if os.path.isdir(path):   # a wallpaper package: its largest image
+        images = sorted(Path(path, "contents/images").glob("*"), key=lambda p: p.stat().st_size)
+        return str(images[-1]) if images else ""
+    return path if os.path.isfile(path) else ""
+
+
+# Where the bar's icons are: the logo at the left, the tray and the clock at
+# the right (fractions of the screen width)
+ZONES = {"left": (0.0, 0.18), "right": (0.45, 1.0)}
+
+
+def strip_luma(path, w, h):
+    """Relative luminance Y (0-1, linear light) of the wallpaper behind the top
+    bar's icons, at the left and at the right, as Plasma scales and crops it
+    to the screen: [left, right]. The alpha channel of a PNG is left out (its
+    mean would count as brightness)."""
+    bar = max(24, round(h * 0.045))
+    out = []
+    for a, b in ZONES.values():
+        x, zw = round(w * a), round(w * (b - a))
+        r = subprocess.run(["magick", path + "[0]", "-resize", f"{w}x{h}^", "-gravity", "center", "-extent", f"{w}x{h}",
+                            "-gravity", "northwest", "-crop", f"{zw}x{bar}+{x}+0", "+repage", "-alpha", "off", "-colorspace", "LinearGray",
+                            "-format", "%[fx:mean]", "info:"], capture_output=True, text=True, timeout=60)
+        try:
+            out.append(float(r.stdout.strip()))
+        except ValueError:
+            return None
+    return out
+
+
+ICONS = {"light": "#f5f4f1", "dark": "#1d1c1a"}
+
+
+# Contrast, APCA (WCAG 3 draft): white glyphs read well (Lc 60) over Y up to
+# 0.293, black ones from 0.38 on; in between neither stands out clearly, and
+# the icons keep the variant's own color (dark in light mode). The tray and
+# the clock (the right zone) decide the icons' color. A veil is a tool for
+# split wallpapers only (one side light, the other dark), just strong enough
+# for the other side; a wallpaper that agrees with itself gets none.
+WHITE_OK, BLACK_OK = 0.293, 0.38
+DARK_TINT_Y, LIGHT_TINT_Y = 0.008, 0.92   # #161616 and #f7f6f3
+
+
+def variant():
+    try:
+        return (STATE / "theme-variant").read_text().strip()
+    except OSError:
+        return "dark"
+
+
+def side(y, own):
+    """The icons' color that stands out over luminance y."""
+    return "light" if y < WHITE_OK else "dark" if y > BLACK_OK else own
+
+
+def look(zones):
+    """(icons, veil color, veil alpha) for the bar over zones [left, right]."""
+    if not zones:
+        return "theme", "none", 0.0
+    left, right = zones
+    own = "dark" if variant() == "light" else "light"
+    icons, other = side(right, own), side(left, own)
+    if icons == other:
+        return icons, "none", 0.0
+    # blending is in gamma-encoded sRGB: work with v = Y^(1/2.4)
+    g = lambda y: y ** (1 / 2.4)
+    if icons == "light":   # the left side is light: darken it to WHITE_OK
+        a = (g(left) - g(WHITE_OK)) / (g(left) - g(DARK_TINT_Y))
+        return "light", "black", round(min(0.45, max(0.10, a)), 2)
+    a = (g(BLACK_OK) - g(left)) / (g(LIGHT_TINT_Y) - g(left))   # the left side is dark: lighten it
+    return "dark", "white", round(min(0.45, max(0.10, a)), 2)
+
+
+def preset_for(icons, color, alpha):
+    if icons == "theme":
+        return str(BASE)
+    name = f"RedRog Clear {icons}-{color}-{round(alpha * 100):02d}"
+    path = PRESETS / name
+    if not (path / "settings.json").is_file():
+        style = json.loads((BASE / "settings.json").read_text())
+        g = style["globalSettings"]
+        bg = g["panel"]["normal"]["backgroundColor"]
+        if color == "none":
+            bg.update({"alpha": 0.0})
+        else:
+            bg.update({"enabled": True, "sourceType": 0, "custom": "#000000" if color == "black" else "#ffffff",
+                       "alpha": alpha})
+        fg = g["widgets"]["normal"]["foregroundColor"]
+        fg.update({"enabled": True, "sourceType": 0, "custom": ICONS[icons], "alpha": 1})
+        # light glyphs get a soft dark shadow (as macOS draws light text over
+        # pictures); dark glyphs none at all: a light halo around them looks dated
+        for part in (g["panel"]["normal"], g["widgets"]["normal"]):
+            sh = part["shadow"]["foreground"]
+            sh.update({"enabled": icons == "light", "size": 3, "xOffset": 0, "yOffset": 1})
+            sh["color"].update({"sourceType": 0, "custom": "#000000", "alpha": 0.3})
+        path.mkdir(parents=True, exist_ok=True)
+        (path / "settings.json").write_text(json.dumps(style, indent=2))
+    return str(path)
+
+
+# With a maximized window the bar is frosted (blur), tinted to match its icons:
+# a dark tint under light icons, a light one under dark icons
+TINTS = {"light": ("#161616", 0.42), "dark": ("#f7f6f3", 0.55)}
+
+
+def frosted_for(icons):
+    if icons == "theme" or not (FROSTED / "settings.json").is_file():
+        return str(FROSTED)
+    path = PRESETS / f"RedRog Frosted {icons}"
+    if not (path / "settings.json").is_file():
+        style = json.loads((FROSTED / "settings.json").read_text())
+        g = style["globalSettings"]
+        tint, alpha = TINTS[icons]
+        g["panel"]["normal"]["backgroundColor"].update({"enabled": True, "sourceType": 0, "custom": tint, "alpha": alpha})
+        g["widgets"]["normal"]["foregroundColor"].update({"enabled": True, "sourceType": 0, "custom": ICONS[icons],
+                                                          "alpha": 1})
+        path.mkdir(parents=True, exist_ok=True)
+        (path / "settings.json").write_text(json.dumps(style, indent=2))
+    return str(path)
+
+
+def main():
+    if not (BASE / "settings.json").is_file():
+        return
+    info = layout()
+    screens = info.get("screens", {})
+    try:
+        cache = json.loads(CACHE.read_text())
+    except (OSError, ValueError):
+        cache = {}
+    lumas, used, changes = {}, {str(BASE)}, []
+    for bar in info.get("bars", []):
+        s = screens.get(str(bar["screen"])) or screens.get(bar["screen"])
+        if not s:
+            continue
+        key = (s["image"], s["w"], s["h"])
+        if key not in lumas:
+            path = image_file(s["image"])
+            ck = f"zones2|{path}|{s['w']}x{s['h']}|{os.path.getmtime(path) if path else 0}"
+            if ck not in cache:
+                cache[ck] = strip_luma(path, s["w"], s["h"]) if path else None
+            lumas[key] = cache[ck]
+        lk = look(lumas[key])
+        target, frosted = preset_for(*lk), frosted_for(lk[0])
+        used.update((target, frosted))
+        try:
+            autoload = json.loads(bar["autoload"] or "{}")
+        except ValueError:
+            autoload = {}
+        if (autoload.get("normal"), autoload.get("maximized"), autoload.get("fullscreenWindow")) != (target, frosted, frosted):
+            autoload.update({"normal": target, "maximized": frosted, "fullscreenWindow": frosted})
+            changes.append((bar["panel"], bar["widget"], json.dumps(autoload)))
+    if changes:
+        plasma("\n".join(
+            "(function () { var w = panelById(%d).widgetById(%d); w.currentConfigGroup = ['General']; "
+            "w.writeConfig('presetAutoloading', %s); w.reloadConfig(); })();" % (p, w, json.dumps(a))
+            for p, w, a in changes))
+    STATE.mkdir(parents=True, exist_ok=True)
+    CACHE.write_text(json.dumps(dict(list(cache.items())[-40:])))
+    # veils no screen uses any more
+    for d in list(PRESETS.glob("RedRog Clear *")) + list(PRESETS.glob("RedRog Frosted *")):
+        if str(d) not in used and d.name.split(" ")[-1].split("-")[0] in ("light", "dark", "black", "white"):
+            shutil.rmtree(d, ignore_errors=True)
+    for (image, w, h), luma in lumas.items():
+        print(f"{w}x{h} {os.path.basename(image_file(image)) or '-'}: {luma and [round(z, 2) for z in luma]}")
+
+
+if __name__ == "__main__":
+    main()

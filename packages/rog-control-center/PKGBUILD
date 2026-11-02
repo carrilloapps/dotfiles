@@ -1,0 +1,43 @@
+# Maintainer: Junior Carrillo
+#
+# ROG Control Center with the RedRog look: the same source as Arch's asusctl
+# package, with redrog-theme.py applied before building (glass with blur,
+# a macOS-style sidebar with ROG accents, modern controls, the fan curves and
+# colour pages redone, Spanish translation). Replaces rog-control-center.
+pkgname=rog-control-center-redrog
+_pkgbase=asusctl
+pkgver=6.5.0
+pkgrel=1
+pkgdesc="Graphical user interface for asusctl, RedRog edition"
+arch=('x86_64')
+url="https://asus-linux.org"
+license=('MPL-2.0')
+depends=('asusctl' 'fontconfig' 'glibc' 'hicolor-icon-theme' 'libgcc' 'systemd-libs')
+makedepends=('cargo' 'python')
+provides=("rog-control-center=${pkgver}")
+conflicts=('rog-control-center')
+source=("${_pkgbase}-${pkgver}.tar.gz::https://github.com/OpenGamingCollective/asusctl/archive/${pkgver}.tar.gz")
+sha256sums=('edceeab080df670a3851af9815c082949e5c0d14be20fc41216d4a7e84d8fca8')
+
+prepare() {
+    cd "${_pkgbase}-${pkgver}"
+    python3 -I "${startdir}/redrog-theme.py" rog-control-center/ui
+    mkdir -p rog-control-center/translations/es
+    # the repository root (install.sh passes it; it builds in a temporary copy)
+    local root="${REDROG_ROOT:-${startdir}/../..}"
+    cp "${root}/i18n/rog-control-center/es.po" rog-control-center/translations/es/rog-control-center.po
+    # the theme turns on a Slint feature, which can touch Cargo.lock
+    cargo fetch --target host-tuple
+}
+
+build() {
+    cd "${_pkgbase}-${pkgver}"
+    export CARGO_PROFILE_RELEASE_LTO=true
+    export CARGO_PROFILE_RELEASE_CODEGEN_UNITS=1
+    cargo build --frozen --release -p rog-control-center
+}
+
+package() {
+    cd "${_pkgbase}-${pkgver}"
+    make DESTDIR="${pkgdir}" install-rog_gui install-data-rog_gui
+}

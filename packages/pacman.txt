@@ -1,0 +1,110 @@
+# Packages from the official repositories (Arch / CachyOS). One per line.
+kvantum
+papirus-icon-theme
+inter-font
+ttf-jetbrains-mono-nerd
+kitty
+wl-clipboard
+imagemagick
+python-gobject
+python-pillow
+xdg-user-dirs
+gettext
+cava
+# the animated light/dark transition (modules/theme-switch): its overlay layer
+layer-shell-qt
+easyeffects
+# DeepFilterNet: deep-learning noise removal for the streaming microphone preset
+deepfilternet-ladspa
+calf
+lsp-plugins-lv2
+mda.lv2
+# network tuning (modules/system)
+ethtool
+iw
+# Audacity: more LV2 effects (meters, maximizer, reverb, noise reduction,
+# classic LADSPA sets, pitch/time) and Vamp analysis plugins (modules/audacity)
+x42-plugins-lv2
+zam-plugins-lv2
+dragonfly-reverb
+# (noise-repellent: rejected by Audacity as an invalid plugin; its own Noise
+#  Reduction covers it)
+swh-plugins
+caps
+rubberband-lv2
+vamp-aubio-plugins
+# OBS Studio with everything (browser and VLC sources, scripting), game
+# capture for Vulkan/OpenGL (modules/obs)
+obs-studio-browser
+obs-vkcapture
+python-vdf
+# graphical package manager (repositories and AUR through paru)
+octopi
+# maintenance: deep cleaning of caches and logs, duplicate and large files
+bleachbit
+czkawka-gui
+# image viewer and text editor in the style of macOS Preview and TextEdit
+# (instead of Gwenview and Kate; defaults set by modules/apps)
+loupe
+gnome-text-editor
+# macOS-style everyday apps (defaults and shortcuts set by modules/apps):
+# Activity Monitor, Calculator, Mail + Calendar +
+# Contacts, Photo Booth (webcam photos and video), Freeform
+mission-center
+gnome-calculator
+thunderbird
+thunderbird-i18n-es-es
+snapshot
+rnote
+# every audio, video and image format: the codec plugins of GStreamer's Rust
+# set (AV1, FFV1, GIF, FLAC, Vorbis, WebP, PNG, MP4, FLV, CD+G), VLC with all
+# its plugins, Blu-ray keys, and Haruna (mpv) as the video player
+gst-plugin-dav1d
+gst-plugin-ffv1
+gst-plugin-gif
+gst-plugin-claxon
+gst-plugin-lewton
+gst-plugin-rswebp
+gst-plugin-rspng
+gst-plugin-isobmff
+gst-plugin-rsflv
+gst-plugin-cdg
+gst-plugin-rsaudioparsers
+gst-plugin-rsclosedcaption
+vlc-plugins-all
+libaacs
+haruna
+gum
+nodejs
+# gaming: launchers (Steam, Lutris, Heroic, Faugus), Proton/Wine with umu and
+# CachyOS' gaming meta, overlays and performance (MangoHud, GameMode,
+# gamescope), Wine's Gecko and Mono for prefixes, 32-bit PulseAudio, and
+# protobuf for Lutris' Battle.net source
+steam
+lutris
+heroic-games-launcher
+faugus-launcher
+umu-launcher
+protontricks
+winetricks
+wine
+wine-gecko
+wine-mono
+cachyos-gaming-meta
+cachyos-gaming-applications
+mangohud
+lib32-mangohud
+goverlay
+gamescope
+gamemode
+lib32-gamemode
+lib32-libpulse
+python-protobuf
+# Android: udev rules so adb sees phones over USB (adbusers group)
+android-udev
+# Android phone on the desktop: scrcpy (mirroring, control, audio, camera,
+# recording, OTG) and v4l2loopback for --v4l2-sink (the phone as a webcam)
+scrcpy
+android-tools
+v4l2loopback-dkms
+v4l2loopback-utils

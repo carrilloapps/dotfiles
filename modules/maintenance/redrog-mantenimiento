@@ -1,0 +1,656 @@
+#!/usr/bin/env bash
+# Mantenimiento: a terminal tool (gum) to free space before caches fill the
+# disk (package caches, AUR builds, thumbnails, shader caches, the journal,
+# crash dumps, orphan packages, the trash, old snapshots, any folder of
+# ~/.cache; Claude Code and Antigravity sessions and caches; Steam's shader
+# caches, Proton prefixes of uninstalled games and unused GE-Proton; npm,
+# pnpm, Gradle, Cargo, Go, VS Code, Homebrew and Docker), to update every
+# tool (system, Flatpak, Homebrew, agy, mise, npm, gh, Rust, tldr, firmware),
+# to tidy up (leftovers of uninstalled apps, large files, empty folders: to
+# the trash), to check the hardware (disks' SMART, battery health and charge
+# limit) and errors (by source, crashes, failed services), and to check and
+# tune performance (ASUS power profile, memory, heaviest
+# processes, failed services, temperatures, boot time). Shows each item's
+# size before anything is removed and asks before every step; root steps go
+# through sudo.
+export PATH="/usr/bin:/usr/local/bin:$PATH" LC_NUMERIC=C
+RED="#ef3340" DIM="#888680" FG="#efeeeb"
+export GUM_CHOOSE_CURSOR_FOREGROUND=$RED GUM_CHOOSE_SELECTED_FOREGROUND=$RED \
+       GUM_CHOOSE_HEADER_FOREGROUND=$DIM GUM_CONFIRM_SELECTED_BACKGROUND=$RED \
+       GUM_SPIN_SPINNER_FOREGROUND=$RED GUM_CHOOSE_CURSOR="› " GUM_CHOOSE_SELECTED_PREFIX="● " \
+       GUM_CHOOSE_UNSELECTED_PREFIX="○ "
+command -v gum >/dev/null || { echo "Falta gum: sudo pacman -S gum"; exit 1; }
+C=${XDG_CACHE_HOME:-$HOME/.cache}
+
+title() { clear; gum style --foreground "$RED" --bold --border rounded --border-foreground "$RED" \
+            --padding "0 2" "$1"; [ -z "${2:-}" ] || gum style --foreground "$DIM" "$2"; echo; }
+pause() { echo; gum style --foreground "$DIM" "Pulsa una tecla para volver"; read -rsn1; }
+human() { numfmt --to=iec --suffix=B --format='%.1f' "${1:-0}" 2>/dev/null || echo "${1:-0} B"; }
+size() { local t=0 s; for p in "$@"; do [ -e "$p" ] && { s=$(du -sb "$p" 2>/dev/null | cut -f1); t=$((t + ${s:-0})); }; done; echo "$t"; }
+sudo_size() { sudo du -sbc "$@" 2>/dev/null | tail -1 | cut -f1; }
+done_msg() { gum style --foreground "$RED" "✓ $1"; }
+fail_msg() { gum style --foreground 244 "✗ $1"; }
+
+# Removes the user's own folders, also ones an app left read-only (dotslash,
+# Nix-like stores and others mark what they unpack so, which made rm fail
+# once per file); quietly: one line from the caller if something stays
+wipe() {
+  local p failed=0
+  for p in "$@"; do
+    [ -e "$p" ] || continue
+    chmod -R u+w "$p" 2>/dev/null
+    rm -rf "$p" 2>/dev/null || failed=1
+  done
+  return $failed
+}
+kept() { fail_msg "$1: no se pudo borrar todo (¿la app sigue abierta?)"; }
+
+summary() {
+  local root mem
+  root=$(df -h --output=used,size,pcent / | tail -1 | awk '{print $1" de "$2" ("$3")"}')
+  mem=$(LC_ALL=C free -h | awk '/^Mem/{print $3" de "$2" en uso, "$7" disponible"}')
+  gum style --foreground "$FG" \
+    "Disco /      $root" \
+    "Memoria      $mem" \
+    "Swap/zram    $(LC_ALL=C free -h | awk '/^Swap/{print $3" de "$2}')" \
+    "Energía      $(asusctl profile get 2>/dev/null | sed -n 's/^Active profile: //p' || echo -)" \
+    "GPU          $(supergfxctl -g 2>/dev/null || echo -)" \
+    "Encendido    $(awk '{s=int($1); printf "%d h %d min", s/3600, s%3600/60}' /proc/uptime)"
+  echo
+}
+
+# ── Limpieza ─────────────────────────────────────────────────────────────────
+SHADERS=("$C/nvidia" "$C/mesa_shader_cache" "$C/mesa_shader_cache_db" "$C/radv_builtin_shaders")
+clean() {
+  title "Limpiar" "Calculando tamaños…"
+  local pkg aur art thumb shader trash journal orph
+  pkg=$(size /var/cache/pacman/pkg)
+  aur=$(size "$C/paru/clone" "$C/yay" "$C/redrog-pkgs")
+  art=$(size "$C/artcraft-launcher")
+  thumb=$(size "$C/thumbnails")
+  shader=$(size "${SHADERS[@]}")
+  trash=$(size "$HOME/.local/share/Trash")
+  journal=$(journalctl --disk-usage 2>/dev/null | grep -oE '[0-9.]+[KMGT]?B?' | head -1)
+  orph=$(pacman -Qdtq 2>/dev/null | wc -l)
+  # profile-sync-daemon keeps a whole copy of a browser profile after every
+  # unclean shutdown (Chrome's alone can be many GB)
+  local psdcopies=0
+  command -v psd >/dev/null && psdcopies=$(find "$HOME/.config" -maxdepth 3 -type d -name '*-backup-crashrecovery-*' 2>/dev/null | paths_size)
+  local opts=(
+    "Caché de pacman: deja solo la última versión ($(human "$pkg"))"
+    "Compilaciones del AUR ($(human "$aur"))"
+    "Descargas del lanzador ArtCraft ($(human "$art"))"
+    "Miniaturas ($(human "$thumb"))"
+    "Cachés de shaders, se regeneran ($(human "$shader"))"
+    "Registro del sistema: dejarlo en 200 MB (${journal:-?})"
+    "Volcados de fallos (coredumps)"
+    "Paquetes huérfanos ($orph)"
+    "Papelera ($(human "$trash"))"
+  )
+  [ "$psdcopies" -gt 0 ] && opts+=("Copias de recuperación de navegadores, el perfil en uso no se toca ($(human "$psdcopies"))")
+  command -v flatpak >/dev/null && opts+=("Flatpak sin usar")
+  title "Limpiar" "Espacio para elegir: marca con espacio, confirma con Enter"
+  local pick
+  pick=$(gum choose --no-limit --height 14 "${opts[@]}") || return
+  [ -n "$pick" ] || return
+  echo "$pick" | sed 's/^/  • /'; echo
+  gum confirm "¿Limpiar lo marcado?" || return
+  while IFS= read -r item; do
+    case "$item" in
+      "Caché de pacman"*)
+        sudo paccache -qrk1 && sudo paccache -qruk0 && done_msg "caché de pacman" ;;
+      "Compilaciones del AUR"*)
+        wipe "$C/paru/clone" "$C/yay" "$C/redrog-pkgs" && done_msg "compilaciones del AUR" || kept "compilaciones del AUR" ;;
+      "Descargas del lanzador"*)
+        wipe "$C/artcraft-launcher/downloads" && done_msg "descargas de ArtCraft" || kept "descargas de ArtCraft" ;;
+      "Miniaturas"*)
+        wipe "$C/thumbnails" && done_msg "miniaturas" || kept "miniaturas" ;;
+      "Cachés de shaders"*)
+        wipe "${SHADERS[@]}" && done_msg "cachés de shaders (cierra los juegos y apps 3D antes)" || kept "cachés de shaders" ;;
+      "Registro del sistema"*)
+        sudo journalctl -q --vacuum-size=200M && done_msg "registro del sistema" ;;
+      "Volcados de fallos"*)
+        sudo find /var/lib/systemd/coredump -type f -delete && done_msg "volcados de fallos" ;;
+      "Paquetes huérfanos"*)
+        mapfile -t o < <(pacman -Qdtq)
+        if [ ${#o[@]} -gt 0 ]; then sudo pacman -Rns "${o[@]}"; else done_msg "no hay huérfanos"; fi ;;
+      "Papelera"*)
+        gio trash --empty 2>/dev/null || rm -rf "$HOME/.local/share/Trash/files" "$HOME/.local/share/Trash/info"
+        done_msg "papelera" ;;
+      "Copias de recuperación"*)
+        psd clean >/dev/null 2>&1 && done_msg "copias de recuperación de navegadores" || kept "copias de recuperación" ;;
+      "Flatpak sin usar"*)
+        flatpak uninstall --unused -y && done_msg "flatpak sin usar" ;;
+    esac
+  done <<< "$pick"
+  pause
+}
+
+cache_dirs() {
+  title "Carpetas de ~/.cache" "Calculando tamaños…"
+  local lines
+  lines=$(du -sb "$C"/*/ 2>/dev/null | sort -rn | head -25 | while read -r b p; do
+    printf '%9s  %s\n' "$(human "$b")" "$(basename "$p")"; done)
+  [ -n "$lines" ] || { gum style "~/.cache está vacía"; pause; return; }
+  title "Carpetas de ~/.cache" "Cierra antes la app de cada carpeta; la recrea vacía al abrirse"
+  local pick
+  pick=$(echo "$lines" | gum choose --no-limit --height 20) || return
+  [ -n "$pick" ] || return
+  gum confirm "¿Borrar las carpetas marcadas?" || return
+  while IFS= read -r l; do
+    # the name is everything after the size column (it may contain spaces)
+    d=$(sed -E 's/^ *[^ ]+  //' <<< "$l")
+    [ -n "$d" ] && [ -d "$C/$d" ] && [[ $d != */* ]] || continue
+    if wipe "${C:?}/$d"; then done_msg "$d"; else kept "$d"; fi
+  done <<< "$pick"
+  pause
+}
+
+snapshots() {
+  title "Instantáneas" "Puntos para volver atrás desde el menú de arranque"
+  command -v snapper >/dev/null || { gum style "snapper no está instalado"; pause; return; }
+  local list
+  list=$(sudo snapper -c root --csvout list --columns number,date,description 2>/dev/null | tail -n +2 | awk -F, '$1!=0')
+  [ -n "$list" ] || { gum style "No hay instantáneas"; pause; return; }
+  local pick
+  pick=$(echo "$list" | awk -F, '{printf "%5s  %s  %s\n", $1, substr($2,1,19), substr($3,1,60)}' \
+         | gum choose --no-limit --height 20 --header "Marca las que quieres borrar") || return
+  [ -n "$pick" ] || return
+  gum confirm "¿Borrar $(echo "$pick" | wc -l) instantáneas?" || return
+  sudo snapper -c root delete $(echo "$pick" | awk '{print $1}') && done_msg "instantáneas borradas"
+  pause
+}
+
+# ── Claude y Antigravity ─────────────────────────────────────────────────────
+CLAUDE_DIR="$HOME/.claude" CLAUDE_APP="$HOME/.config/Claude"
+AGY_DIR="$HOME/.gemini/antigravity" AGY_APP="$HOME/.config/Antigravity"
+# sessions older than DAYS, never one touched in the last hour (open now)
+old_sessions() {   # days → paths: Claude Code transcripts (with their folder)
+  find "$CLAUDE_DIR/projects" -mindepth 2 -maxdepth 2 -name '*.jsonl' -mtime +"$1" -mmin +60 2>/dev/null |
+    while read -r f; do echo "$f"; [ -d "${f%.jsonl}" ] && echo "${f%.jsonl}"; done
+}
+old_agy() {   # days → paths: Antigravity conversations (and their working notes)
+  find "$AGY_DIR/conversations" -maxdepth 1 -name '*.db' -mtime +"$1" -mmin +60 2>/dev/null |
+    while read -r f; do id=$(basename "$f" .db); echo "$f"; [ -d "$AGY_DIR/brain/$id" ] && echo "$AGY_DIR/brain/$id"; done
+}
+paths_size() { local t=0 s; while IFS= read -r p; do [ -n "$p" ] || continue; s=$(du -sb "$p" 2>/dev/null | cut -f1); t=$((t + ${s:-0})); done; echo "$t"; }
+claude_versions_old() {   # Claude Code versions the app keeps, but the newest
+  ls -d "$CLAUDE_APP/claude-code"/*/ 2>/dev/null | sort -V | head -n -1
+}
+claude_agy() {
+  title "Claude y Antigravity" "Elige la antigüedad de las sesiones a limpiar"
+  local age days
+  age=$(gum choose "Más de 30 días" "Más de 14 días" "Más de 7 días") || return
+  days=$(tr -dc 0-9 <<< "$age")
+  title "Claude y Antigravity" "Calculando tamaños…"
+  local cs fh snap paste cv clog ccache acache alog aconv run_c run_a
+  cs=$(old_sessions "$days" | paths_size)
+  fh=$(find "$CLAUDE_DIR/file-history" -mindepth 1 -maxdepth 1 -type d -mtime +"$days" 2>/dev/null | paths_size)
+  snap=$(find "$CLAUDE_DIR/shell-snapshots" -type f -mtime +7 2>/dev/null | paths_size)
+  paste=$(find "$CLAUDE_DIR/paste-cache" -type f -mtime +"$days" 2>/dev/null | paths_size)
+  cv=$(claude_versions_old | paths_size)
+  clog=$(find "$CLAUDE_APP/logs" "$CLAUDE_APP/sentry" "$CLAUDE_APP/Crashpad" -type f -mtime +7 2>/dev/null | paths_size)
+  ccache=$(size "$CLAUDE_APP/Cache" "$CLAUDE_APP/Code Cache" "$CLAUDE_APP/GPUCache" "$CLAUDE_APP/GPUPersistentCache" \
+                "$CLAUDE_APP/DawnGraphiteCache" "$CLAUDE_APP/DawnWebGPUCache")
+  acache=$(size "$AGY_APP/Cache" "$AGY_APP/Code Cache" "$AGY_APP/CachedData" "$AGY_APP/GPUCache" \
+                "$AGY_DIR/cache" "$AGY_DIR/crashes" "$AGY_DIR/scratch")
+  alog=$(find "$AGY_APP/logs" -mindepth 1 -maxdepth 1 -mtime +7 2>/dev/null | paths_size)
+  aconv=$(old_agy "$days" | paths_size)
+  pgrep -f claude-desktop >/dev/null && run_c=" — cierra Claude antes" || run_c=""
+  pgrep -f '/usr/bin/antigravity|/opt/Antigravity' >/dev/null && run_a=" — cierra Antigravity antes" || run_a=""
+  local opts=(
+    "Claude Code: sesiones de $age, no se podrán reanudar ($(human "$cs"))"
+    "Claude Code: puntos de restauración de esas sesiones ($(human "$fh"))"
+    "Claude Code: capturas de shell y pegados viejos ($(human $((snap + paste))))"
+    "App de Claude: versiones antiguas de Claude Code ($(human "$cv"))"
+    "App de Claude: registros y fallos de más de 7 días ($(human "$clog"))"
+    "App de Claude: caché web$run_c ($(human "$ccache"))"
+    "Antigravity: caché, fallos y borradores$run_a ($(human "$acache"))"
+    "Antigravity: registros de más de 7 días ($(human "$alog"))"
+    "Antigravity: conversaciones de $age, no se podrán reabrir ($(human "$aconv"))"
+  )
+  local pick
+  pick=$(gum choose --no-limit --height 12 --header "Marca con espacio, confirma con Enter" "${opts[@]}") || return
+  [ -n "$pick" ] || return
+  echo "$pick" | sed 's/^/  • /'; echo
+  gum confirm "¿Borrar lo marcado? No se puede deshacer" || return
+  while IFS= read -r item; do
+    case "$item" in
+      "Claude Code: sesiones"*)
+        mapfile -t l < <(old_sessions "$days"); wipe "${l[@]}" && done_msg "sesiones de Claude Code" || kept "sesiones de Claude Code" ;;
+      "Claude Code: puntos"*)
+        mapfile -t l < <(find "$CLAUDE_DIR/file-history" -mindepth 1 -maxdepth 1 -type d -mtime +"$days" 2>/dev/null)
+        wipe "${l[@]}" && done_msg "puntos de restauración" || kept "puntos de restauración" ;;
+      "Claude Code: capturas"*)
+        find "$CLAUDE_DIR/shell-snapshots" -type f -mtime +7 -delete 2>/dev/null
+        find "$CLAUDE_DIR/paste-cache" -type f -mtime +"$days" -delete 2>/dev/null
+        done_msg "capturas y pegados" ;;
+      "App de Claude: versiones"*)
+        mapfile -t l < <(claude_versions_old); wipe "${l[@]}" && done_msg "versiones antiguas de Claude Code" || kept "versiones antiguas" ;;
+      "App de Claude: registros"*)
+        find "$CLAUDE_APP/logs" "$CLAUDE_APP/sentry" "$CLAUDE_APP/Crashpad" -type f -mtime +7 -delete 2>/dev/null
+        done_msg "registros de la app de Claude" ;;
+      "App de Claude: caché"*)
+        if [ -n "$run_c" ]; then fail_msg "caché de Claude: la app está abierta, ciérrala y vuelve a intentarlo"
+        else wipe "$CLAUDE_APP/Cache" "$CLAUDE_APP/Code Cache" "$CLAUDE_APP/GPUCache" "$CLAUDE_APP/GPUPersistentCache" \
+                  "$CLAUDE_APP/DawnGraphiteCache" "$CLAUDE_APP/DawnWebGPUCache" && done_msg "caché de la app de Claude" || kept "caché de Claude"; fi ;;
+      "Antigravity: caché"*)
+        if [ -n "$run_a" ]; then fail_msg "caché de Antigravity: está abierto, ciérralo y vuelve a intentarlo"
+        else wipe "$AGY_APP/Cache" "$AGY_APP/Code Cache" "$AGY_APP/CachedData" "$AGY_APP/GPUCache" \
+                  "$AGY_DIR/cache" "$AGY_DIR/crashes" "$AGY_DIR/scratch" && done_msg "caché de Antigravity" || kept "caché de Antigravity"; fi ;;
+      "Antigravity: registros"*)
+        mapfile -t l < <(find "$AGY_APP/logs" -mindepth 1 -maxdepth 1 -mtime +7 2>/dev/null)
+        wipe "${l[@]}" && done_msg "registros de Antigravity" || kept "registros de Antigravity" ;;
+      "Antigravity: conversaciones"*)
+        mapfile -t l < <(old_agy "$days"); wipe "${l[@]}" && done_msg "conversaciones de Antigravity" || kept "conversaciones de Antigravity" ;;
+    esac
+  done <<< "$pick"
+  pause
+}
+
+# ── Juegos y Steam ───────────────────────────────────────────────────────────
+STEAM="$HOME/.local/share/Steam"
+steam_installed() { ls "$STEAM"/steamapps/appmanifest_*.acf 2>/dev/null | sed -E 's/.*appmanifest_([0-9]+)\.acf/\1/'; }
+steam_name() { sed -n 's/.*"name"[[:space:]]*"\(.*\)".*/\1/p' "$STEAM/steamapps/appmanifest_$1.acf" 2>/dev/null | head -1; }
+# Proton prefixes of games no longer installed (the large ids of non-Steam
+# games added by hand, and 0, the prefix Steam shares for its tools, are left
+# alone)
+steam_orphans() {
+  local inst id d; inst=$(steam_installed)
+  for d in "$STEAM"/steamapps/compatdata/*/; do
+    id=$(basename "$d"); [ "$id" -gt 0 ] 2>/dev/null && [ "$id" -lt 2147483648 ] || continue
+    grep -qx "$id" <<< "$inst" || echo "${d%/}"
+  done
+}
+# GE-Proton versions no game uses (the newest stays)
+proton_unused() {
+  local dir="$STEAM/compatibilitytools.d" v used
+  [ -d "$dir" ] || return 0
+  used=$(grep -h '"name"' "$STEAM/config/config.vdf" 2>/dev/null | sed -n 's/.*"name"[[:space:]]*"\(.*\)".*/\1/p' | sort -u)
+  ls -d "$dir"/*/ 2>/dev/null | sort -V | head -n -1 | while read -r v; do
+    grep -qx "$(basename "$v")" <<< "$used" || echo "${v%/}"
+  done
+}
+games() {
+  title "Juegos y Steam" "Calculando tamaños…"
+  [ -d "$STEAM" ] || { gum style "Steam no está instalado"; pause; return; }
+  local orph web logs part ge run
+  orph=$(steam_orphans | paths_size)
+  web=$(size "$STEAM/config/htmlcache" "$STEAM/appcache/httpcache")
+  logs=$(size "$STEAM/logs" "$STEAM/dumps")
+  part=$(size "$STEAM/steamapps/downloading" "$STEAM/steamapps/temp")
+  ge=$(proton_unused | paths_size)
+  pgrep -x steam >/dev/null && run=" — cierra Steam antes" || run=""
+  local opts=("Cachés de shaders de juegos concretos: elegir, se regeneran ($(human "$(size "$STEAM/steamapps/shadercache")") en total)")
+  opts+=("Prefijos de Proton de juegos desinstalados: pueden tener partidas guardadas ($(human "$orph"))"
+         "Caché web de Steam$run ($(human "$web"))"
+         "Registros y volcados de Steam ($(human "$logs"))"
+         "Descargas a medias de Steam$run ($(human "$part"))"
+         "Versiones de GE-Proton que ningún juego usa ($(human "$ge"))")
+  command -v lutris >/dev/null && opts+=("Caché de Lutris ($(human "$(size "$C/lutris")"))")
+  local pick
+  pick=$(gum choose --no-limit --height 12 --header "Marca con espacio, confirma con Enter" "${opts[@]}") || return
+  [ -n "$pick" ] || return
+  while IFS= read -r item; do
+    case "$item" in
+      "Cachés de shaders"*)
+        local list g
+        list=$(for d in "$STEAM"/steamapps/shadercache/*/; do id=$(basename "$d")
+                 printf '%9s  %s  %s\n' "$(human "$(size "$d")")" "$id" "$(steam_name "$id")"; done | sort -rh)
+        g=$(echo "$list" | gum choose --no-limit --height 15 --header "Juegos cuyas cachés borrar (se regeneran al jugar)") || continue
+        [ -n "$g" ] && gum confirm "¿Borrar la caché de shaders de $(echo "$g" | wc -l) juegos?" || continue
+        # the id is the second column (size, id, name)
+        awk '{print $2}' <<< "$g" | while read -r id; do
+          [[ $id =~ ^[0-9]+$ ]] && wipe "$STEAM/steamapps/shadercache/$id"
+        done
+        done_msg "cachés de shaders elegidas" ;;
+      "Prefijos de Proton"*)
+        mapfile -t l < <(steam_orphans)
+        [ ${#l[@]} -gt 0 ] || { done_msg "no hay prefijos huérfanos"; continue; }
+        gum style --foreground "$DIM" "Las partidas que no estén en la nube de Steam se perderán:"
+        for d in "${l[@]}"; do echo "  $(basename "$d")  $(human "$(size "$d")")"; done
+        gum confirm "¿Borrar estos prefijos?" && { wipe "${l[@]}" && done_msg "prefijos huérfanos" || kept "prefijos"; } ;;
+      "Caché web"*)
+        [ -n "$run" ] && { fail_msg "caché web: Steam está abierto"; continue; }
+        gum confirm "¿Borrar la caché web de Steam?" && { wipe "$STEAM/config/htmlcache" "$STEAM/appcache/httpcache" && done_msg "caché web de Steam" || kept "caché web"; } ;;
+      "Registros y volcados"*)
+        gum confirm "¿Borrar registros y volcados de Steam?" && {
+          find "$STEAM/logs" "$STEAM/dumps" -type f -delete 2>/dev/null; done_msg "registros y volcados de Steam"; } ;;
+      "Descargas a medias"*)
+        [ -n "$run" ] && { fail_msg "descargas: Steam está abierto"; continue; }
+        gum confirm "¿Borrar las descargas a medias? (Steam las reanudará desde cero)" && {
+          find "$STEAM/steamapps/downloading" "$STEAM/steamapps/temp" -mindepth 1 -maxdepth 1 -exec rm -rf {} + 2>/dev/null
+          done_msg "descargas a medias"; } ;;
+      "Versiones de GE-Proton"*)
+        mapfile -t l < <(proton_unused)
+        [ ${#l[@]} -gt 0 ] || { done_msg "no hay versiones sin usar"; continue; }
+        gum confirm "¿Borrar ${l[*]##*/}?" && { wipe "${l[@]}" && done_msg "GE-Proton sin usar" || kept "GE-Proton"; } ;;
+      "Caché de Lutris"*)
+        gum confirm "¿Borrar la caché de Lutris?" && { wipe "$C/lutris" && done_msg "caché de Lutris" || kept "caché de Lutris"; } ;;
+    esac
+  done <<< "$pick"
+  pause
+}
+
+# ── Desarrollo ───────────────────────────────────────────────────────────────
+devel() {
+  title "Desarrollo" "Calculando tamaños…"
+  local opts=()
+  command -v npm >/dev/null && opts+=("Caché de npm ($(human "$(size "$HOME/.npm/_cacache")"))")
+  [ -d "$HOME/.local/share/pnpm/store" ] && opts+=("Almacén de pnpm: solo paquetes que ningún proyecto usa ($(human "$(size "$HOME/.local/share/pnpm/store")"))")
+  [ -d "$HOME/.gradle/caches" ] && opts+=("Cachés de Gradle / Android Studio, se descargan de nuevo ($(human "$(size "$HOME/.gradle/caches")"))")
+  [ -d "$HOME/.cargo/registry/cache" ] && opts+=("Descargas de Cargo (Rust) ($(human "$(size "$HOME/.cargo/registry/cache")"))")
+  [ -d "$HOME/.cache/go-build" ] && opts+=("Compilaciones de Go ($(human "$(size "$HOME/.cache/go-build")"))")
+  [ -d "$HOME/.config/Code" ] && opts+=("Cachés de VS Code ($(human "$(size "$HOME/.config/Code/Cache" "$HOME/.config/Code/CachedData" "$HOME/.config/Code/GPUCache")"))")
+  command -v brew >/dev/null && opts+=("Homebrew: versiones viejas y descargas ($(human "$(size "$(brew --cache 2>/dev/null)")"))")
+  command -v docker >/dev/null && opts+=("Docker: volúmenes sin usar, pueden tener datos de proyectos")
+  [ ${#opts[@]} -gt 0 ] || { gum style "No hay herramientas de desarrollo con caché"; pause; return; }
+  local pick
+  pick=$(gum choose --no-limit --height 12 --header "Marca con espacio, confirma con Enter" "${opts[@]}") || return
+  [ -n "$pick" ] || return
+  echo "$pick" | sed 's/^/  • /'; echo
+  gum confirm "¿Limpiar lo marcado?" || return
+  while IFS= read -r item; do
+    case "$item" in
+      "Caché de npm"*) npm cache clean --force >/dev/null 2>&1 && done_msg "caché de npm" ;;
+      "Almacén de pnpm"*)
+        if command -v pnpm >/dev/null; then pnpm store prune >/dev/null 2>&1 && done_msg "almacén de pnpm"
+        elif command -v corepack >/dev/null; then corepack pnpm store prune >/dev/null 2>&1 && done_msg "almacén de pnpm"
+        else fail_msg "pnpm no está disponible"; fi ;;
+      "Cachés de Gradle"*)
+        pgrep -f 'GradleDaemon|android-studio' >/dev/null && { fail_msg "Gradle: cierra Android Studio antes"; continue; }
+        wipe "$HOME/.gradle/caches" && done_msg "cachés de Gradle" || kept "cachés de Gradle" ;;
+      "Descargas de Cargo"*) wipe "$HOME/.cargo/registry/cache" && done_msg "descargas de Cargo" || kept "Cargo" ;;
+      "Compilaciones de Go"*) go clean -cache >/dev/null 2>&1 && done_msg "compilaciones de Go" ;;
+      "Cachés de VS Code"*)
+        pgrep -x code >/dev/null && { fail_msg "VS Code: ciérralo antes"; continue; }
+        wipe "$HOME/.config/Code/Cache" "$HOME/.config/Code/CachedData" "$HOME/.config/Code/GPUCache" && done_msg "cachés de VS Code" || kept "VS Code" ;;
+      "Homebrew"*) brew cleanup --prune=all -s >/dev/null 2>&1 && done_msg "Homebrew limpio" ;;
+      "Docker"*)
+        docker volume ls -qf dangling=true 2>/dev/null | sed 's/^/  /'
+        gum confirm "¿Borrar estos volúmenes sin usar? Sus datos se pierden" && docker volume prune -f >/dev/null && done_msg "volúmenes de Docker" ;;
+    esac
+  done <<< "$pick"
+  pause
+}
+
+# ── Actualizar ───────────────────────────────────────────────────────────────
+update_tools() {
+  title "Actualizar" "Buscando lo que hay instalado…"
+  local opts=()
+  command -v paru >/dev/null && opts+=("Sistema: paquetes de CachyOS y del AUR (paru)")
+  command -v flatpak >/dev/null && opts+=("Flatpak")
+  command -v brew >/dev/null && opts+=("Homebrew y lo instalado con él$(brew list --cask 2>/dev/null | grep -qx claude-code && echo ', Claude Code incluido')")
+  command -v agy >/dev/null && opts+=("Antigravity CLI (agy)")
+  command -v mise >/dev/null && opts+=("mise y sus herramientas (node, python…)")
+  command -v npm >/dev/null && opts+=("Paquetes globales de npm")
+  command -v gh >/dev/null && [ -n "$(gh extension list 2>/dev/null)" ] && opts+=("Extensiones de gh")
+  command -v rustup >/dev/null && opts+=("Rust (rustup)")
+  command -v tldr >/dev/null && opts+=("Páginas de tldr")
+  command -v fwupdmgr >/dev/null && opts+=("Firmware del portátil (fwupd)")
+  local pick
+  pick=$(gum choose --no-limit --height 13 --header "Marca con espacio, confirma con Enter" "${opts[@]}") || return
+  [ -n "$pick" ] || return
+  while IFS= read -r item; do
+    echo; gum style --foreground "$RED" --bold "▶ $item"
+    case "$item" in
+      "Sistema"*) paru -Syu ;;
+      "Flatpak") flatpak update ;;
+      "Homebrew"*)
+        brew update >/dev/null 2>&1
+        local out; out=$(brew outdated --greedy 2>/dev/null)
+        if [ -z "$out" ]; then done_msg "Homebrew al día"
+        else echo "$out" | sed 's/^/  /'; gum confirm "¿Actualizar?" && brew upgrade --greedy && brew cleanup -s >/dev/null 2>&1 && done_msg "Homebrew actualizado"; fi ;;
+      "Antigravity"*) agy update && done_msg "agy al día" ;;
+      "mise"*)
+        mise self-update -y 2>/dev/null; local out; out=$(mise outdated 2>/dev/null)
+        if [ -z "$out" ]; then done_msg "herramientas de mise al día"
+        else echo "$out" | sed 's/^/  /'; gum confirm "¿Actualizar?" && mise upgrade && done_msg "mise actualizado"; fi ;;
+      "Paquetes globales de npm"*)
+        local out; out=$(npm outdated -g 2>/dev/null)
+        if [ -z "$out" ]; then done_msg "npm global al día"
+        else echo "$out" | sed 's/^/  /'; gum confirm "¿Actualizar?" && npm update -g && done_msg "npm global actualizado"; fi ;;
+      "Extensiones de gh") gh extension upgrade --all ;;
+      "Rust"*) rustup update ;;
+      "Páginas de tldr") tldr --update >/dev/null 2>&1 && done_msg "tldr al día" ;;
+      "Firmware"*)
+        fwupdmgr refresh >/dev/null 2>&1; fwupdmgr get-updates 2>/dev/null | tail -n +1
+        gum confirm "¿Instalar las actualizaciones de firmware que haya? (puede pedir reiniciar)" && fwupdmgr update ;;
+    esac
+  done <<< "$pick"
+  pause
+}
+
+# ── Salud del hardware ───────────────────────────────────────────────────────
+hardware() {
+  title "Salud del hardware" "Discos y batería"
+  gum style --foreground "$DIM" "Discos (SMART, pide la contraseña)"
+  local d
+  for d in /dev/nvme[0-9]n1 /dev/sd[a-z]; do
+    [ -b "$d" ] || continue
+    sudo smartctl -j -a "$d" 2>/dev/null | jq -r --arg dev "$d" '
+      def gb: . * 512000 / 1e9 | floor;
+      (.model_name // "disco") as $m
+      | (.nvme_smart_health_information_log // {}) as $h
+      | (.smart_status.passed // true) as $ok
+      | "  \($dev)  \($m)",
+        "     estado: \(if $ok and (($h.critical_warning // 0) == 0) then "bien" else "¡revisar!" end)"
+        + (if $h.percentage_used != null then "   desgaste: \($h.percentage_used) %" else "" end)
+        + "   temperatura: \(.temperature.current // "?") °C",
+        (if $h.data_units_written != null then "     escrito: \($h.data_units_written | gb) GB   encendido: \($h.power_on_hours // "?") h   errores: \($h.media_errors // 0)   apagados bruscos: \($h.unsafe_shutdowns // 0)" else empty end)'
+  done
+  echo; gum style --foreground "$DIM" "Batería"
+  local bat full design health limit
+  bat=$(upower -e 2>/dev/null | grep -i bat | head -1)
+  if [ -n "$bat" ]; then
+    full=$(upower -i "$bat" | awk '/energy-full:/{print $2}' | tr , .)
+    design=$(upower -i "$bat" | awk '/energy-full-design:/{print $2}' | tr , .)
+    health=$(awk -v f="$full" -v d="$design" 'BEGIN{ if (d > 0) printf "%.0f", f * 100 / d }')
+    limit=$(cat /sys/class/power_supply/BAT*/charge_control_end_threshold 2>/dev/null | head -1)
+    echo "  salud: ${health:-?} % de la original (${full:-?} de ${design:-?} Wh)"
+    echo "  carga: $(upower -i "$bat" | awk '/percentage:/{print $2}')   estado: $(upower -i "$bat" | awk '/state:/{print $2}')   límite de carga: ${limit:-?} %"
+    if command -v asusctl >/dev/null && gum confirm --default=false "¿Cambiar el límite de carga?"; then
+      local l
+      l=$(gum choose "60 % — enchufado casi siempre" "80 % — equilibrio, recomendado" "100 % — cuando necesites toda la autonomía") || { pause; return; }
+      asusctl battery limit "${l%% *}" >/dev/null && done_msg "límite de carga: ${l%% *} %"
+    fi
+  else
+    echo "  sin batería"
+  fi
+  pause
+}
+
+# ── Diagnóstico de errores ───────────────────────────────────────────────────
+diagnose() {
+  title "Diagnóstico de errores" "Desde el último encendido"
+  gum style --foreground "$DIM" "Errores por origen"
+  local top
+  top=$(journalctl -b -p err -q -o json --no-pager 2>/dev/null | python3 -I -c '
+import collections, json, sys
+c, last = collections.Counter(), {}
+for line in sys.stdin:
+    try: d = json.loads(line)
+    except ValueError: continue
+    k = d.get("SYSLOG_IDENTIFIER") or d.get("_COMM") or "?"
+    c[k] += 1
+    m = d.get("MESSAGE")
+    if isinstance(m, str): last[k] = m.splitlines()[0][:90] if m else ""
+for k, n in c.most_common(10):
+    print(f"{n:6d}  {k}  —  {last.get(k, "")}")')
+  [ -n "$top" ] && echo "$top" | sed 's/^/  /' || echo "  ninguno"
+  echo; gum style --foreground "$DIM" "Programas que se cerraron de golpe (volcados)"
+  local dumps
+  dumps=$(coredumpctl list -b --no-pager 2>/dev/null | awk 'NR>1{print $NF}' | sort | uniq -c | sort -rn | head -8)
+  [ -n "$dumps" ] && echo "$dumps" | sed 's/^/  /' || echo "  ninguno"
+  echo; gum style --foreground "$DIM" "Servicios con fallos"
+  { systemctl --failed --no-legend --plain; systemctl --user --failed --no-legend --plain; } | sed 's/^/  /'
+  [ -n "$(systemctl --failed --no-legend; systemctl --user --failed --no-legend)" ] || echo "  ninguno"
+  [ -n "$top" ] || { pause; return; }
+  echo
+  local src
+  src=$(echo "$top" | awk '{print $2}' | gum choose --header "Ver los últimos errores de… (Esc para volver)") || return
+  title "Errores de $src"
+  journalctl -b -p err -q --no-pager -t "$src" 2>/dev/null | tail -30
+  pause
+}
+
+# ── Restos, archivos grandes y carpetas vacías ───────────────────────────────
+# what is installed, to tell a leftover folder from one in use: packages,
+# Flatpak and Homebrew apps, launchers and the commands on the PATH
+installed_names() {
+  { pacman -Qq; command -v flatpak >/dev/null && flatpak list --columns=application;
+    command -v brew >/dev/null && brew list -1 2>/dev/null
+    ls /usr/share/applications ~/.local/share/applications 2>/dev/null | sed 's/\.desktop$//'
+    compgen -c; } 2>/dev/null | tr 'A-Z' 'a-z' | tr -d ' ' | sort -u
+}
+# folders KDE, GNOME and the desktop share, never a leftover
+KEEP_DIRS="applications|icons|fonts|mime|menus|kservices[0-9]*|kxmlgui[0-9]*|plasma.*|kde.*|k[a-z]*rc|color-schemes|aurorae|kwin|konsole|systemd|autostart|environment.d|gtk-[0-9.]+|dconf|pulse|pipewire|wireplumber|xdg-.*|user-dirs.*|fontconfig|trash|recently-used.*|keyrings|gnupg|gvfs-metadata|baloo|akonadi.*|kactivitymanagerd|kscreen|desktop-directories|redrog|kvantum|panel-colorizer|session|knewstuff[0-9]*|kpackage|kded[0-9]*|klipper|krunner.*|ibus|nautilus|evolution|gnome-.*|org.gnome.*|org.kde.*|libaccounts-glue|accounts|okular|dolphin|ark|spectacle|kate|kwrite|mozilla|google-chrome|chromium|code|claude|antigravity|steam|umu|lutris|heroic|wine.*|vulkan|nvidia|mesa.*|containers|docker|flatpak|applications-merged|mc|nvim|htop|btop|fish|zsh|bash|git|gh|npm|pnpm|cargo|go|mise|uv|pip"
+leftovers_find() {
+  local inst root d n
+  inst=$(installed_names)
+  for root in "$HOME/.config" "$HOME/.local/share"; do
+    for d in "$root"/*/; do
+      n=$(basename "$d" | tr 'A-Z' 'a-z')
+      [[ $n =~ ^($KEEP_DIRS)$ ]] && continue
+      # untouched for a month
+      [ -n "$(find "$d" -maxdepth 0 -mtime -30 2>/dev/null)" ] && continue
+      local key=${n//[^a-z0-9]/}
+      [ ${#key} -ge 3 ] || continue
+      grep -q -- "${key:0:12}" <<< "${inst//[^a-z0-9$'\n']/}" && continue
+      echo "${d%/}"
+    done
+  done
+}
+# large files of the user's own (games, caches and package stores have their
+# own sections)
+big_find() {
+  find "$HOME" -xdev \( -path "$STEAM" -o -path "$HOME/.cache" -o -path "$HOME/.gradle" -o -path "$HOME/.npm" \
+       -o -path "$HOME/.local/share/pnpm" -o -path "$HOME/.local/share/Trash" -o -path "$HOME/.local/share/containers" \
+       -o -path "$HOME/.local/share/umu" -o -path "$HOME/.local/share/docker" \) -prune -o \
+       -type f -size +"$1" -printf '%s\t%TY-%Tm-%Td\t%p\n' 2>/dev/null | sort -rn | head -30
+}
+# empty folders inside the user's own folders (Documents, Downloads, projects…)
+# and the cache, but not those folders themselves, nor anything touched this
+# week (the apps' own folders, in ~/.config and ~/.local, are their structure:
+# many are meant to start empty)
+empty_find() {
+  local xdg roots=() r repos
+  xdg=$(for k in DESKTOP DOCUMENTS DOWNLOAD MUSIC PICTURES VIDEOS TEMPLATES PUBLICSHARE; do xdg-user-dir "$k" 2>/dev/null; done | grep -vx "$HOME")
+  for r in $xdg "$HOME/Proyectos" "$HOME/Desarrollo" "$HOME/.cache"; do [ -d "$r" ] && roots+=("$r"); done
+  # inside a project (a git repository) an empty folder is part of its layout
+  # or of its build: the project's own tools look after it
+  repos=$(find "${roots[@]}" -name node_modules -prune -o -name .git -printf '%h/\n' 2>/dev/null)
+  find "${roots[@]}" -mindepth 1 \
+       \( -name .git -o -name node_modules -o -name target -o -name .venv -o -path "*/drive_c" \) -prune -o \
+       -type d -empty -mtime +7 -print 2>/dev/null |
+    grep -vxF $(printf -- '-e %s ' "${roots[@]}") |
+    { if [ -n "$repos" ]; then grep -vF "$repos"; else cat; fi; }
+}
+to_trash() { local p ok=0; for p in "$@"; do gio trash "$p" 2>/dev/null || ok=1; done; return $ok; }
+tidy() {
+  title "Restos, archivos grandes y carpetas vacías" "Lo que se quite va a la papelera, por si hiciera falta"
+  local what
+  what=$(gum choose "Restos de apps desinstaladas" "Archivos grandes de tu carpeta" "Carpetas vacías") || return
+  case "$what" in
+    "Restos"*)
+      title "Restos de apps desinstaladas" "Buscando carpetas de programas que ya no están (sin uso hace un mes)…"
+      local list pick
+      list=$(leftovers_find | while read -r d; do printf '%9s  %s\n' "$(human "$(size "$d")")" "${d/#$HOME/~}"; done | sort -rh)
+      [ -n "$list" ] || { gum style "No hay restos"; pause; return; }
+      pick=$(echo "$list" | gum choose --no-limit --height 20 --header "Revísalas: marca solo lo que reconozcas como resto") || return
+      [ -n "$pick" ] || return
+      gum confirm "¿Mover $(echo "$pick" | wc -l) carpetas a la papelera?" || return
+      while IFS= read -r l; do d=$(sed -E 's/^ *[^ ]+  //; s|^~|'"$HOME"'|' <<< "$l"); to_trash "$d" && done_msg "${d/#$HOME/~}" || kept "${d/#$HOME/~}"; done <<< "$pick" ;;
+    "Archivos grandes"*)
+      local min list pick
+      min=$(gum choose "Más de 1 GB" "Más de 500 MB" "Más de 200 MB") || return
+      case "$min" in *1\ GB*) min=1G ;; *500*) min=500M ;; *) min=200M ;; esac
+      title "Archivos grandes" "Buscando… (los juegos, cachés y almacenes de paquetes tienen su propia sección)"
+      list=$(big_find "$min" | while IFS=$'\t' read -r b t f; do printf '%9s  %s  %s\n' "$(human "$b")" "$t" "${f/#$HOME/~}"; done)
+      [ -n "$list" ] || { gum style "No hay archivos de ese tamaño"; pause; return; }
+      pick=$(echo "$list" | gum choose --no-limit --height 20 --header "Marca los que quieras mover a la papelera") || return
+      [ -n "$pick" ] || return
+      gum confirm "¿Mover $(echo "$pick" | wc -l) archivos a la papelera?" || return
+      while IFS= read -r l; do f=$(sed -E 's/^ *[^ ]+  [^ ]+  //; s|^~|'"$HOME"'|' <<< "$l"); to_trash "$f" && done_msg "${f/#$HOME/~}" || kept "${f/#$HOME/~}"; done <<< "$pick" ;;
+    "Carpetas vacías")
+      title "Carpetas vacías" "Buscando… (sin tocar las de tu carpeta personal ni lo usado esta semana)"
+      local list
+      mapfile -t list < <(empty_find)
+      [ ${#list[@]} -gt 0 ] || { gum style "No hay carpetas vacías"; pause; return; }
+      printf '%s\n' "${list[@]}" | sed "s|^$HOME|~|" | head -40 | sed 's/^/  /'
+      [ ${#list[@]} -gt 40 ] && echo "  … y $(( ${#list[@]} - 40 )) más"
+      gum confirm "¿Quitar estas ${#list[@]} carpetas vacías? (las apps las recrean si las necesitan)" || return
+      local n=0 d
+      for d in "${list[@]}"; do rmdir "$d" 2>/dev/null && n=$((n + 1)); done
+      done_msg "$n carpetas vacías quitadas" ;;
+  esac
+  pause
+}
+
+# ── Rendimiento ──────────────────────────────────────────────────────────────
+power() {
+  title "Perfil de energía" "Actual: $(asusctl profile get 2>/dev/null | sed -n 's/^Active profile: //p')"
+  local p
+  p=$(gum choose "Performance — máximo rendimiento" "Balanced — equilibrado" "Quiet — silencioso y fresco") || return
+  asusctl profile set "${p%% *}" && done_msg "perfil ${p%% *}"
+  pause
+}
+
+memory() {
+  title "Memoria" "Linux usa la RAM libre como caché y la suelta sola cuando hace falta"
+  free -h; echo
+  gum confirm "¿Soltar ahora la caché de disco en RAM? (solo útil para medir)" || return
+  sudo sh -c 'sync; echo 3 > /proc/sys/vm/drop_caches' && done_msg "caché soltada"
+  echo; free -h; pause
+}
+
+top_procs() {
+  title "Procesos que más consumen"
+  gum style --foreground "$DIM" "Por CPU"
+  ps -eo pid,pcpu,pmem,comm --sort=-pcpu | head -11
+  echo; gum style --foreground "$DIM" "Por memoria"
+  ps -eo pid,pmem,rss,comm --sort=-rss | head -11 | awk 'NR==1{print; next}{printf "%7s %5s %8.0fM %s\n",$1,$2,$3/1024,$4}'
+  pause
+}
+
+health() {
+  title "Estado del sistema"
+  gum style --foreground "$DIM" "Servicios con fallos"
+  { systemctl --failed --no-legend --plain; systemctl --user --failed --no-legend --plain; } | sed 's/^/  /'
+  [ -n "$(systemctl --failed --no-legend; systemctl --user --failed --no-legend)" ] || echo "  ninguno"
+  echo; gum style --foreground "$DIM" "Temperaturas"
+  sensors 2>/dev/null | grep -E '^(Package|Core 0|Tctl|edge|temp1|CPU|GPU)' | head -8 | sed 's/^/  /'
+  command -v nvidia-smi >/dev/null && nvidia-smi --query-gpu=name,temperature.gpu,power.draw,utilization.gpu \
+    --format=csv,noheader 2>/dev/null | sed 's/^/  GPU: /'
+  echo; gum style --foreground "$DIM" "Arranque"
+  systemd-analyze 2>/dev/null | head -1 | sed 's/^/  /'
+  systemd-analyze blame --no-pager 2>/dev/null | head -8 | sed 's/^/  /'
+  pause
+}
+
+while true; do
+  title "Mantenimiento RedRog"
+  summary
+  choice=$(gum choose --height 17 \
+    "Limpiar cachés y espacio" "Claude y Antigravity" "Juegos y Steam" "Desarrollo" \
+    "Restos, archivos grandes y carpetas vacías" "Carpetas de ~/.cache" "Instantáneas" \
+    "Actualizar herramientas" "Salud del hardware" "Diagnóstico de errores" \
+    "Perfil de energía" "Memoria" "Procesos que más consumen" "Estado del sistema" "Salir") || exit 0
+  case "$choice" in
+    "Limpiar"*)     clean ;;
+    "Claude"*)      claude_agy ;;
+    "Juegos"*)      games ;;
+    "Desarrollo")   devel ;;
+    "Actualizar"*)  update_tools ;;
+    "Restos"*)      tidy ;;
+    "Salud"*)       hardware ;;
+    "Diagnóstico"*) diagnose ;;
+    "Carpetas"*)    cache_dirs ;;
+    "Instantáneas") snapshots ;;
+    "Perfil"*)      power ;;
+    "Memoria")      memory ;;
+    "Procesos"*)    top_procs ;;
+    "Estado"*)      health ;;
+    *)              exit 0 ;;
+  esac
+done

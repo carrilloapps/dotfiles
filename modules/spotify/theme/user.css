@@ -1,0 +1,17 @@
+/* RedRog for Spotify (Spicetify): rounded cards and controls like the rest of
+   the theme; the colors come from color.ini. */
+.main-card-card,
+.main-shelf-shelf .main-card-card,
+.main-trackList-trackListRow {
+    border-radius: 10px;
+}
+.main-playButton-PlayButton,
+.main-playPauseButton-button {
+    box-shadow: 0 6px 18px rgba(239, 51, 64, 0.35);
+}
+.Root__nav-bar,
+.Root__main-view,
+.Root__now-playing-bar,
+.Root__right-sidebar {
+    border-radius: 12px;
+}

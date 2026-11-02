@@ -1,0 +1,89 @@
+# Traditional Chinese translation of RedRog.
+# Copyright (C) 2026 RedRog contributors
+# This file is distributed under the same license as the redrog package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: redrog\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-25 16:25-0500\n"
+"PO-Revision-Date: 2026-10-16 15:35-0500\n"
+"Last-Translator: \n"
+"Language-Team: none\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: modules/rog-notify/redrog-rog-notify.py:32
+msgid "Balanced"
+msgstr "平衡"
+
+#: modules/rog-notify/redrog-rog-notify.py:33
+msgid "Performance"
+msgstr "效能"
+
+#: modules/rog-notify/redrog-rog-notify.py:34
+msgid "Quiet"
+msgstr "安靜"
+
+#: modules/rog-notify/redrog-rog-notify.py:35
+msgid "Low power"
+msgstr "省電"
+
+#: modules/rog-notify/redrog-rog-notify.py:108
+msgid "RedRog panel open"
+msgstr ""
+
+#: modules/rog-notify/redrog-rog-notify.py:125
+msgid "Custom"
+msgstr "自訂"
+
+#: modules/rog-notify/redrog-rog-notify.py:126
+#, python-format
+msgid "Power profile: %s"
+msgstr "電源設定檔：%s"
+
+#: modules/rog-notify/redrog-rog-notify.py:130
+#, python-format
+msgid "The battery will stop charging at %d %%."
+msgstr "電池將在 %d %% 時停止充電。"
+
+#: modules/rog-notify/redrog-rog-notify.py:131
+msgid "The battery will charge to 100 %."
+msgstr "電池將充電至 100 %。"
+
+#: modules/rog-notify/redrog-rog-notify.py:132
+#, python-format
+msgid "Charge limit: %d %%"
+msgstr "充電上限：%d %%"
+
+#: modules/rog-notify/redrog-rog-notify.py:144
+msgid "Dedicated GPU disabled"
+msgstr "獨立顯示卡已停用"
+
+#: modules/rog-notify/redrog-rog-notify.py:144
+msgid "Dedicated GPU enabled"
+msgstr "獨立顯示卡已啟用"
+
+#: modules/rog-notify/redrog-rog-notify.py:145
+msgid "Changes take effect after a reboot or logout."
+msgstr "變更將在重新開機或登出後生效。"
+
+#: modules/rog-notify/redrog-rog-notify.py:147
+#, python-format
+msgid "GPU mode: %s"
+msgstr "顯示卡模式：%s"
+
+#: modules/rog-notify/redrog-rog-notify.py:147
+msgid "Hybrid"
+msgstr "混合"
+
+#: modules/rog-notify/redrog-rog-notify.py:147
+msgid "Ultimate (dGPU only)"
+msgstr "Ultimate（僅獨立顯示卡）"
+
+#: modules/rog-notify/redrog-rog-notify.py:148
+msgid "Reboot to apply the change."
+msgstr "重新開機以套用變更。"

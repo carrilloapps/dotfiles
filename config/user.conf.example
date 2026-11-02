@@ -1,0 +1,7 @@
+# Copy this file to config/user.conf and adjust what you want.
+# user.conf is in .gitignore: your paths and preferences are never published.
+
+# WALLPAPER="$HOME/Pictures/Wallpapers/my-wallpaper.jpg"
+# ACCENT="ef3340"
+# DOCK_APPS=(org.kde.dolphin firefox kitty steam org.kde.systemsettings)
+# LIMINE_BRANDING="My Laptop  ·  CachyOS"

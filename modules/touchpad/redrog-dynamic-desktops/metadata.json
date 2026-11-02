@@ -1,0 +1,16 @@
+{
+    "KPlugin": {
+        "Id": "redrog-dynamic-desktops",
+        "Name": "RedRog dynamic desktops",
+        "Name[es]": "Escritorios dinámicos de RedRog",
+        "Description": "Desktops like macOS Spaces: at least three, a new one appears when the last fills up and empty ones close by themselves",
+        "Description[es]": "Escritorios como los Spaces de macOS: al menos tres, aparece uno nuevo cuando el último se ocupa y los vacíos se cierran solos",
+        "License": "GPL-3.0-or-later",
+        "Version": "1.0",
+        "EnabledByDefault": false,
+        "Authors": [{ "Name": "RedRog" }]
+    },
+    "X-Plasma-API": "javascript",
+    "X-Plasma-MainScript": "code/main.js",
+    "KPackageStructure": "KWin/Script"
+}

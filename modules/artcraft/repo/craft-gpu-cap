@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# craft-gpu-cap: while any ArtCraft app or MCP engine runs, the NVIDIA card's
+# graphics clock is capped at 76 % of its maximum (nvidia-smi -lgc), so the
+# suite uses about three quarters of the GPU and the desktop keeps its share;
+# when the last one closes the cap is lifted (-rgc). Checks every 5 s with
+# pgrep and calls nvidia-smi only when the state changes (it would wake a
+# sleeping card on hybrid graphics). Runs as root from redrog-craft-gpu.service.
+set -u
+command -v nvidia-smi >/dev/null || exit 0
+# process names (at most 15 characters, as the kernel keeps them)
+APPS='(photo|vector|film|light|pdf|effect|design|fig|sound|word|grid|deck|solid)craft(-cli)?'
+SHARE=76
+capped=0
+cap() {
+  local max min
+  max=$(nvidia-smi --query-gpu=clocks.max.graphics --format=csv,noheader,nounits 2>/dev/null | head -1)
+  min=$(nvidia-smi --query-supported-clocks=graphics --format=csv,noheader,nounits 2>/dev/null | sort -n | head -1)
+  [[ $max =~ ^[0-9]+$ && $min =~ ^[0-9]+$ ]] || return
+  nvidia-smi -lgc "$min,$(( max * SHARE / 100 ))" >/dev/null 2>&1 && capped=1
+}
+uncap() { nvidia-smi -rgc >/dev/null 2>&1; capped=0; }
+trap '[ $capped = 1 ] && uncap; exit 0' TERM INT
+while :; do
+  if pgrep -x "$APPS" >/dev/null 2>&1; then
+    [ $capped = 1 ] || cap
+  else
+    [ $capped = 0 ] || uncap
+  fi
+  sleep 5 & wait $!
+done
