@@ -167,7 +167,7 @@ Every application in the ArtCraft suite features a dedicated Model Context Proto
 
 - **Dual Operating Modes:** When an application is running with an open window, the MCP server connects live to its local control port (`127.0.0.1`, configured in `~/.config/environment.d/60-redrog-artcraft.conf`) authenticated by a secure session token generated at login in `$XDG_RUNTIME_DIR`. When the application is closed, the server runs the application's headless engine with sandbox access restricted to your home directory.
 - **Resource Containment:** ArtCraft apps and their MCP engines execute inside a dedicated systemd slice (`redrog-artcraft.slice`) constrained to at most 75% CPU and 75–80% RAM. An automated GPU service (`redrog-craft-gpu.service`) caps GPU power draw to 76% during heavy processing to ensure system responsiveness.
-- **Automated Local Repository:** Official Arch packages for the 12 Craft applications and SolidCraft (3D parametric CAD) are served from a local pacman repository at `/var/lib/redrog-artcraft-repo`, synchronized via `redrog-artcraft-repo.timer` every 6 hours with cryptographic verification against `SHA256SUMS.txt`.
+- **Automated Local Repository:** Official Arch packages for the 12 Craft applications, SolidCraft (3D parametric CAD), Altered Audio Editor (multitrack audio editor), and BananaV (GPU-accelerated video editor) are served from a local pacman repository at `/var/lib/redrog-artcraft-repo`, synchronized via `redrog-artcraft-repo.timer` every 6 hours with cryptographic verification against `SHA256SUMS.txt` and GitHub release tags.
 
 #### The RedRog Telemetry Dashboard
 

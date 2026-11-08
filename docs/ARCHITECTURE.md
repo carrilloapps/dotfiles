@@ -225,9 +225,9 @@ On ASUS TUF and ROG platforms, RedRog interfaces with low-level platform feature
 
 ## 10. ArtCraft Suite and Agent Tooling Architecture
 
-RedRog provides native infrastructure for the ArtCraft creative suite (12 specialized applications covering photo editing, vector design, video editing, audio workstation, 3D CAD, etc.):
+RedRog provides native infrastructure for the ArtCraft creative suite and companion creative tools (12 specialized Craft applications, SolidCraft 3D CAD, Altered Audio Editor, and BananaV video editor):
 
-- **Local Package Repository:** Packages are hosted in `/var/lib/redrog-artcraft-repo` and managed by `redrog-artcraft-repo.service` and `redrog-artcraft-repo.timer`. Packages are cryptographically validated against `SHA256SUMS.txt` over HTTPS before entering the repository database.
+- **Local Package Repository:** Packages are hosted in `/var/lib/redrog-artcraft-repo` and managed by `redrog-artcraft-repo.service` and `redrog-artcraft-repo.timer`. Packages are cryptographically validated against `SHA256SUMS.txt` and GitHub releases before entering the repository database.
 - **MCP Bridge (`artcraft-mcp`):** Registers each application as an MCP server with Claude Code and Antigravity. When an application's window is open, the MCP bridge communicates with its local control port (`127.0.0.1`) using a session token stored securely in `$XDG_RUNTIME_DIR`. When closed, the MCP bridge transparently executes the app's headless engine in a restricted directory sandbox.
 - **Resource Slice Enforcement:** All Craft applications and their background MCP workers execute within `redrog-artcraft.slice`, enforcing systemd cgroup limits: max 75% CPU and 75–80% memory allocation. The companion service `redrog-craft-gpu.service` clamps GPU power targets during continuous generation tasks to prevent desktop stutter.
 

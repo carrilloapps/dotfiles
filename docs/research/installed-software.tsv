@@ -18,9 +18,11 @@ Graphics	PhotoCraft	ai.storyteller.photocraft.desktop
 AudioVideo	SoundCraft	ai.storyteller.soundcraft.desktop
 Graphics	VectorCraft	ai.storyteller.vectorcraft.desktop
 Office	WordCraft	ai.storyteller.wordcraft.desktop
+AudioVideo	Altered Audio Editor	altered-audio-editor.desktop
 Utility	Cachy-Update	arch-update.desktop
 Development	Qt Assistant	assistant.desktop
 AudioVideo	Audacity	audacity.desktop
+AudioVideo	BananaV	bananav.desktop
 Video	Blackmagic RAW Player	blackmagicraw-player.desktop
 Video	Blackmagic RAW Speed Test	blackmagicraw-speedtest.desktop
 Network	Brave	brave-browser.desktop
