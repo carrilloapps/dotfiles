@@ -57,7 +57,7 @@ for p in "${PROJECTS[@]}"; do
       rm -rf "$pkgdir" && mkdir -p "$pkgdir"
       bsdtar -xOf "$tmp/$deb" data.tar.gz | bsdtar -xf - -C "$pkgdir"
       if [ -f "$pkgdir/usr/share/applications/Altered Audio Editor.desktop" ]; then
-        cp "$pkgdir/usr/share/applications/Altered Audio Editor.desktop" "$pkgdir/usr/share/applications/altered-audio-editor.desktop"
+        mv "$pkgdir/usr/share/applications/Altered Audio Editor.desktop" "$pkgdir/usr/share/applications/altered-audio-editor.desktop"
       fi
       size=$(du -sb "$pkgdir/usr" 2>/dev/null | cut -f1 || echo 42000000)
       cat << EOF_PKG > "$pkgdir/.PKGINFO"
