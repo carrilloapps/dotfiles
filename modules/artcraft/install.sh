@@ -33,7 +33,7 @@ run sudo bash "$HERE/repo/setup.sh"
 # of the system half-updated. Later updates come through the repository.
 # --ask=4: replace the AUR artcraft-launcher, which the official one conflicts with
 pkgs=()
-for app in artcraft-launcher "${CRAFT_APPS[@]}"; do
+for app in artcraft-launcher "${CRAFT_APPS[@]}" altered-audio-editor; do
   f=$(ls /var/lib/redrog-artcraft-repo/"$app"-[0-9]*-linux-x86_64.pkg.tar.zst 2>/dev/null | sort -V | tail -1)
   if [ -n "$f" ]; then pkgs+=("$f"); else warn "$(L "no package for $app in the repository" "no hay paquete de $app en el repositorio")"; fi
 done
@@ -97,9 +97,14 @@ run systemctl --user unset-environment PHOTOCRAFT_CONTROL_TOKEN FILMCRAFT_CONTRO
 # FilmCraft with an empty project instead of its demo. Memory budgets and
 # GPU paths sized for this machine (tune.py), and a KWin script so no Craft
 # window opens larger than its screen.
-for app in artcraft-launcher "${CRAFT_APPS[@]}"; do
-  src=/usr/share/applications/$(appid "$app").desktop
-  dst="$DATA_HOME/applications/$(appid "$app").desktop"
+for app in artcraft-launcher "${CRAFT_APPS[@]}" altered-audio-editor; do
+  if [ "$app" = altered-audio-editor ]; then
+    src=/usr/share/applications/altered-audio-editor.desktop
+    dst="$DATA_HOME/applications/altered-audio-editor.desktop"
+  else
+    src=/usr/share/applications/$(appid "$app").desktop
+    dst="$DATA_HOME/applications/$(appid "$app").desktop"
+  fi
   [ -f "$src" ] || continue
   [ -f "$dst" ] || cp "$src" "$dst"
   sed -i -E '/^Exec=/{/WGPU_POWER_PREF/!s/^Exec=/Exec=env WGPU_POWER_PREF=high /}' "$dst"
