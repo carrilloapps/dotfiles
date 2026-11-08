@@ -15,12 +15,13 @@ set -euo pipefail
 REPO=${STATE_DIRECTORY:-/var/lib/redrog-artcraft-repo}
 DB=$REPO/redrog-artcraft.db.tar.gz
 PROJECTS=(craft-launcher photocraft vectorcraft filmcraft lightcraft pdfcraft effectcraft
-          designcraft figcraft soundcraft wordcraft gridcraft deckcraft solidcraft altered-audio-editor)
+          designcraft figcraft soundcraft wordcraft gridcraft deckcraft solidcraft altered-audio-editor bananav)
 # the GitHub organization and package name prefix of each project
 owner() {
   case $1 in
     solidcraft) echo tangency-labs ;;
     altered-audio-editor) echo geekcastradio ;;
+    bananav) echo acasoq-web ;;
     *) echo storytold ;;
   esac
 }
@@ -28,6 +29,7 @@ prefix() {
   case $1 in
     solidcraft) echo io.tangencylabs ;;
     altered-audio-editor) echo com.geekcastradio ;;
+    bananav) echo io.github.bananav ;;
     *) echo ai.storyteller ;;
   esac
 }
@@ -88,6 +90,60 @@ EOF_PKG
         failed+=("$p")
       fi
       rm -rf "$pkgdir" "$tmp/$deb" "$tmp/$file" "$tmp/SHA256SUMS.txt"
+    else
+      echo "redrog-artcraft: $p $tag rejected (download or checksum)" >&2
+      failed+=("$p")
+    fi
+    continue
+  fi
+
+  # BananaV releases an AppImage; extract and package as a native Arch package
+  if [ "$p" = bananav ]; then
+    file="$p-${tag#v}-linux-$ARCH.pkg.tar.zst"
+    [ -f "$REPO/$file" ] && continue
+    base="https://github.com/$(owner "$p")/BananaV/releases/download/$tag"
+    appimage="BananaV-${tag#v}-linux-x64.AppImage"
+    if curl -fsSL --proto '=https' --retry 3 --max-time 900 -o "$tmp/$appimage" "$base/$appimage" \
+       && curl -fsSL --proto '=https' --retry 3 --max-time 60 -o "$tmp/SHA256SUMS.txt" "$base/SHA256SUMS.txt" \
+       && (cd "$tmp" && grep -E " \*?$appimage\$" SHA256SUMS.txt | sha256sum -c --status -); then
+      chmod +x "$tmp/$appimage"
+      (cd "$tmp" && ./"$appimage" --appimage-extract >/dev/null)
+      pkgdir="$tmp/pkg_bananav"
+      rm -rf "$pkgdir"
+      mkdir -p "$pkgdir/opt/bananav/bin" "$pkgdir/opt/bananav/lib" "$pkgdir/usr/bin" "$pkgdir/usr/share/applications" "$pkgdir/usr/share/icons/hicolor"
+      cp "$tmp/squashfs-root/usr/bin/bananav" "$pkgdir/opt/bananav/bin/"
+      cp -r "$tmp/squashfs-root/usr/lib/"* "$pkgdir/opt/bananav/lib/"
+      ln -s /opt/bananav/bin/bananav "$pkgdir/usr/bin/bananav"
+      cp "$tmp/squashfs-root/usr/share/applications/bananav.desktop" "$pkgdir/usr/share/applications/"
+      cp -r "$tmp/squashfs-root/usr/share/icons/hicolor/"* "$pkgdir/usr/share/icons/hicolor/"
+      size=$(du -sb "$pkgdir" | cut -f1)
+      cat << EOF_PKG > "$pkgdir/.PKGINFO"
+pkgname = bananav
+pkgbase = bananav
+pkgver = ${tag#v}-1
+pkgdesc = Free and open-source video editor inspired by Vegas Pro
+url = https://github.com/acasoq-web/BananaV
+builddate = $(date +%s)
+packager = RedRog <soyjrcarrillo@gmail.com>
+size = $size
+arch = $ARCH
+license = GPL-3.0-only
+depend = alsa-lib
+depend = libxkbcommon
+depend = libxkbcommon-x11
+depend = vulkan-icd-loader
+EOF_PKG
+      (cd "$pkgdir" && bsdtar --uid 0 --gid 0 -cf - .PKGINFO opt usr | zstd -c -T0 > "$tmp/$file")
+      if pkgname=$(bsdtar -xOf "$tmp/$file" .PKGINFO | sed -n 's/^pkgname = //p') \
+         && [ "$pkgname" = "$p" ]; then
+        install -m 644 "$tmp/$file" "$REPO/$file"
+        repo-add -q -R "$DB" "$REPO/$file"
+        added=$((added + 1))
+      else
+        echo "redrog-artcraft: $p $tag packaging failed" >&2
+        failed+=("$p")
+      fi
+      rm -rf "$pkgdir" "$tmp/squashfs-root" "$tmp/$appimage" "$tmp/$file" "$tmp/SHA256SUMS.txt"
     else
       echo "redrog-artcraft: $p $tag rejected (download or checksum)" >&2
       failed+=("$p")
