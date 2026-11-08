@@ -1,0 +1,12 @@
+# RedRog: rebuilds the "9:10 PM" clock of the login and lock screens from the
+# updated plasma-workspace (breeze-clock.sh)
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = plasma-workspace
+
+[Action]
+Description = Re-applying the RedRog login screen clock...
+When = PostTransaction
+Exec = /usr/local/lib/redrog/breeze-clock.sh

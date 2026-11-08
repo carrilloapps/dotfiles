@@ -17,34 +17,34 @@
         Quiet: (
             enabled: true,
             group: {
+                NvDynamicBoost: 5,
                 PptPl1Spl: 35,
                 PptPl2Sppt: 55,
-                NvDynamicBoost: 5,
-            },
-        ),
-        Balanced: (
-            enabled: true,
-            group: {
-                PptPl2Sppt: 85,
-                NvDynamicBoost: 10,
-                PptPl1Spl: 55,
             },
         ),
         Performance: (
             enabled: true,
             group: {
-                NvDynamicBoost: 15,
                 PptPl2Sppt: 95,
+                NvDynamicBoost: 15,
                 PptPl1Spl: 80,
+            },
+        ),
+        Balanced: (
+            enabled: true,
+            group: {
+                PptPl1Spl: 55,
+                NvDynamicBoost: 10,
+                PptPl2Sppt: 85,
             },
         ),
     },
     dc_profile_tunings: {
-        Balanced: (
+        Quiet: (
             enabled: false,
             group: {},
         ),
-        Quiet: (
+        Balanced: (
             enabled: false,
             group: {},
         ),

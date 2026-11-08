@@ -5,9 +5,10 @@ switch-to-activity-54ac1947-78b3-48be-a3af-2eff9305d3a8=none,none,Cambiar a la a
 [KDE Keyboard Layout Switcher]
 Switch to Last-Used Keyboard Layout=Meta+Alt+L,Meta+Alt+L,Cambiar a la última distribución de teclado usada
 Switch to Next Keyboard Layout=Meta+Alt+K,Meta+Alt+K,Cambiar a la siguiente distribución de teclado
-_k_friendly_name=Selector de distribución de teclado
+_k_friendly_name=Selector de distribución del teclado
 
 [com.anthropic.Claude]
+0612701533EDCBDBF1FFE3D0E23C1036-Ctrl+Alt+Space=Ctrl+Alt+Space,Ctrl+Alt+Space,Claude shortcut: Ctrl+Alt+Space
 8F19448AE0BB554B89B96B7CCE1B764B-Ctrl+Alt+Space=Ctrl+Alt+Space,Ctrl+Alt+Space,Claude shortcut: Ctrl+Alt+Space
 _k_friendly_name=Claude
 
@@ -210,34 +211,34 @@ view_zoom_in=Meta++\tMeta+=,Meta++\tMeta+=,Ampliar
 view_zoom_out=Meta+-,Meta+-,Reducir
 
 [kwin][$InverseAction]
-Cycle Overview=Cycle Overview Opposite
-Increase Opacity=Decrease Opacity
-MoveZoomRight=MoveZoomLeft
+Cycle Overview Opposite=Cycle Overview
+Decrease Opacity=Increase Opacity
+MoveZoomLeft=MoveZoomRight
 MoveZoomUp=MoveZoomDown
-Switch One Desktop Down=Switch One Desktop Up
-Switch One Desktop to the Right=Switch One Desktop to the Left
-Switch Window Left=Switch Window Right
+Switch One Desktop Up=Switch One Desktop Down
+Switch One Desktop to the Left=Switch One Desktop to the Right
+Switch Window Right=Switch Window Left
 Switch Window Up=Switch Window Down
-Switch to Previous Desktop=Switch to Next Desktop
-Switch to Previous Screen=Switch to Next Screen
-Switch to Screen Below=Switch to Screen Above
+Switch to Next Desktop=Switch to Previous Desktop
+Switch to Next Screen=Switch to Previous Screen
+Switch to Screen Above=Switch to Screen Below
 Switch to Screen to the Left=Switch to Screen to the Right
 Walk Through Windows=Walk Through Windows (Reverse)
-Walk Through Windows Alternative (Reverse)=Walk Through Windows Alternative
+Walk Through Windows Alternative=Walk Through Windows Alternative (Reverse)
 Walk Through Windows of Current Application=Walk Through Windows of Current Application (Reverse)
-Walk Through Windows of Current Application Alternative (Reverse)=Walk Through Windows of Current Application Alternative
-Window One Desktop Up=Window One Desktop Down
-Window One Desktop to the Left=Window One Desktop to the Right
-Window One Screen Up=Window One Screen Down
-Window One Screen to the Right=Window One Screen to the Left
+Walk Through Windows of Current Application Alternative=Walk Through Windows of Current Application Alternative (Reverse)
+Window Grow Horizontal=Window Shrink Horizontal
+Window Grow Vertical=Window Shrink Vertical
+Window Lower=Window Raise
+Window One Desktop Down=Window One Desktop Up
+Window One Desktop to the Right=Window One Desktop to the Left
+Window One Screen Down=Window One Screen Up
+Window One Screen to the Left=Window One Screen to the Right
+Window Pack Down=Window Pack Up
 Window Pack Right=Window Pack Left
-Window Pack Up=Window Pack Down
-Window Raise=Window Lower
-Window Shrink Horizontal=Window Grow Horizontal
-Window Shrink Vertical=Window Grow Vertical
-Window to Next Screen=Window to Previous Screen
-Window to Previous Desktop=Window to Next Desktop
-view_zoom_out=view_zoom_in
+Window to Next Desktop=Window to Previous Desktop
+Window to Previous Screen=Window to Next Screen
+view_zoom_in=view_zoom_out
 
 [mediacontrol]
 _k_friendly_name=Controlador multimedia
@@ -253,6 +254,15 @@ seekbackwardmedialong=none,none,Retroceder 30 s la reproducción multimedia
 seekforwardmedia=Media Fast Forward,Media Fast Forward,Avanzar 5 s la reproducción multimedia
 seekforwardmedialong=none,none,Avanzar 30 s la reproducción multimedia
 stopmedia=Media Stop,Media Stop,Detener la reproducción multimedia
+
+[notion]
+4C2D03FFF693F118989AD99DBEFE8736-Ctrl+Shift+K=Ctrl+Shift+K,Ctrl+Shift+K,Notion shortcut: Ctrl+Shift+K
+C436892086FAE8E96D70FFBFAA3FC079-Ctrl+Shift+J=Ctrl+Shift+J,Ctrl+Shift+J,Notion shortcut: Ctrl+Shift+J
+_k_friendly_name=Notion
+
+[openscreen]
+70A7983AB4E703A940C5F1704033C9B6-Ctrl+Shift+O=none,Ctrl+Shift+O,openscreen shortcut: Ctrl+Shift+O
+_k_friendly_name=Openscreen
 
 [org_kde_powerdevil]
 Decrease Keyboard Brightness=Keyboard Brightness Down,Keyboard Brightness Down,Disminuir el brillo del teclado
@@ -302,7 +312,33 @@ activate widget 47=Alt+F1,none,Activar el elemento gráfico Lanzador de aplicaci
 activate widget 487=Alt+F1,none,Activar el elemento gráfico Lanzador de aplicaciones
 activate widget 509=Meta+Shift+A,none,Activar el elemento gráfico Tablero de aplicaciones
 activate widget 519=Alt+F1,none,Activar el elemento gráfico Lanzador de aplicaciones
+activate widget 551=Alt+F1,none,Activar el elemento gráfico Lanzador de aplicaciones
+activate widget 584=Alt+F1,none,Activar el elemento gráfico Lanzador de aplicaciones
+activate widget 617=Alt+F1,none,Activar el elemento gráfico Lanzador de aplicaciones
+activate widget 654=Alt+F1,none,Activar el elemento gráfico Lanzador de aplicaciones
+activate widget 687=Alt+F1,none,Activar el elemento gráfico Lanzador de aplicaciones
+activate widget 710=Alt+Space,none,Activar el elemento gráfico AppGrid Launcher Center
+activate widget 720=Alt+F1,none,Activar el elemento gráfico Lanzador de aplicaciones
 activate widget 74=Alt+F1,none,Activar el elemento gráfico Lanzador de aplicaciones
+activate widget 743=Alt+Space,none,Activar el elemento gráfico AppGrid Launcher Center
+activate widget 753=Alt+F1,none,Activar el elemento gráfico Lanzador de aplicaciones
+activate widget 773=Meta+N,none,Activar el elemento gráfico Notificaciones
+activate widget 776=Alt+Space,none,Activar el elemento gráfico AppGrid Launcher Center
+activate widget 786=Alt+F1,none,Activar el elemento gráfico Lanzador de aplicaciones
+activate widget 803=none,none,Activar el elemento gráfico Porcentaje de batería y panel del sistema
+activate widget 806=Meta+N,none,Activar el elemento gráfico Notificaciones
+activate widget 809=Alt+Space,none,Activar el elemento gráfico AppGrid Launcher Center
+activate widget 820=Alt+F1,none,Activar el elemento gráfico Lanzador de aplicaciones
+activate widget 837=none,none,Activar el elemento gráfico Porcentaje de batería y panel del sistema
+activate widget 840=Meta+N,none,Activar el elemento gráfico Notificaciones
+activate widget 843=Alt+Space,none,Activar el elemento gráfico AppGrid Launcher Center
+activate widget 854=Alt+F1,none,Activar el elemento gráfico Lanzador de aplicaciones
+activate widget 874=Meta+N,none,Activar el elemento gráfico Notificaciones
+activate widget 884=Alt+F1,none,Activar el elemento gráfico Lanzador de aplicaciones
+activate widget 906=Meta+N,none,Activar el elemento gráfico Notificaciones
+activate widget 909=Alt+Space,none,Activar el elemento gráfico AppGrid Launcher Center
+activate widget 920=Alt+F1,none,Activar el elemento gráfico Lanzador de aplicaciones
+activate widget 942=Meta+N,none,Activar el elemento gráfico Notificaciones
 clear history=none,none,Borrar el historial de notificaciones
 clear-history=none,none,Borrar historial del portapapeles
 clipboard_action=none,none,Conmutar la aparición automática del menú de acciones
@@ -322,6 +358,21 @@ show-on-mouse-pos=Meta+V,Meta+V,Mostrar elementos del portapapeles en la posici�
 switch to next activity=none,none,Cambiar a la actividad siguiente
 switch to previous activity=none,none,Cambiar a la actividad anterior
 toggle do not disturb=none,none,Conmutar no molestar
+
+[services][io.missioncenter.MissionCenter.desktop]
+_launch=Ctrl+Esc
+
+[services][kitty.desktop]
+_launch=Ctrl+Alt+T
+
+[services][org.gnome.Calculator.desktop]
+_launch=Calculator
+
+[services][org.kde.krunner.desktop]
+_launch=Search\tAlt+F2
+
+[services][org.kde.plasma-systemmonitor.desktop]
+_launch=none
 
 [services][redrog-rog-control-center.desktop]
 _launch=Launch (3)\tLaunch (5)

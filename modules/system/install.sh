@@ -97,6 +97,18 @@ if grep -q '^NoExtract *=.*usr/share/wallpapers/\*' /etc/pacman.conf; then
   [ "$removed" = 0 ] || info "$(L "only RedRog's wallpapers in the picker ($removed package wallpapers removed)" "solo los fondos de RedRog en el selector ($removed fondos de paquetes quitados)")"
 fi
 
+# IgnorePkg para paquetes AUR problemáticos (bucle de pkgver en -git)
+if ! grep -q '^IgnorePkg *=.*obs-plugin-waveform-git' /etc/pacman.conf; then
+  [ -e "$BK/pacman.conf" ] || run cp -a /etc/pacman.conf "$BK/pacman.conf"
+  if [ "$DRY_RUN" != 1 ]; then
+    if grep -q '^IgnorePkg *=' /etc/pacman.conf; then
+      sed -i '/^IgnorePkg *=/ s/$/ obs-plugin-waveform-git/' /etc/pacman.conf
+    else
+      sed -i '/^\[options\]/a IgnorePkg = obs-plugin-waveform-git' /etc/pacman.conf
+    fi
+  fi
+fi
+
 # The greeter runs as its own user and cannot read the user's home: install the
 # generated RedRog theme pieces system-wide
 U_DATA="$DATA_HOME" U_CONF="$CONFIG_HOME"

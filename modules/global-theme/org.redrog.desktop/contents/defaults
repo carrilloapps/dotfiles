@@ -20,5 +20,5 @@ library=org.kde.kwin.aurorae
 theme=__aurorae__svg__RedRog
 
 [ksplashrc][KSplash]
-Engine=none
-Theme=None
+Engine=KSplashQML
+Theme=org.redrog.desktop

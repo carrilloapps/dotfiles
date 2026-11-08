@@ -5,7 +5,7 @@
 # one points at its own color scheme, Plasma style, window decoration and
 # icons. The previews are generated from the configured WALLPAPER, which is
 # not part of the repository.
-# describe: RedRog global theme, emblem icon, desktop and lock screen wallpaper, no splash | tema global RedRog, icono del emblema, fondo de escritorio y de bloqueo, sin splash
+# describe: RedRog global theme, emblem icon, desktop and lock screen wallpaper, Arch splash | tema global RedRog, icono del emblema, fondo de escritorio y de bloqueo, splash de Arch
 
 SRC="$REDROG_ROOT/modules/global-theme/org.redrog.desktop"
 build_lnf() {
@@ -34,6 +34,18 @@ build_lnf() {
       \( -size 1920x40 "xc:#${BG}99" \) -gravity north -composite \
       "$LNF/contents/previews/fullscreenpreview.jpg"
   run magick "$LNF/contents/previews/fullscreenpreview.jpg" -resize 640x360 "$LNF/contents/previews/preview.png"
+
+  # Splash frames (animated Arch logo from boot splash / transition)
+  run mkdir -p "$LNF/contents/splash/images"
+  for splash_dir in "$REAL_HOME/.local/lib/redrog/theme/transition/arch" /usr/share/plymouth/themes/redrog-arch /usr/share/plymouth/themes/arch-charge-big; do
+    if [ -f "$splash_dir/progress-00.png" ]; then
+      run cp "$splash_dir"/progress-*.png "$splash_dir"/throbber-*.png "$LNF/contents/splash/images/" 2>/dev/null || true
+      break
+    fi
+  done
+  if [ -f "$LNF/contents/splash/images/throbber-08.png" ] && [ "$DRY_RUN" != 1 ]; then
+    magick -size 640x360 xc:black \( "$LNF/contents/splash/images/throbber-08.png" -resize 120x120 \) -gravity center -composite "$LNF/contents/previews/splash.png"
+  fi
 }
 for_each_variant build_lnf
 
@@ -69,8 +81,8 @@ kw --file kdeglobals --group KDE --key LookAndFeelPackage "$LNF_ID"
 # RedRog is both of Plasma's looks: dark and light
 kw --file kdeglobals --group KDE --key DefaultDarkLookAndFeel org.redrog.desktop
 kw --file kdeglobals --group KDE --key DefaultLightLookAndFeel org.redrog.light.desktop
-kw --file ksplashrc --group KSplash --key Engine none
-kw --file ksplashrc --group KSplash --key Theme None
+kw --file ksplashrc --group KSplash --key Engine KSplashQML
+kw --file ksplashrc --group KSplash --key Theme "$LNF_ID"
 
 # Desktop and lock screen wallpaper (Breeze lock screen). The wallpaper is the
 # user's: RedRog's (WALLPAPER) goes on a screen RedRog has not set up yet, or

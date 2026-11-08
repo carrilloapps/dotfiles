@@ -1,0 +1,13 @@
+# RedRog: rebuilds the red Arch boot splash (redrog-arch) when its base theme
+# updates, and the boot images with it
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = plymouth-theme-arch-charge-big
+Target = plymouth
+
+[Action]
+Description = Rebuilding the RedRog boot splash...
+When = PostTransaction
+Exec = /usr/local/lib/redrog/plymouth-redrog-update

@@ -2,9 +2,18 @@
 NumLock=0
 
 [Libinput][10248][260][ASUF1204:00 2808:0104 Touchpad]
+ClickMethod=2
+DisableWhileTyping=true
+MiddleEmulation=false
 NaturalScroll=true
 ScrollFactor=0.1
+ScrollTwoFinger=true
+TapAndDrag=true
+TapDragLock=false
+TapToClick=true
+
+[Libinput][7847][100][2.4G Mouse]
+PointerAcceleration=-0.200
 
 [Mouse]
 cursorSize=24
-cursorTheme=Bibata-Modern-Classic

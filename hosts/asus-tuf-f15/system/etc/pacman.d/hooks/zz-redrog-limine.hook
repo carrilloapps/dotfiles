@@ -1,0 +1,15 @@
+# RedRog: re-apply the Limine boot menu look after kernel, Limine or theme
+# updates. CachyOS rewrites /boot/limine.conf in its own hooks; "zz-" makes
+# this one run after them.
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = linux*
+Target = limine*
+Target = cachyos-*limine*
+
+[Action]
+Description = Re-applying the RedRog Limine look...
+When = PostTransaction
+Exec = /usr/local/lib/redrog/limine-theme.sh

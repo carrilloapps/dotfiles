@@ -79,8 +79,8 @@ ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
 [Colors:View]
-BackgroundAlternate=49,49,49
-BackgroundNormal=37,37,36
+BackgroundAlternate=43,43,42
+BackgroundNormal=28,28,28
 DecorationFocus=239,51,64
 DecorationHover=239,51,64
 ForegroundActive=233,61,73
@@ -108,7 +108,7 @@ ForegroundVisited=155,89,182
 
 [General]
 ColorScheme=ArcDark
-Name=Arc Dark ROG
+Name=RedRog
 shadeSortColumn=true
 
 [KDE]

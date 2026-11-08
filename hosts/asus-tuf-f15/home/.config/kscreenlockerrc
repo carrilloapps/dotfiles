@@ -6,4 +6,4 @@ Timeout=0
 WallpaperPluginId=org.kde.image
 
 [Greeter][Wallpaper][org.kde.image][General]
-Image=file:///home/m/Imágenes/Wallpapers/fondo-general.jpg
+Image=file:///home/m/.local/share/wallpapers/RedRog/contents/images/1920x1080.jpg

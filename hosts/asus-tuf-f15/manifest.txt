@@ -32,6 +32,7 @@
 .config/fish/config.fish
 
 # --- System (reference only) ---
+/etc/pacman.conf
 /etc/asusd/asusd.ron
 /etc/asusd/fan_curves.ron
 /etc/asusd/aura_tuf.ron

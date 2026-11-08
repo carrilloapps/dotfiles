@@ -21,13 +21,13 @@ IntensityAmount=0
 IntensityEffect=0
 
 [Colors:Button]
-BackgroundAlternate=182,50,59
+BackgroundAlternate=161,41,48
 BackgroundNormal=49,49,49
-DecorationFocus=239,51,64
-DecorationHover=239,51,64
-ForegroundActive=239,51,64
+DecorationFocus=210,38,48
+DecorationHover=210,38,48
+ForegroundActive=210,38,48
 ForegroundInactive=136,134,128
-ForegroundLink=249,188,190
+ForegroundLink=250,181,183
 ForegroundNegative=218,68,83
 ForegroundNeutral=246,116,0
 ForegroundNormal=239,238,235
@@ -37,32 +37,32 @@ ForegroundVisited=155,89,182
 [Colors:Complementary]
 BackgroundAlternate=28,28,28
 BackgroundNormal=28,28,28
-DecorationFocus=239,51,64
-DecorationHover=239,51,64
-ForegroundActive=239,51,64
+DecorationFocus=210,38,48
+DecorationHover=210,38,48
+ForegroundActive=210,38,48
 ForegroundInactive=136,134,128
-ForegroundLink=249,188,190
+ForegroundLink=250,181,183
 ForegroundNormal=239,238,235
 ForegroundVisited=155,89,182
 
 [Colors:Header]
 BackgroundAlternate=28,28,28
 BackgroundNormal=28,28,28
-DecorationFocus=239,51,64
-DecorationHover=239,51,64
-ForegroundActive=239,51,64
+DecorationFocus=210,38,48
+DecorationHover=210,38,48
+ForegroundActive=210,38,48
 ForegroundInactive=136,134,128
-ForegroundLink=249,188,190
+ForegroundLink=250,181,183
 ForegroundNormal=239,238,235
 
 [Colors:Selection]
-BackgroundAlternate=178,46,55
-BackgroundNormal=178,46,55
-DecorationFocus=239,51,64
-DecorationHover=239,51,64
-ForegroundActive=239,51,64
+BackgroundAlternate=155,35,42
+BackgroundNormal=155,35,42
+DecorationFocus=210,38,48
+DecorationHover=210,38,48
+ForegroundActive=210,38,48
 ForegroundInactive=255,255,255
-ForegroundLink=174,37,47
+ForegroundLink=153,28,35
 ForegroundNegative=160,48,50
 ForegroundNeutral=182,85,0
 ForegroundNormal=255,255,255
@@ -72,11 +72,11 @@ ForegroundVisited=155,89,182
 [Colors:Tooltip]
 BackgroundAlternate=28,28,28
 BackgroundNormal=28,28,28
-DecorationFocus=239,51,64
-DecorationHover=239,51,64
-ForegroundActive=239,51,64
+DecorationFocus=210,38,48
+DecorationHover=210,38,48
+ForegroundActive=210,38,48
 ForegroundInactive=136,134,128
-ForegroundLink=249,188,190
+ForegroundLink=250,181,183
 ForegroundNegative=218,68,83
 ForegroundNeutral=246,116,0
 ForegroundNormal=239,238,235
@@ -84,13 +84,13 @@ ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
 [Colors:View]
-BackgroundAlternate=49,49,49
-BackgroundNormal=37,37,36
-DecorationFocus=239,51,64
-DecorationHover=239,51,64
-ForegroundActive=239,51,64
+BackgroundAlternate=43,43,42
+BackgroundNormal=28,28,28
+DecorationFocus=210,38,48
+DecorationHover=210,38,48
+ForegroundActive=210,38,48
 ForegroundInactive=136,134,128
-ForegroundLink=249,188,190
+ForegroundLink=250,181,183
 ForegroundNegative=218,68,83
 ForegroundNeutral=246,116,0
 ForegroundNormal=239,238,235
@@ -100,11 +100,11 @@ ForegroundVisited=155,89,182
 [Colors:Window]
 BackgroundAlternate=28,28,28
 BackgroundNormal=28,28,28
-DecorationFocus=239,51,64
-DecorationHover=239,51,64
-ForegroundActive=239,51,64
+DecorationFocus=210,38,48
+DecorationHover=210,38,48
+ForegroundActive=210,38,48
 ForegroundInactive=136,134,128
-ForegroundLink=249,188,190
+ForegroundLink=250,181,183
 ForegroundNegative=218,68,83
 ForegroundNeutral=246,116,0
 ForegroundNormal=239,238,235
@@ -113,9 +113,11 @@ ForegroundVisited=155,89,182
 
 [General]
 AccentColor=239,51,64
-ColorScheme=ArcDarkROG
-ColorSchemeHash=aca3f7576216128829167a7be9c740bc2a4d9889
+BrowserApplication=google-chrome.desktop
+ColorSchemeHash=42adf74f33852e3b7148c770a5aac0d5bfe4afc7
 LastUsedCustomAccentColor=229,72,77
+TerminalApplication=kitty
+TerminalService=kitty.desktop
 accentColorFromWallpaper=false
 fixed=JetBrainsMono Nerd Font,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 font=Inter,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
@@ -123,23 +125,20 @@ menuFont=Inter,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 smallestReadableFont=Inter,8,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 toolBarFont=Inter,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 
-[Icons]
-Theme=Papirus-Dark
-
 [KDE]
 AnimationDurationFactor=0.25
-DefaultDarkLookAndFeel=org.local.arcdarkrog
-DefaultLightLookAndFeel=com.cromewar.neongrid.light
-LookAndFeelPackage=org.local.arcdarkrog
+AutomaticLookAndFeel=false
+DefaultDarkLookAndFeel=org.redrog.desktop
+DefaultLightLookAndFeel=org.redrog.light.desktop
+LookAndFeelPackage=org.redrog.desktop
 contrast=4
 frameContrast=0.2
-widgetStyle=kvantum
 
 [KFileDialog Settings]
 Allow Expansion=false
 Automatically select filename extension=true
 Breadcrumb Navigation=true
-Decoration position=2
+Decoration position=0
 Show Full Path=false
 Show Inline Previews=true
 Show Preview=false
@@ -149,7 +148,7 @@ Sort by=Name
 Sort directories first=true
 Sort hidden files last=false
 Sort reversed=false
-Speedbar Width=148
+Speedbar Width=194
 View Style=DetailTree
 
 [WM]

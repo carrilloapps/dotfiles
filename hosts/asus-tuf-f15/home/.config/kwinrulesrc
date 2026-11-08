@@ -1,2 +1,73 @@
 [General]
-Order=steam
+Order=redrog-glass-org.opengamingcollective.rog-control-center,redrog-glass-org.kde.plasma-systemmonitor,redrog-glass-org.kde.discover,redrog-glass-xdg-desktop-portal-kde,redrog-glass-org.kde.kdeconnect.app,redrog-glass-org.kde.kdeconnect.handler,redrog-glass-org.kde.kinfocenter,redrog-titlebar-resolve
+
+[redrog-glass-org.kde.discover]
+Description=RedRog glass: org.kde.discover
+opacityactive=77
+opacityactiverule=0
+opacityinactive=77
+opacityinactiverule=0
+wmclass=org.kde.discover
+wmclassmatch=1
+
+[redrog-glass-org.kde.kdeconnect.app]
+Description=RedRog glass: org.kde.kdeconnect.app
+opacityactive=77
+opacityactiverule=0
+opacityinactive=77
+opacityinactiverule=0
+wmclass=org.kde.kdeconnect.app
+wmclassmatch=1
+
+[redrog-glass-org.kde.kdeconnect.handler]
+Description=RedRog glass: org.kde.kdeconnect.handler
+opacityactive=77
+opacityactiverule=0
+opacityinactive=77
+opacityinactiverule=0
+wmclass=org.kde.kdeconnect.handler
+wmclassmatch=1
+
+[redrog-glass-org.kde.kinfocenter]
+Description=RedRog glass: org.kde.kinfocenter
+opacityactive=77
+opacityactiverule=0
+opacityinactive=77
+opacityinactiverule=0
+wmclass=org.kde.kinfocenter
+wmclassmatch=1
+
+[redrog-glass-org.kde.plasma-systemmonitor]
+Description=RedRog glass: org.kde.plasma-systemmonitor
+opacityactive=77
+opacityactiverule=0
+opacityinactive=77
+opacityinactiverule=0
+wmclass=org.kde.plasma-systemmonitor
+wmclassmatch=1
+
+[redrog-glass-org.opengamingcollective.rog-control-center]
+Description=RedRog glass: org.opengamingcollective.rog-control-center
+opacityactive=77
+opacityactiverule=0
+opacityinactive=77
+opacityinactiverule=0
+wmclass=org.opengamingcollective.rog-control-center
+wmclassmatch=1
+
+[redrog-glass-xdg-desktop-portal-kde]
+Description=RedRog glass: xdg-desktop-portal-kde
+opacityactive=77
+opacityactiverule=0
+opacityinactive=77
+opacityinactiverule=0
+wmclass=xdg-desktop-portal-kde
+wmclassmatch=1
+
+[redrog-titlebar-resolve]
+Description=RedRog titlebar: resolve
+decorationpolicy=server
+decorationpolicyrule=2
+noborder=false
+wmclass=resolve
+wmclassmatch=1

@@ -1,2 +1,5 @@
 [General]
 loginMode=emptySession
+
+[Session: saved at previous logout]
+count=0
