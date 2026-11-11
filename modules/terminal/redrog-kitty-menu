@@ -12,6 +12,7 @@ here="$(dirname "$(readlink -f "$0")")"
 agents=()
 command -v claude >/dev/null && agents+=("claude:Claude Code:claude-desktop")
 command -v agy >/dev/null && agents+=("agy:Antigravity:antigravity")
+command -v dsh >/dev/null && agents+=("dsh:DeepSeek Harness:deepseek-harness")
 command -v codex >/dev/null && agents+=("codex:Codex:")
 command -v gemini >/dev/null && agents+=("gemini:Gemini CLI:")
 command -v opencode >/dev/null && agents+=("opencode:OpenCode:")

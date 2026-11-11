@@ -187,7 +187,7 @@ RedRog configures `kitty` as the central terminal emulator:
 ### Contextual Qt Menu (`redrog-kitty-menu`)
 Right-clicking inside the terminal triggers a standalone QML contextual menu rendered via Qt's `qml` runtime:
 - **IPC Mechanism:** Kitty triggers the helper script with remote control privileges (`kitten @ action --match id:<window>`).
-- **Agent CLI Discovery:** The menu automatically detects available AI agent command-line tools in `$PATH` (Claude Code, Antigravity `agy`, OpenAI Codex, Gemini CLI, OpenCode, Aider) and allows instant launching in horizontal or vertical splits.
+- **Agent CLI Discovery:** The menu automatically detects available AI agent command-line tools in `$PATH` (Claude Code, Antigravity `agy`, DeepSeek Harness `dsh`, OpenAI Codex, Gemini CLI, OpenCode, Aider) and allows instant launching in horizontal or vertical splits.
 
 ---
 

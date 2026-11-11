@@ -39,6 +39,7 @@ Development	Visual Studio Code	com.microsoft.VSCode.desktop
 AudioVideo	OBS Studio	com.obsproject.Studio.desktop
 System	Shelly	com.shellyorg.shelly.desktop
 Development	Qt Widgets Designer	designer.desktop
+Development	DeepSeek Harness	deepseek-harness.desktop
 Network	Discord	discord.desktop
 Network	Firefox	firefox.desktop
 Network	Google Chrome	google-chrome.desktop
